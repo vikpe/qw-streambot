@@ -1,6 +1,6 @@
 .idea/
 quake/
 coverage.out
-env.go
 streambot
 !.gitkeep
+.env
