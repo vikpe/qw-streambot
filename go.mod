@@ -3,6 +3,8 @@ module github.com/vikpe/streambot
 go 1.18
 
 require (
+	github.com/joho/godotenv v1.4.0
+	github.com/pebbe/zmq4 v1.2.9
 	github.com/stretchr/testify v1.7.4
 	github.com/vikpe/serverstat v0.1.80
 	golang.org/x/exp v0.0.0-20220613132600-b0d781184e0d
