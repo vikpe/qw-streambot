@@ -6,19 +6,19 @@ import (
 	"strings"
 )
 
-type PipeWriter struct {
+type Writer struct {
 	username string
 	queue    []string
 }
 
-func NewPipeWriter(username string) PipeWriter {
-	return PipeWriter{
+func NewWriter(username string) Writer {
+	return Writer{
 		username: username,
 		queue:    make([]string, 0),
 	}
 }
 
-func (w PipeWriter) Write(value string) error {
+func (w Writer) Write(value string) error {
 	strippedValue := strings.TrimSpace(value)
 
 	if 0 == len(strippedValue) {
@@ -30,7 +30,7 @@ func (w PipeWriter) Write(value string) error {
 	return w.processQueue()
 }
 
-func (w PipeWriter) processQueue() error {
+func (w Writer) processQueue() error {
 	for {
 		if 0 == len(w.queue) {
 			break
@@ -53,7 +53,7 @@ func (w PipeWriter) processQueue() error {
 	return nil
 }
 
-func (w PipeWriter) writeToPipe(value string) error {
+func (w Writer) writeToPipe(value string) error {
 	file, errOpen := os.OpenFile(w.path(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	if errOpen != nil {
@@ -67,6 +67,6 @@ func (w PipeWriter) writeToPipe(value string) error {
 	return errWrite
 }
 
-func (w PipeWriter) path() string {
+func (w Writer) path() string {
 	return fmt.Sprintf("/tmp/ezquake_fifo_%s", w.username)
 }
