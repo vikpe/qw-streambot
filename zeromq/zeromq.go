@@ -3,8 +3,10 @@ package zeromq
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
+	"github.com/goccy/go-json"
 	zmq "github.com/pebbe/zmq4"
 )
 
@@ -63,6 +65,22 @@ func (p Proxy) Start() error {
 	return nil
 }
 
+type Message struct {
+	Topic string
+	Data  any
+}
+
+func NewMessage(topic string, data any) Message {
+	return Message{
+		Topic: topic,
+		Data:  data,
+	}
+}
+
+func (m Message) Encode() []byte {
+	return EncodeMessage(m)
+}
+
 type Publisher struct {
 	address string
 }
@@ -71,17 +89,16 @@ func NewPublisher(address string) Publisher {
 	return Publisher{address: address}
 }
 
-func (p Publisher) SendMessage(message ...string) {
-	PubSendMessage(p.address, message...)
+func (p Publisher) SendMessage(topic string, data any) {
+	PubSendMessage(p.address, topic, data)
 }
 
-func PubSendMessage(address string, message ...string) {
+func PubSendMessage(address string, topic string, data any) {
 	pubSocket, _ := zmq.NewSocket(zmq.PUB)
 	defer pubSocket.Close()
 	pubSocket.Connect(address)
 	WaitForConnection()
-
-	pubSocket.SendMessage(message)
+	pubSocket.SendMessage(NewMessage(topic, data).Encode())
 }
 
 type Subscriber struct {
@@ -105,27 +122,29 @@ func (s Subscriber) Start() {
 	subSocket.SetSubscribe(s.topics)
 
 	for {
-		if msg, err := subSocket.RecvMessage(0); err != nil {
+		if rawMsg, err := subSocket.RecvMessage(0); err != nil {
 			fmt.Println("Error recieving message", err)
 		} else {
-			fmt.Println("Received message:", msg)
+			msg := DecodeMessage(rawMsg)
+			fmt.Println("Received message:", msg.Topic, msg.Data)
 		}
 	}
 }
 
-/*func EncodeMessage(message string) []byte {
-	result, err := json.Marshal(message)
+func EncodeMessage(msg Message) []byte {
+	result, err := json.Marshal(msg)
 	if err != nil {
 		return nil
 	}
 	return result
 }
 
-func DecodeMessage(encodedMessage string) map[string]interface{} {
-	var result map[string]interface{}
-	err := json.Unmarshal(encodedMessage, &result)
+func DecodeMessage(rawMessage []string) Message {
+	var msg Message
+
+	err := json.Unmarshal([]byte(strings.Join(rawMessage, " ")), &msg)
 	if err != nil {
-		return make(map[string]interface{}, 0)
+		return Message{}
 	}
-	return result
-}*/
+	return msg
+}
