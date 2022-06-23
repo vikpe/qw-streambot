@@ -129,10 +129,31 @@ func (s Subscriber) Start() {
 				} else {
 					data = ""
 				}
-				dataType = fmt.Sprintf("%T", data)
+				dataType = "string"
 			}
 
 			pp.Print(topic, fmt.Sprintf("(%s)", dataType), data)
 		}
 	}
+}
+
+type Message struct {
+	Topic string
+	Data  string
+}
+
+func (m Message) String() string {
+	var target string
+	m.To(target)
+	return target
+}
+
+func (m Message) Int() int {
+	var target int
+	m.To(target)
+	return target
+}
+
+func (m Message) To(target interface{}) {
+	json.Unmarshal([]byte(m.Data), &target)
 }
