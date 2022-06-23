@@ -11,7 +11,7 @@ import (
 	"github.com/vikpe/streambot/util/term"
 )
 
-var pp = term.NewPrettyPrinter("proxy", color.FgHiCyan)
+var pp = term.NewPrettyPrinter("zmq", color.FgHiMagenta)
 
 const ConnectionTimeout = time.Millisecond * 10
 
@@ -87,7 +87,7 @@ func PubSendMessage(address string, topic string, data any) {
 	WaitForConnection()
 
 	dataAsJson, _ := json.Marshal(data)
-	pubSocket.SendMessage(topic, dataAsJson)
+	pubSocket.SendMessage(topic, dataAsJson, fmt.Sprintf("%T", data))
 }
 
 type Subscriber struct {
@@ -110,17 +110,29 @@ func (s Subscriber) Start() {
 
 	subSocket.SetSubscribe(s.topics)
 
-	pp.Print("HELLO", "WORLD", 2)
-
 	for {
 		if rawMsg, err := subSocket.RecvMessage(0); err != nil {
 			pp.Print("Error recieving message", err)
 		} else {
+			var topic string
+			var dataType string
+			var data any
 
-			pp.Print("RAW MSG", rawMsg, len(rawMsg))
-			topic := rawMsg[0]
-			data := rawMsg[1]
-			pp.Print("Received message:", "topic", topic, "data", data)
+			topic = rawMsg[0]
+
+			if 3 == len(rawMsg) {
+				dataType = rawMsg[2]
+				data = rawMsg[1]
+			} else {
+				if 2 == len(rawMsg) {
+					data = rawMsg[1]
+				} else {
+					data = ""
+				}
+				dataType = fmt.Sprintf("%T", data)
+			}
+
+			pp.Print(topic, fmt.Sprintf("(%s)", dataType), data)
 		}
 	}
 }
