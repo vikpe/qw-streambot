@@ -3,12 +3,15 @@ package zeromq
 import (
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/goccy/go-json"
 	zmq "github.com/pebbe/zmq4"
+	"github.com/vikpe/streambot/util/term"
 )
+
+var pp = term.NewPrettyPrinter("proxy", color.FgHiCyan)
 
 const ConnectionTimeout = time.Millisecond * 10
 
@@ -22,7 +25,7 @@ type Proxy struct {
 }
 
 func NewProxy(frontend string, backend string) Proxy {
-	fmt.Println("NEWPROXY", frontend, backend)
+	pp.Print("NEWPROXY", frontend, backend)
 
 	return Proxy{
 		frontendAddress: frontend,
@@ -31,7 +34,7 @@ func NewProxy(frontend string, backend string) Proxy {
 }
 
 func (p Proxy) Start() error {
-	fmt.Println("PROXY START")
+	pp.Print("PROXY START")
 
 	// frontend - endpoint for publishers
 	frontend, _ := zmq.NewSocket(zmq.XSUB)
@@ -65,22 +68,6 @@ func (p Proxy) Start() error {
 	return nil
 }
 
-type Message struct {
-	Topic string
-	Data  any
-}
-
-func NewMessage(topic string, data any) Message {
-	return Message{
-		Topic: topic,
-		Data:  data,
-	}
-}
-
-func (m Message) Encode() []byte {
-	return EncodeMessage(m)
-}
-
 type Publisher struct {
 	address string
 }
@@ -98,7 +85,9 @@ func PubSendMessage(address string, topic string, data any) {
 	defer pubSocket.Close()
 	pubSocket.Connect(address)
 	WaitForConnection()
-	pubSocket.SendMessage(NewMessage(topic, data).Encode())
+
+	dataAsJson, _ := json.Marshal(data)
+	pubSocket.SendMessage(topic, dataAsJson)
 }
 
 type Subscriber struct {
@@ -121,30 +110,17 @@ func (s Subscriber) Start() {
 
 	subSocket.SetSubscribe(s.topics)
 
+	pp.Print("HELLO", "WORLD", 2)
+
 	for {
 		if rawMsg, err := subSocket.RecvMessage(0); err != nil {
-			fmt.Println("Error recieving message", err)
+			pp.Print("Error recieving message", err)
 		} else {
-			msg := DecodeMessage(rawMsg)
-			fmt.Println("Received message:", msg.Topic, msg.Data)
+
+			pp.Print("RAW MSG", rawMsg, len(rawMsg))
+			topic := rawMsg[0]
+			data := rawMsg[1]
+			pp.Print("Received message:", "topic", topic, "data", data)
 		}
 	}
-}
-
-func EncodeMessage(msg Message) []byte {
-	result, err := json.Marshal(msg)
-	if err != nil {
-		return nil
-	}
-	return result
-}
-
-func DecodeMessage(rawMessage []string) Message {
-	var msg Message
-
-	err := json.Unmarshal([]byte(strings.Join(rawMessage, " ")), &msg)
-	if err != nil {
-		return Message{}
-	}
-	return msg
 }

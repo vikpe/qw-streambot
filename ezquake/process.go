@@ -6,7 +6,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/vikpe/streambot/util"
+	"github.com/vikpe/streambot/util/shell"
 )
 
 type Process struct {
@@ -17,7 +17,7 @@ type Process struct {
 func NewProcess(path string) Process {
 	return Process{
 		Path:        path,
-		ExecCommand: util.ExecCommand,
+		ExecCommand: shell.ExecCommand,
 	}
 }
 
