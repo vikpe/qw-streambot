@@ -12,6 +12,9 @@ jobs:
         with:
           go-version: 1.18.x
 
+      - name: Install requirements
+        run: apt-get install libzmq3-dev
+
       - name: Test
         run: go test ./... -covermode=atomic -coverprofile=coverage.out
         #run: go test ./... -covermode=atomic -coverprofile=coverage.out
