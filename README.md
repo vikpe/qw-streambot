@@ -1,4 +1,4 @@
-# streambot
+# streambot [![Test](https://github.com/vikpe/streambot/actions/workflows/test.yml/badge.svg)](https://github.com/vikpe/streambot/actions/workflows/test.yml)
 
 ## Requirements
 **ZeroMQ**
