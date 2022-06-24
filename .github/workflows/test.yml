@@ -15,8 +15,11 @@ jobs:
       - name: Install requirements
         run: sudo apt-get install libzmq3-dev -y
 
+      - name: Install dependencies
+        run: go mod tidy
+
       - name: Test
-        run: go test ./... -covermode=atomic -coverprofile=coverage.out
+        run: go test ./... --cover
         #run: go test ./... -covermode=atomic -coverprofile=coverage.out
 
       #- name: Upload coverage to Codecov
