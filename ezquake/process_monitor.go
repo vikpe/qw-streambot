@@ -11,24 +11,23 @@ type ProcessMonitor struct {
 	isDone       bool
 	process      *Process
 	eventHandler eventHandler
-	interval     time.Duration
 }
 
-func NewProcessMonitor(process *Process, eventHandler eventHandler, interval time.Duration) ProcessMonitor {
+func NewProcessMonitor(process *Process, eventHandler eventHandler) ProcessMonitor {
 	return ProcessMonitor{
 		isDone:       false,
 		process:      process,
 		eventHandler: eventHandler,
-		interval:     interval,
 	}
 }
 
-func (p *ProcessMonitor) Start() {
+func (p *ProcessMonitor) Start(interval time.Duration) {
 	p.isDone = false
-	ticker := time.NewTicker(p.interval)
-	prevState := NewProcessState(*p.process)
+	ticker := time.NewTicker(interval)
 
 	go func() {
+		prevState := NewProcessState(*p.process)
+
 		for ; true; <-ticker.C {
 			if p.isDone {
 				return
