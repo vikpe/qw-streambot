@@ -9,21 +9,17 @@ import (
 )
 
 type Controller struct {
-	process Process
-	pipe    PipeWriter
+	pipe PipeWriter
 }
 
 func NewController(process Process, pipe PipeWriter) Controller {
 	return Controller{
-		process: process,
-		pipe:    pipe,
+		pipe: pipe,
 	}
 }
 
 func (c Controller) Command(cmd string) {
-	if c.process.IsStarted() {
-		c.pipe.Write(cmd)
-	}
+	c.pipe.Write(cmd)
 }
 
 func (c Controller) Lastscores(duration time.Duration) {
