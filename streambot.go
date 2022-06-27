@@ -1,11 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/zeromq"
+	"github.com/vikpe/streambot/config"
+	"github.com/vikpe/streambot/events"
+	"github.com/vikpe/streambot/ezquake"
+	"github.com/vikpe/streambot/task"
 )
 
 func main() {
@@ -50,17 +55,40 @@ func main() {
 
 		wg.Wait()
 	*/
+	/*
+		wg := sync.WaitGroup{}
+		subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), "")
+
+		wg.Add(1)
+		go func() {
+			subscriber.Start()
+		}()
+
+		publiser := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
+		publiser.SendMessage("hehe", "")*/
+
+	cfg, _ := config.NewFromFile(os.Getenv("STREAMBOT_CONFIG_PATH"))
+	fmt.Println("cfg.Mode", cfg.Mode)
+	fmt.Println("cfg.MapChangeTimestamp", cfg.MapChangeTimestamp)
+	fmt.Println("cfg.SpecAddress", cfg.SpecAddress)
+	fmt.Println("cfg.ServerAddress", cfg.ServerAddress, "\n")
 
 	wg := sync.WaitGroup{}
-	subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), "")
-
 	wg.Add(1)
-	go func() {
-		subscriber.Start()
-	}()
 
-	publiser := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
-	publiser.SendMessage("hehe", "")
+	go func() {
+		proc := ezquake.NewProcess(os.Getenv("EZQUAKE_BIN_PATH"))
+		eventHandler := func(topic string, data any) {
+			fmt.Println("got event", topic, data)
+		}
+
+		pmon := task.NewProcessMonitor(&proc, eventHandler)
+		pmon.Start(4 * time.Second)
+
+		foo := func() { fmt.Println(events.StreambotHealthCheck) }
+		hth := task.NewPeriodicalTask(foo)
+		hth.Start(10 * time.Second)
+	}()
 
 	wg.Wait()
 }
