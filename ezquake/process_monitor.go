@@ -1,7 +1,6 @@
 package ezquake
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -50,7 +49,6 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 
 func (p *ProcessMonitor) Stop() {
 	p.isDone = true
-	fmt.Println("yes we stopped..")
 }
 
 type ProcessState struct {
