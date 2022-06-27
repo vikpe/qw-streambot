@@ -11,6 +11,7 @@ type Event struct {
 }
 
 type EventHandler func(Event)
+type EventDataHandler func(data EventData)
 
 type EventData string
 

@@ -11,10 +11,8 @@ import (
 	"github.com/vikpe/streambot/zeromq"
 )
 
-type MessageDataHandler func(data zeromq.EventData)
-
 func OnMessage(msg zeromq.Event) {
-	handlers := map[string]MessageDataHandler{
+	handlers := map[string]zeromq.EventDataHandler{
 		// ezquak events
 		events.EzquakeProcessStart:  OnEzquakeProcessStart,
 		events.EzquakeProcessStop:   OnEzquakeProcessStop,
