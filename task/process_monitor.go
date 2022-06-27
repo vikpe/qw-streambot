@@ -1,18 +1,21 @@
-package ezquake
+package task
 
 import (
 	"time"
+
+	"github.com/vikpe/streambot/events"
+	"github.com/vikpe/streambot/ezquake"
 )
 
 type eventHandler func(string, any)
 
 type ProcessMonitor struct {
 	isDone  bool
-	process *Process
+	process *ezquake.Process
 	onEvent eventHandler
 }
 
-func NewProcessMonitor(process *Process, eventHandler eventHandler) ProcessMonitor {
+func NewProcessMonitor(process *ezquake.Process, eventHandler eventHandler) ProcessMonitor {
 	return ProcessMonitor{
 		isDone:  false,
 		process: process,
@@ -36,10 +39,10 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 			diff := NewProcessDiff(currentState, prevState)
 
 			if diff.HasStarted {
-				p.onEvent(EventProcessStart, "")
+				p.onEvent(events.EzquakeProcessStart, "")
 
 			} else if diff.HasStopped {
-				p.onEvent(EventProcessStop, "")
+				p.onEvent(events.EzquakeProcessStop, "")
 			}
 
 			prevState = currentState
@@ -55,7 +58,7 @@ type ProcessState struct {
 	IsStarted bool
 }
 
-func NewProcessState(process Process) ProcessState {
+func NewProcessState(process ezquake.Process) ProcessState {
 	return ProcessState{
 		IsStarted: process.IsStarted(),
 	}
