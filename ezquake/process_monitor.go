@@ -22,9 +22,9 @@ func NewProcessMonitor(process *Process, eventHandler eventHandler) ProcessMonit
 
 func (p *ProcessMonitor) Start(interval time.Duration) {
 	p.isDone = false
-	ticker := time.NewTicker(interval)
 
 	go func() {
+		ticker := time.NewTicker(interval)
 		prevState := NewProcessState(*p.process)
 
 		for ; true; <-ticker.C {
