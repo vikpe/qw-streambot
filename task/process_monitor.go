@@ -7,19 +7,17 @@ import (
 	"github.com/vikpe/streambot/ezquake"
 )
 
-type eventHandler func(string, any)
-
 type ProcessMonitor struct {
 	isDone  bool
 	process *ezquake.Process
-	onEvent eventHandler
+	onEvent EventHandler
 }
 
-func NewProcessMonitor(process *ezquake.Process, eventHandler eventHandler) ProcessMonitor {
+func NewProcessMonitor(process *ezquake.Process, onEvent EventHandler) ProcessMonitor {
 	return ProcessMonitor{
 		isDone:  false,
 		process: process,
-		onEvent: eventHandler,
+		onEvent: onEvent,
 	}
 }
 
