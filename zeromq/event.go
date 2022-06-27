@@ -32,17 +32,17 @@ func (d EventData) To(target interface{}) {
 }
 
 func ParseEvent(rawMsg []string) Event {
-	var topic string
+	topic := rawMsg[0]
+	msgPartCount := len(rawMsg)
+
 	var dataType string
 	var data string
 
-	topic = rawMsg[0]
-
-	if 3 == len(rawMsg) {
+	if msgPartCount > 2 {
 		dataType = rawMsg[2]
 		data = rawMsg[1]
 	} else {
-		if 2 == len(rawMsg) {
+		if msgPartCount > 1 {
 			data = rawMsg[1]
 		} else {
 			data = ""
