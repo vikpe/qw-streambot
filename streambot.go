@@ -4,37 +4,103 @@ import (
 	"fmt"
 	"os"
 	"sync"
-	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/config"
+	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/streambot/events"
-	"github.com/vikpe/streambot/ezquake"
-	"github.com/vikpe/streambot/task"
+	"github.com/vikpe/streambot/zeromq"
 )
+
+type MessageDataHandler func(data zeromq.EventData)
+
+func OnMessage(msg zeromq.Event) {
+	handlers := map[string]MessageDataHandler{
+		// ezquak events
+		events.EzquakeProcessStart:  OnEzquakeProcessStart,
+		events.EzquakeProcessStop:   OnEzquakeProcessStop,
+		events.EzquakeServerConnect: OnEzquakeServerConnect,
+
+		// server events
+		events.ServerMapChange:        OnServerMapChange,
+		events.ServerScoreChange:      OnServerScoreChange,
+		events.ServerStatusNameChange: OnServerStatusNameChange,
+		events.ServerTitleChange:      OnServerTitleChange,
+
+		// streambot events
+		events.StreambotHealthCheck:         OnStreambotHealthCheck,
+		events.StreambotActionSuggestServer: OnStreambotActionSuggestServer,
+	}
+
+	if handler, ok := handlers[msg.Topic]; ok {
+		handler(msg.Data)
+	} else {
+		fmt.Println("no handler defined for", msg.Topic, fmt.Sprintf("%T", msg.Topic), msg.Data)
+	}
+}
+
+func OnStreambotActionSuggestServer(data zeromq.EventData) {
+	var server mvdsv.Mvdsv
+	data.To(&server)
+	fmt.Println("StreambotActionSuggestServer", server.Address, data)
+}
+
+func OnEzquakeProcessStart(data zeromq.EventData) {
+	fmt.Println("OnEzquakeProcessStart", data.ToString())
+}
+
+func OnEzquakeProcessStop(data zeromq.EventData) {
+	fmt.Println("OnEzquakeProcessStop", data.ToString())
+}
+
+func OnEzquakeServerConnect(data zeromq.EventData) {
+	fmt.Println("OnEzquakeServerConnect", data.ToString())
+}
+
+func OnStreambotHealthCheck(data zeromq.EventData) {
+	fmt.Println("OnStreambotHealthCheck", data.ToString())
+}
+
+func OnServerMapChange(data zeromq.EventData) {
+	fmt.Println("OnServerMapChange", data.ToString())
+}
+
+func OnServerScoreChange(data zeromq.EventData) {
+	fmt.Println("OnServerScoreChange", data.ToInt())
+}
+
+func OnServerStatusNameChange(data zeromq.EventData) {
+	fmt.Println("OnServerStatusNameChange", data.ToString())
+}
+
+func OnServerTitleChange(data zeromq.EventData) {
+	fmt.Println("OnServerTitleChange", data.ToString())
+}
 
 func main() {
 	godotenv.Load()
+	wg := sync.WaitGroup{}
+
+	/*wg.Add(1)
+	go func() {
+		proxy := zeromq.NewProxy(
+			os.Getenv("ZMQ_PROXY_FRONTEND_ADDRESS"),
+			os.Getenv("ZMQ_PROXY_BACKEND_ADDRESS"),
+		)
+		proxy.Start()
+	}()
+	zeromq.WaitForConnection()*/
+
+	subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), zeromq.TopicsAll, OnMessage)
+	wg.Add(1)
+	go func() {
+		subscriber.Start()
+	}()
+	zeromq.WaitForConnection()
+
+	wg.Wait()
+
 	/*
-		godotenv.Load()
-		wg := sync.WaitGroup{}
 
-		wg.Add(1)
-		go func() {
-			proxy := zeromq.NewProxy(
-				os.Getenv("ZMQ_PROXY_FRONTEND_ADDRESS"),
-				os.Getenv("ZMQ_PROXY_BACKEND_ADDRESS"),
-			)
-			proxy.Start()
-		}()
-		subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), "")
-		time.Sleep(time.Millisecond * 20)
-
-		wg.Add(1)
-		go func() {
-			subscriber.Start()
-		}()
-		time.Sleep(time.Millisecond * 20)
 
 		ticker := time.NewTicker(time.Duration(5) * time.Second)
 		//process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
@@ -67,13 +133,12 @@ func main() {
 		publiser := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
 		publiser.SendMessage("hehe", "")*/
 
-	cfg, _ := config.NewFromFile(os.Getenv("STREAMBOT_CONFIG_PATH"))
+	/*cfg, _ := config.NewFromFile(os.Getenv("STREAMBOT_CONFIG_PATH"))
 	fmt.Println("cfg.Mode", cfg.Mode)
 	fmt.Println("cfg.MapChangeTimestamp", cfg.MapChangeTimestamp)
 	fmt.Println("cfg.SpecAddress", cfg.SpecAddress)
 	fmt.Println("cfg.ServerAddress", cfg.ServerAddress, "\n")
 
-	wg := sync.WaitGroup{}
 	wg.Add(1)
 
 	go func() {
@@ -90,5 +155,5 @@ func main() {
 		hth.Start(10 * time.Second)
 	}()
 
-	wg.Wait()
+	wg.Wait()*/
 }
