@@ -4,33 +4,33 @@ import (
 	"github.com/goccy/go-json"
 )
 
-type Message struct {
+type Event struct {
 	Topic    string
-	Data     MessageJsonData
+	Data     EventData
 	DataType string
 }
 
-type MessageHandler func(Message)
+type EventHandler func(Event)
 
-type MessageJsonData string
+type EventData string
 
-func (d MessageJsonData) ToString() string {
+func (d EventData) ToString() string {
 	var target string
 	d.To(&target)
 	return target
 }
 
-func (d MessageJsonData) ToInt() int {
+func (d EventData) ToInt() int {
 	var target int
 	d.To(&target)
 	return target
 }
 
-func (d MessageJsonData) To(target interface{}) {
+func (d EventData) To(target interface{}) {
 	json.Unmarshal([]byte(d), &target)
 }
 
-func ParseMessage(rawMsg []string) Message {
+func ParseEvent(rawMsg []string) Event {
 	var topic string
 	var dataType string
 	var data string
@@ -49,9 +49,9 @@ func ParseMessage(rawMsg []string) Message {
 		dataType = "string"
 	}
 
-	return Message{
+	return Event{
 		Topic:    topic,
-		Data:     MessageJsonData(data),
+		Data:     EventData(data),
 		DataType: dataType,
 	}
 

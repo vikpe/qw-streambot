@@ -9,10 +9,10 @@ import (
 type Subscriber struct {
 	address   string
 	topics    string
-	onMessage MessageHandler
+	onMessage EventHandler
 }
 
-func NewSubscriber(address string, topics string, onEvent MessageHandler) Subscriber {
+func NewSubscriber(address string, topics string, onEvent EventHandler) Subscriber {
 	return Subscriber{
 		address:   address,
 		topics:    topics,
@@ -31,7 +31,7 @@ func (s Subscriber) Start() {
 		if rawMsg, err := subSocket.RecvMessage(0); err != nil {
 			pp.Print("Error recieving message", err)
 		} else {
-			msg := ParseMessage(rawMsg)
+			msg := ParseEvent(rawMsg)
 			s.onMessage(msg)
 		}
 	}
