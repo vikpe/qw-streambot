@@ -70,13 +70,7 @@ func staticTextScale(text string) float64 {
 	lengthFactor := (float64(len(text)) - lengthMin) / (lengthMax - lengthMin)
 	scale := scaleMax - (lengthFactor * (scaleMax - scaleMin))
 
-	clamp := func(value float64, min_ float64, max_ float64) float64 {
-		valueList := []float64{min_, max_, value}
-		sort.Float64s(valueList)
-		return valueList[1]
-	}
-
-	return Round(clamp(scaleMin, scale, scaleMax), 2)
+	return Round(ClampFloat64(scaleMin, scale, scaleMax), 2)
 }
 
 func toQwurl(value string) string {
@@ -92,4 +86,10 @@ func toQwurl(value string) string {
 func Round(value float64, precision int) float64 {
 	n := math.Pow(10, float64(precision))
 	return math.Round(value*n) / n
+}
+
+func ClampFloat64(value float64, min_ float64, max_ float64) float64 {
+	valueList := []float64{min_, max_, value}
+	sort.Float64s(valueList)
+	return valueList[1]
 }
