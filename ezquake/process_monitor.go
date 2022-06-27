@@ -7,16 +7,16 @@ import (
 type eventHandler func(string, any)
 
 type ProcessMonitor struct {
-	isDone       bool
-	process      *Process
-	eventHandler eventHandler
+	isDone  bool
+	process *Process
+	onEvent eventHandler
 }
 
 func NewProcessMonitor(process *Process, eventHandler eventHandler) ProcessMonitor {
 	return ProcessMonitor{
-		isDone:       false,
-		process:      process,
-		eventHandler: eventHandler,
+		isDone:  false,
+		process: process,
+		onEvent: eventHandler,
 	}
 }
 
@@ -36,10 +36,10 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 			diff := NewProcessDiff(currentState, prevState)
 
 			if diff.HasStarted {
-				p.eventHandler(EventProcessStart, "")
+				p.onEvent(EventProcessStart, "")
 
 			} else if diff.HasStopped {
-				p.eventHandler(EventProcessStop, "")
+				p.onEvent(EventProcessStop, "")
 			}
 
 			prevState = currentState
