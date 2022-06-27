@@ -1,6 +1,7 @@
 package ezquake
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -22,25 +23,25 @@ func NewProcessMonitor(process *Process, eventHandler eventHandler, interval tim
 	}
 }
 
-func (t *ProcessMonitor) Start() {
-	t.isDone = false
-	ticker := time.NewTicker(t.interval)
-	prevState := NewProcessState(*t.process)
+func (p *ProcessMonitor) Start() {
+	p.isDone = false
+	ticker := time.NewTicker(p.interval)
+	prevState := NewProcessState(*p.process)
 
 	go func() {
 		for ; true; <-ticker.C {
-			if t.isDone {
+			if p.isDone {
 				return
 			}
 
-			currentState := NewProcessState(*t.process)
+			currentState := NewProcessState(*p.process)
 			diff := NewProcessDiff(currentState, prevState)
 
 			if diff.HasStarted {
-				t.eventHandler(EventProcessStart, "")
+				p.eventHandler(EventProcessStart, "")
 
 			} else if diff.HasStopped {
-				t.eventHandler(EventProcessStop, "")
+				p.eventHandler(EventProcessStop, "")
 			}
 
 			prevState = currentState
@@ -48,8 +49,9 @@ func (t *ProcessMonitor) Start() {
 	}()
 }
 
-func (t *ProcessMonitor) Stop() {
-	t.isDone = true
+func (p *ProcessMonitor) Stop() {
+	p.isDone = true
+	fmt.Println("yes we stopped..")
 }
 
 type ProcessState struct {
