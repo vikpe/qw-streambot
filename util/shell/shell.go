@@ -1,7 +1,6 @@
 package shell
 
 import (
-	"fmt"
 	"os/exec"
 	"strings"
 )
@@ -12,7 +11,7 @@ func ExecCommand(command string) string {
 	out, err := cmd.CombinedOutput()
 
 	if err != nil {
-		fmt.Println("SHELL ERROR", err, cmd.String())
+		//fmt.Println("SHELL ERROR", err, cmd.String())
 		return ""
 	}
 
