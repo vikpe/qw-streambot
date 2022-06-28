@@ -2,34 +2,85 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"sync"
+	"syscall"
+	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
+	"github.com/vikpe/streambot/ezquake"
+	"github.com/vikpe/streambot/qws"
 	"github.com/vikpe/streambot/topics"
 	"github.com/vikpe/streambot/zeromq"
 )
 
-func OnMessage(msg zeromq.Message) {
+type Streambot struct {
+	pipe       ezquake.PipeWriter
+	process    ezquake.Process
+	publisher  zeromq.Publisher
+	subscriber zeromq.Subscriber
+}
+
+func NewStreambot(
+	ezquakeUsername string,
+	ezquakePath string,
+	publisherAddress string,
+	subscriberAddress string,
+) Streambot {
+	bot := Streambot{
+		pipe:      ezquake.NewPipeWriter(ezquakeUsername),
+		process:   ezquake.NewProcess(ezquakePath),
+		publisher: zeromq.NewPublisher(publisherAddress),
+	}
+	bot.subscriber = zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll, bot.OnMessage)
+
+	return bot
+}
+
+func (s Streambot) Start() {
+	wg := sync.WaitGroup{}
+
+	wg.Add(1)
+	go func() {
+		s.subscriber.Start()
+	}()
+
+	wg.Add(1)
+	go func() {
+		ticker := time.NewTicker(4 * time.Second)
+		for ; true; <-ticker.C {
+			bestServer, err := qws.GetBestServer()
+
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			fmt.Println(bestServer.Address, bestServer.Score)
+		}
+	}()
+
+	wg.Wait()
+}
+
+func (s Streambot) OnMessage(msg zeromq.Message) {
 	handlers := map[string]zeromq.MessageDataHandler{
 		// client
-		topics.ClientStart:      OnClientStart,
-		topics.ClientStop:       OnClientStop,
-		topics.ClientConnect:    OnClientConnect,
-		topics.ClientDisconnect: OnClientDisconnect,
+		topics.ClientConnect:      s.OnClientConnect,
+		topics.ClientCommand:      s.OnClientCommand,
+		topics.ClientStarted:      s.OnClientStarted,
+		topics.ClientStopped:      s.OnClientStopped,
+		topics.ClientConnected:    s.OnClientConnected,
+		topics.ClientDisconnected: s.OnClientDisconnected,
+		topics.StopClient:         s.OnStopClient,
 
 		// server
-		topics.ServerMapChange:    OnServerMapChange,
-		topics.ServerScoreChange:  OnServerScoreChange,
-		topics.ServerStatusChange: OnServerStatusChange,
-		topics.ServerTitleChange:  OnServerTitleChange,
+		topics.ServerMapChanged:    s.OnServerMapChanged,
+		topics.ServerScoreChanged:  s.OnServerScoreChanged,
+		topics.ServerStatusChanged: s.OnServerStatusChanged,
+		topics.ServerTitleChanged:  s.OnServerTitleChanged,
 
-		// streambot
-		topics.StreambotHealthCheck: OnStreambotHealthCheck,
-
-		// user actions
-		topics.ActionSuggestServer: OnActionSuggestServer,
+		// system
+		topics.SystemHealthCheck: s.OnSystemHealthCheck,
+		topics.SystemUpdate:      s.OnSystemUpdate,
 	}
 
 	if handler, ok := handlers[msg.Topic]; ok {
@@ -39,126 +90,76 @@ func OnMessage(msg zeromq.Message) {
 	}
 }
 
-func OnActionSuggestServer(data zeromq.MessageData) {
+func (s Streambot) Evaluate() {
+	fmt.Println("Evaluate")
+}
+
+func (s Streambot) OnStart() {
+	fmt.Println("OnStart")
+	s.Evaluate()
+}
+
+func (s Streambot) OnClientConnect(data zeromq.MessageData) {
 	var server mvdsv.Mvdsv
 	data.To(&server)
-	fmt.Println("StreambotActionSuggestServer", server.Address, data)
+
+	fmt.Println("OnClientConnect", server.Address, data)
+
+	time.AfterFunc(4*time.Second, func() {
+		s.publisher.SendMessage(topics.ClientCommand, "bot_track")
+	})
 }
 
-func OnClientStart(data zeromq.MessageData) {
-	fmt.Println("OnClientStart", data.ToString())
+func (s Streambot) OnClientCommand(data zeromq.MessageData) {
+	fmt.Println("OnClientCommand", data.ToString())
+	s.pipe.Write(data.ToString())
 }
 
-func OnClientStop(data zeromq.MessageData) {
-	fmt.Println("OnClientStop", data.ToString())
+func (s Streambot) OnClientStarted(data zeromq.MessageData) {
+	fmt.Println("OnClientStarted", data.ToString())
+
+	time.AfterFunc(4*time.Second, func() {
+		s.publisher.SendMessage(topics.ClientCommand, "toggleconsole")
+	})
 }
 
-func OnClientConnect(data zeromq.MessageData) {
-	fmt.Println("OnClientConnect", data.ToString())
+func (s Streambot) OnStopClient(data zeromq.MessageData) {
+	fmt.Println("OnStopClient", data.ToString())
+	s.process.Stop(syscall.SIGTERM)
 }
 
-func OnClientDisconnect(data zeromq.MessageData) {
-	fmt.Println("OnClientDisconnect", data.ToString())
+func (s Streambot) OnClientStopped(data zeromq.MessageData) {
+	fmt.Println("OnClientStopped", data.ToString())
 }
 
-func OnStreambotHealthCheck(data zeromq.MessageData) {
-	fmt.Println("OnStreambotHealthCheck", data.ToString())
+func (s Streambot) OnClientConnected(data zeromq.MessageData) {
+	fmt.Println("OnClientConnected", data.ToString())
 }
 
-func OnServerMapChange(data zeromq.MessageData) {
-	fmt.Println("OnServerMapChange", data.ToString())
+func (s Streambot) OnClientDisconnected(data zeromq.MessageData) {
+	fmt.Println("OnClientDisconnected", data.ToString())
 }
 
-func OnServerScoreChange(data zeromq.MessageData) {
-	fmt.Println("OnServerScoreChange", data.ToInt())
+func (s Streambot) OnSystemHealthCheck(data zeromq.MessageData) {
+	fmt.Println("OnSystemHealthCheck", data.ToString())
 }
 
-func OnServerStatusChange(data zeromq.MessageData) {
-	fmt.Println("OnServerStatusChange", data.ToString())
+func (s Streambot) OnSystemUpdate(data zeromq.MessageData) {
+	fmt.Println("OnSystemUpdate", data.ToString())
 }
 
-func OnServerTitleChange(data zeromq.MessageData) {
-	fmt.Println("OnServerTitleChange", data.ToString())
+func (s Streambot) OnServerMapChanged(data zeromq.MessageData) {
+	fmt.Println("OnServerMapChanged", data.ToString())
 }
 
-func main() {
-	godotenv.Load()
-	wg := sync.WaitGroup{}
+func (s Streambot) OnServerScoreChanged(data zeromq.MessageData) {
+	fmt.Println("OnServerScoreChanged", data.ToInt())
+}
 
-	/*wg.Add(1)
-	go func() {
-		proxy := zeromq.NewProxy(
-			os.Getenv("ZMQ_PROXY_FRONTEND_ADDRESS"),
-			os.Getenv("ZMQ_PROXY_BACKEND_ADDRESS"),
-		)
-		proxy.Start()
-	}()
-	zeromq.WaitForConnection()*/
+func (s Streambot) OnServerStatusChanged(data zeromq.MessageData) {
+	fmt.Println("OnServerStatusChanged", data.ToString())
+}
 
-	subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), zeromq.TopicsAll, OnMessage)
-	wg.Add(1)
-	go func() {
-		subscriber.Start()
-	}()
-	zeromq.WaitForConnection()
-
-	wg.Wait()
-
-	/*
-
-
-		ticker := time.NewTicker(time.Duration(5) * time.Second)
-		//process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
-
-		wg.Add(1)
-
-		publisher := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
-
-		go func() {
-			for ; true; <-ticker.C {
-				address := process.TcpAddress()
-				fmt.Println("process.TcpAddress", address)
-				info, _ := serverstat.GetInfo("troopers.fi:28001")
-				fmt.Println(info)
-				publisher.SendMessage("hello", "world")
-			}
-		}()
-
-		wg.Wait()
-	*/
-	/*
-		wg := sync.WaitGroup{}
-		subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), "")
-
-		wg.Add(1)
-		go func() {
-			subscriber.Start()
-		}()
-
-		publiser := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
-		publiser.SendMessage("hehe", "")*/
-
-	/*cfg, _ := config.NewFromFile(os.Getenv("STREAMBOT_CONFIG_PATH"))
-	fmt.Println("cfg.Mode", cfg.Mode)
-	fmt.Println("cfg.MapChangeTimestamp", cfg.MapChangeTimestamp)
-	fmt.Println("cfg.SpecAddress", cfg.SpecAddress)
-	fmt.Println("cfg.ServerAddress", cfg.ServerAddress, "\n")
-
-	wg.Add(1)
-
-	go func() {
-		proc := ezquake.NewProcess(os.Getenv("EZQUAKE_BIN_PATH"))
-		eventHandler := func(topic string, data any) {
-			fmt.Println("got event", topic, data)
-		}
-
-		pmon := task.NewProcessMonitor(&proc, eventHandler)
-		pmon.Start(4 * time.Second)
-
-		foo := func() { fmt.Println(events.StreambotHealthCheck) }
-		hth := task.NewPeriodicalTask(foo)
-		hth.Start(10 * time.Second)
-	}()
-
-	wg.Wait()*/
+func (s Streambot) OnServerTitleChanged(data zeromq.MessageData) {
+	fmt.Println("OnServerTitleChanged", data.ToString())
 }
