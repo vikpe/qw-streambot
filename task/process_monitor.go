@@ -3,8 +3,8 @@ package task
 import (
 	"time"
 
-	"github.com/vikpe/streambot/events"
 	"github.com/vikpe/streambot/ezquake"
+	"github.com/vikpe/streambot/topics"
 )
 
 type ProcessMonitor struct {
@@ -37,10 +37,10 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 			diff := NewProcessDiff(currentState, prevState)
 
 			if diff.HasStarted {
-				p.onEvent(events.EzquakeProcessStart, "")
+				p.onEvent(topics.ClientStart, "")
 
 			} else if diff.HasStopped {
-				p.onEvent(events.EzquakeProcessStop, "")
+				p.onEvent(topics.ClientStop, "")
 			}
 
 			prevState = currentState

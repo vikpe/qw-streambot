@@ -7,26 +7,29 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/streambot/events"
+	"github.com/vikpe/streambot/topics"
 	"github.com/vikpe/streambot/zeromq"
 )
 
-func OnMessage(msg zeromq.Event) {
-	handlers := map[string]zeromq.EventDataHandler{
-		// ezquak events
-		events.EzquakeProcessStart:  OnEzquakeProcessStart,
-		events.EzquakeProcessStop:   OnEzquakeProcessStop,
-		events.EzquakeServerConnect: OnEzquakeServerConnect,
+func OnMessage(msg zeromq.Message) {
+	handlers := map[string]zeromq.MessageDataHandler{
+		// client
+		topics.ClientStart:      OnClientStart,
+		topics.ClientStop:       OnClientStop,
+		topics.ClientConnect:    OnClientConnect,
+		topics.ClientDisconnect: OnClientDisconnect,
 
-		// server events
-		events.ServerMapChange:        OnServerMapChange,
-		events.ServerScoreChange:      OnServerScoreChange,
-		events.ServerStatusNameChange: OnServerStatusNameChange,
-		events.ServerTitleChange:      OnServerTitleChange,
+		// server
+		topics.ServerMapChange:    OnServerMapChange,
+		topics.ServerScoreChange:  OnServerScoreChange,
+		topics.ServerStatusChange: OnServerStatusChange,
+		topics.ServerTitleChange:  OnServerTitleChange,
 
-		// streambot events
-		events.StreambotHealthCheck:         OnStreambotHealthCheck,
-		events.StreambotActionSuggestServer: OnStreambotActionSuggestServer,
+		// streambot
+		topics.StreambotHealthCheck: OnStreambotHealthCheck,
+
+		// user actions
+		topics.ActionSuggestServer: OnActionSuggestServer,
 	}
 
 	if handler, ok := handlers[msg.Topic]; ok {
@@ -36,41 +39,45 @@ func OnMessage(msg zeromq.Event) {
 	}
 }
 
-func OnStreambotActionSuggestServer(data zeromq.EventData) {
+func OnActionSuggestServer(data zeromq.MessageData) {
 	var server mvdsv.Mvdsv
 	data.To(&server)
 	fmt.Println("StreambotActionSuggestServer", server.Address, data)
 }
 
-func OnEzquakeProcessStart(data zeromq.EventData) {
-	fmt.Println("OnEzquakeProcessStart", data.ToString())
+func OnClientStart(data zeromq.MessageData) {
+	fmt.Println("OnClientStart", data.ToString())
 }
 
-func OnEzquakeProcessStop(data zeromq.EventData) {
-	fmt.Println("OnEzquakeProcessStop", data.ToString())
+func OnClientStop(data zeromq.MessageData) {
+	fmt.Println("OnClientStop", data.ToString())
 }
 
-func OnEzquakeServerConnect(data zeromq.EventData) {
-	fmt.Println("OnEzquakeServerConnect", data.ToString())
+func OnClientConnect(data zeromq.MessageData) {
+	fmt.Println("OnClientConnect", data.ToString())
 }
 
-func OnStreambotHealthCheck(data zeromq.EventData) {
+func OnClientDisconnect(data zeromq.MessageData) {
+	fmt.Println("OnClientDisconnect", data.ToString())
+}
+
+func OnStreambotHealthCheck(data zeromq.MessageData) {
 	fmt.Println("OnStreambotHealthCheck", data.ToString())
 }
 
-func OnServerMapChange(data zeromq.EventData) {
+func OnServerMapChange(data zeromq.MessageData) {
 	fmt.Println("OnServerMapChange", data.ToString())
 }
 
-func OnServerScoreChange(data zeromq.EventData) {
+func OnServerScoreChange(data zeromq.MessageData) {
 	fmt.Println("OnServerScoreChange", data.ToInt())
 }
 
-func OnServerStatusNameChange(data zeromq.EventData) {
-	fmt.Println("OnServerStatusNameChange", data.ToString())
+func OnServerStatusChange(data zeromq.MessageData) {
+	fmt.Println("OnServerStatusChange", data.ToString())
 }
 
-func OnServerTitleChange(data zeromq.EventData) {
+func OnServerTitleChange(data zeromq.MessageData) {
 	fmt.Println("OnServerTitleChange", data.ToString())
 }
 

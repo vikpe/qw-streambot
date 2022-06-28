@@ -9,14 +9,14 @@ import (
 type Subscriber struct {
 	address   string
 	topics    string
-	onMessage EventHandler
+	onMessage MessageHandler
 }
 
-func NewSubscriber(address string, topics string, onEvent EventHandler) Subscriber {
+func NewSubscriber(address string, topics string, onMessage MessageHandler) Subscriber {
 	return Subscriber{
 		address:   address,
 		topics:    topics,
-		onMessage: onEvent,
+		onMessage: onMessage,
 	}
 }
 
@@ -28,10 +28,12 @@ func (s Subscriber) Start() {
 	subSocket.SetSubscribe(s.topics)
 
 	for {
-		if rawMsg, err := subSocket.RecvMessage(0); err != nil {
+		zmqMsg, err := subSocket.RecvMessage(0)
+
+		if err != nil {
 			pp.Print("Error recieving message", err)
 		} else {
-			msg := ParseEvent(rawMsg)
+			msg := NewMessage(zmqMsg)
 			s.onMessage(msg)
 		}
 	}
