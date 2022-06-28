@@ -10,10 +10,10 @@ import (
 type ProcessMonitor struct {
 	isDone  bool
 	process *ezquake.Process
-	onEvent EventHandler
+	onEvent func(string, any)
 }
 
-func NewProcessMonitor(process *ezquake.Process, onEvent EventHandler) ProcessMonitor {
+func NewProcessMonitor(process *ezquake.Process, onEvent func(string, any)) ProcessMonitor {
 	return ProcessMonitor{
 		isDone:  false,
 		process: process,
