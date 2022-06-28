@@ -25,7 +25,7 @@ func (p Proxy) Start() error {
 	err := frontend.Bind(p.frontendAddress)
 
 	if err != nil {
-		fmt.Println("unable to connect to frontend")
+		fmt.Println("unable to connect to frontend", err.Error())
 		return err
 	}
 
@@ -35,7 +35,7 @@ func (p Proxy) Start() error {
 	err = backend.Bind(p.backendAddress)
 
 	if err != nil {
-		fmt.Println("unable to bind to backend")
+		fmt.Println("unable to bind to backend", err.Error())
 		return err
 	}
 
@@ -44,7 +44,7 @@ func (p Proxy) Start() error {
 	err = zmq.Proxy(frontend, backend, nil)
 
 	if err != nil {
-		fmt.Println("proxy interrupted:", err)
+		fmt.Println("proxy interrupted:", err.Error())
 		return err
 	}
 

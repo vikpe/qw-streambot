@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -12,20 +11,6 @@ import (
 
 func main() {
 	godotenv.Load()
-
-	proxy := zeromq.NewProxy(
-		os.Getenv("ZMQ_PROXY_FRONTEND_ADDRESS"),
-		os.Getenv("ZMQ_PROXY_BACKEND_ADDRESS"),
-	)
-
-	go func() {
-		err := proxy.Start()
-		if err != nil {
-			fmt.Println("PROXY START FAIL", err.Error())
-			return
-		}
-	}()
-	zeromq.WaitForConnection()
 
 	process := ezquake.NewProcess(os.Getenv("EZQUAKE_BIN_PATH"))
 	pipe := ezquake.NewPipeWriter(os.Getenv("EZQUAKE_USERNAME"))
