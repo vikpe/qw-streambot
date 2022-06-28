@@ -8,44 +8,54 @@ import (
 
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/streambot/ezquake"
-	"github.com/vikpe/streambot/qws"
+	"github.com/vikpe/streambot/task"
 	"github.com/vikpe/streambot/topics"
+	"github.com/vikpe/streambot/util/twitch"
 	"github.com/vikpe/streambot/zeromq"
 )
 
 type Streambot struct {
-	pipe       ezquake.PipeWriter
-	process    ezquake.Process
-	publisher  zeromq.Publisher
-	subscriber zeromq.Subscriber
+	pipe              ezquake.PipeWriter
+	process           ezquake.Process
+	twitch            twitch.Client
+	publisher         zeromq.Publisher
+	subscriberAddress string
 }
 
 func NewStreambot(
-	ezquakeUsername string,
-	ezquakePath string,
-	publisherAddress string,
+	process ezquake.Process,
+	pipe ezquake.PipeWriter,
+	twitchClient twitch.Client,
+	publisher zeromq.Publisher,
 	subscriberAddress string,
 ) Streambot {
-	bot := Streambot{
-		pipe:      ezquake.NewPipeWriter(ezquakeUsername),
-		process:   ezquake.NewProcess(ezquakePath),
-		publisher: zeromq.NewPublisher(publisherAddress),
+	return Streambot{
+		pipe:              pipe,
+		process:           process,
+		publisher:         publisher,
+		twitch:            twitchClient,
+		subscriberAddress: subscriberAddress,
 	}
-	bot.subscriber = zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll, bot.OnMessage)
-
-	return bot
 }
 
 func (s Streambot) Start() {
 	wg := sync.WaitGroup{}
 
 	wg.Add(1)
+
 	go func() {
-		s.subscriber.Start()
+		pmon := task.NewProcessMonitor(&s.process, func(topic string, data any) {
+			s.publisher.SendMessage(topic, data)
+		})
+		pmon.Start(4 * time.Second)
 	}()
 
-	wg.Add(1)
 	go func() {
+		subscriber := zeromq.NewSubscriber(s.subscriberAddress, zeromq.TopicsAll, s.OnMessage)
+		subscriber.Start()
+	}()
+
+	/*go func() {
 		ticker := time.NewTicker(4 * time.Second)
 		for ; true; <-ticker.C {
 			bestServer, err := qws.GetBestServer()
@@ -56,7 +66,7 @@ func (s Streambot) Start() {
 
 			fmt.Println(bestServer.Address, bestServer.Score)
 		}
-	}()
+	}()*/
 
 	wg.Wait()
 }
@@ -112,7 +122,7 @@ func (s Streambot) OnClientConnect(data zeromq.MessageData) {
 
 func (s Streambot) OnClientCommand(data zeromq.MessageData) {
 	fmt.Println("OnClientCommand", data.ToString())
-	s.pipe.Write(data.ToString())
+	//s.pipe.Write(data.ToString())
 }
 
 func (s Streambot) OnClientStarted(data zeromq.MessageData) {
@@ -162,4 +172,5 @@ func (s Streambot) OnServerStatusChanged(data zeromq.MessageData) {
 
 func (s Streambot) OnServerTitleChanged(data zeromq.MessageData) {
 	fmt.Println("OnServerTitleChanged", data.ToString())
+	//s.twitch.SetTitle(data.ToString())
 }
