@@ -9,7 +9,6 @@ import (
 type Proxy struct {
 	frontendAddress string
 	backendAddress  string
-	OnStart         func()
 }
 
 func NewProxy(frontend string, backend string) Proxy {
@@ -41,7 +40,7 @@ func (p Proxy) Start() error {
 	}
 
 	// run until interrupt
-	p.OnStart()
+	fmt.Println("starting proxy")
 	err = zmq.Proxy(frontend, backend, nil)
 
 	if err != nil {

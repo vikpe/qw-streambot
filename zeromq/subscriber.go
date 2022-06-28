@@ -2,19 +2,17 @@ package zeromq
 
 import (
 	"fmt"
-	"os"
-	"strings"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
 type Subscriber struct {
 	address   string
-	topics    []string
+	topics    string
 	onMessage MessageHandler
 }
 
-func NewSubscriber(address string, topics []string, onMessage MessageHandler) Subscriber {
+func NewSubscriber(address string, topics string, onMessage MessageHandler) Subscriber {
 	return Subscriber{
 		address:   address,
 		topics:    topics,
@@ -25,9 +23,9 @@ func NewSubscriber(address string, topics []string, onMessage MessageHandler) Su
 func (s Subscriber) Start() {
 	subSocket, _ := zmq.NewSocket(zmq.SUB)
 	defer subSocket.Close()
-	subSocket.Connect(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"))
+	subSocket.Connect(s.address)
 	WaitForConnection()
-	subSocket.SetSubscribe(strings.Join(s.topics, " "))
+	subSocket.SetSubscribe(s.topics)
 
 	for {
 		zmqMsg, err := subSocket.RecvMessage(0)

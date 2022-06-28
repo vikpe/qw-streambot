@@ -18,9 +18,17 @@ func WaitForConnection() {
 func PubSendMessage(address string, topic string, data any) {
 	pubSocket, _ := zmq.NewSocket(zmq.PUB)
 	defer pubSocket.Close()
-	pubSocket.Connect(address)
+	err := pubSocket.Connect(address)
+	if err != nil {
+		fmt.Println("error connecting to pub socket", err)
+		return
+	}
 	WaitForConnection()
 
 	dataAsJson, _ := json.Marshal(data)
-	pubSocket.SendMessage(topic, dataAsJson, fmt.Sprintf("%T", data))
+	_, err = pubSocket.SendMessage(topic, dataAsJson, fmt.Sprintf("%T", data))
+	if err != nil {
+		fmt.Println("error sending message", err)
+		return
+	}
 }
