@@ -1,5 +1,6 @@
 .idea/
 quake/
+cmd/proxy/proxy
 coverage.out
 streambot
 !.gitkeep
