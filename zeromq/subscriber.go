@@ -1,6 +1,7 @@
 package zeromq
 
 import (
+	"fmt"
 	"os"
 
 	zmq "github.com/pebbe/zmq4"
@@ -31,7 +32,7 @@ func (s Subscriber) Start() {
 		zmqMsg, err := subSocket.RecvMessage(0)
 
 		if err != nil {
-			pp.Print("Error recieving message", err)
+			fmt.Println("Error recieving message", err)
 		} else {
 			msg := NewMessage(zmqMsg)
 			s.onMessage(msg)
