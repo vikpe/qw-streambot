@@ -7,6 +7,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goccy/go-json v0.9.7
 	github.com/joho/godotenv v1.4.0
+	github.com/nicklaw5/helix/v2 v2.5.0
 	github.com/pebbe/zmq4 v1.2.9
 	github.com/stretchr/testify v1.7.4
 	github.com/vikpe/serverstat v0.1.81
@@ -15,6 +16,7 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
