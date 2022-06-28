@@ -20,8 +20,6 @@ func NewProxy(frontend string, backend string) Proxy {
 }
 
 func (p Proxy) Start() error {
-	pp.Print("PROXY START")
-
 	// frontend - endpoint for publishers
 	frontend, _ := zmq.NewSocket(zmq.XSUB)
 	defer frontend.Close()
