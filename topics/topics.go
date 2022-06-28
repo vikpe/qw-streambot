@@ -1,23 +1,28 @@
 package topics
 
-const ClientStart = "CLIENT_START"
-const ClientStop = "CLIENT_STOP"
-const ClientConnect = "CLIENT_CONNECT"
-const ClientDisconnect = "CLIENT_DISCONNECT"
+// Examples — for events raised before/after state change:
+//
+// FileDownloading / FileDownloaded
+// TemperatureChanging / TemperatureChanged
+// MailArriving / MailArrived
 
-const ServerMapChange = "SERVER_MAP_CHANGE"
-const ServerStatusChange = "SERVER_STATUS_NAME_CHANGE"
-const ServerScoreChange = "SERVER_SCORE_CHANGE"
-const ServerTitleChange = "SERVER_TITLE_CHANGE"
+const (
+	ClientConnect = "client.connect"
+	ClientCommand = "client.command"
 
-const StreambotHealthCheck = "STREAMBOT_HEALTH_CHECK"
-const StreambotSystemUpdate = "STREAMBOT_SYSTEM_UPDATE"
+	ClientStarted      = "client.started"
+	ClientStopped      = "client.stopped"
+	ClientConnected    = "client.connected"
+	ClientDisconnected = "client.disconnected"
 
-const ActionSuggestServer = "ACTION_SUGGEST_SERVER"
+	ServerMapChanged    = "server.map_changed"
+	ServerStatusChanged = "server.status_changed"
+	ServerScoreChanged  = "server.score_changed"
+	ServerTitleChanged  = "server.title_changed"
 
-const CommandConsole = "COMMAND_CONSOLE"
-const CommandCommand = "COMMAND_COMMAND"
-const CommandLastscores = "COMMAND_LASTSCORES"
-const CommandSay = "COMMAND_SAY"
-const CommandShowscores = "COMMAND_SHOWSCORES"
-const CommandTrack = "COMMAND_TRACK"
+	SystemHealthCheck = "system.health_check"
+	SystemUpdate      = "system.update"
+	StopClient        = "client.stop"
+	StopBrain         = "brain.stop"
+	StopChatbot       = "chatbot.stop"
+)
