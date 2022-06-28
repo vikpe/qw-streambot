@@ -122,6 +122,13 @@ func (s Streambot) OnClientConnect(data zeromq.MessageData) {
 
 func (s Streambot) OnClientCommand(data zeromq.MessageData) {
 	fmt.Println("OnClientCommand", data.ToString())
+
+	if s.process.IsStarted() {
+		fmt.Println("started!")
+	} else {
+		fmt.Println("not started")
+	}
+
 	//s.pipe.Write(data.ToString())
 }
 
