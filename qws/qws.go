@@ -11,7 +11,6 @@ import (
 type ServerList []mvdsv.Mvdsv
 
 func GetMvdsvServers() ServerList {
-
 	serversUrl := "https://metaqtv.quake.se/v2/servers/mvdsv"
 	resp, err := resty.New().R().SetResult(ServerList{}).Get(serversUrl)
 

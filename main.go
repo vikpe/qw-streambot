@@ -20,13 +20,14 @@ func main() {
 		os.Getenv("TWITCH_API_BROADCASTER_ID"),
 	)
 	publisher := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
+	subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), zeromq.TopicsAll)
 
 	bot := NewStreambot(
 		process,
 		pipe,
 		twitchClient,
 		publisher,
-		os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"),
+		subscriber,
 	)
 	bot.Start()
 }
