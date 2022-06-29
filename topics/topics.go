@@ -7,8 +7,8 @@ package topics
 // MailArriving / MailArrived
 
 const (
-	ClientConnect = "client.connect"
-	ClientCommand = "client.command"
+	ConnectToServer = "client.connect"
+	ClientCommand   = "client.command"
 
 	ClientStarted      = "client.started"
 	ClientStopped      = "client.stopped"
