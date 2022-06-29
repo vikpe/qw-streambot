@@ -12,6 +12,7 @@ import (
 func main() {
 	godotenv.Load()
 
+	playerName := os.Getenv("EZQUAKE_PLAYER_NAME")
 	process := ezquake.NewProcess(os.Getenv("EZQUAKE_BIN_PATH"))
 	pipe := ezquake.NewPipeWriter(os.Getenv("EZQUAKE_USERNAME"))
 	twitchClient := twitch.NewClient(
@@ -23,6 +24,7 @@ func main() {
 	subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), zeromq.TopicsAll)
 
 	bot := NewStreambot(
+		playerName,
 		process,
 		pipe,
 		twitchClient,

@@ -19,15 +19,17 @@ import (
 )
 
 type Streambot struct {
-	pipe          ezquake.PipeWriter
-	process       ezquake.Process
-	serverMonitor task.ServerMonitor
-	twitch        twitch.Client
-	publisher     zeromq.Publisher
-	subscriber    zeromq.Subscriber
+	clientPlayerName string
+	pipe             ezquake.PipeWriter
+	process          ezquake.Process
+	serverMonitor    task.ServerMonitor
+	twitch           twitch.Client
+	publisher        zeromq.Publisher
+	subscriber       zeromq.Subscriber
 }
 
 func NewStreambot(
+	clientPlayerName string,
 	process ezquake.Process,
 	pipe ezquake.PipeWriter,
 	twitchClient twitch.Client,
@@ -35,12 +37,13 @@ func NewStreambot(
 	subscriber zeromq.Subscriber,
 ) Streambot {
 	return Streambot{
-		pipe:          pipe,
-		process:       process,
-		serverMonitor: task.NewServerMonitor(publisher.SendMessage),
-		twitch:        twitchClient,
-		publisher:     publisher,
-		subscriber:    subscriber,
+		clientPlayerName: clientPlayerName,
+		pipe:             pipe,
+		process:          process,
+		serverMonitor:    task.NewServerMonitor(publisher.SendMessage),
+		twitch:           twitchClient,
+		publisher:        publisher,
+		subscriber:       subscriber,
 	}
 }
 
@@ -141,7 +144,7 @@ func (s *Streambot) OnConnectToServer(data zeromq.MessageData) {
 		genericServer, _ := serverstat.GetInfo(server.Address)
 		server := convert.ToMvdsv(genericServer)
 
-		if analyze.HasSpectator(server, "player666") {
+		if analyze.HasSpectator(server, s.clientPlayerName) {
 			fmt.Println(" - oooh yes. ggggggggggggggggggg")
 		} else {
 			fmt.Println(" - NIET!")
