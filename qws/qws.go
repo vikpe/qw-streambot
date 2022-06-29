@@ -3,6 +3,7 @@ package qws
 import (
 	"errors"
 	"fmt"
+	"sort"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
@@ -24,7 +25,13 @@ func GetMvdsvServers() ServerList {
 }
 
 func GetBestServer() (mvdsv.Mvdsv, error) {
-	for _, server := range GetMvdsvServers() {
+	servers := GetMvdsvServers()
+
+	sort.Slice(servers, func(i, j int) bool {
+		return servers[i].Score > servers[j].Score
+	})
+
+	for _, server := range servers {
 		if IsRelevantServer(server) {
 			return server, nil
 		}
