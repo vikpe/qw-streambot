@@ -23,14 +23,14 @@ func TestEndToEnd(t *testing.T) {
 	topicsReceived := make([]string, 0)
 
 	go func() {
-		subscriber := zeromq.NewSubscriber("tcp://localhost:5556", zeromq.TopicsAll, func(message zeromq.Message) {
+		subscriber := zeromq.NewSubscriber("tcp://localhost:5556", zeromq.TopicsAll)
+		subscriber.Start(func(message zeromq.Message) {
 			topicsReceived = append(topicsReceived, message.Topic)
 
 			if len(topicsReceived) == len(topicsToSend) {
 				wg.Done()
 			}
 		})
-		subscriber.Start()
 	}()
 	zeromq.WaitForConnection()
 
