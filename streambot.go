@@ -102,9 +102,22 @@ func (s *Streambot) OnMessage(msg zeromq.Message) {
 func (s *Streambot) Evaluate() {
 	fmt.Println("Evaluate", s.serverMonitor.GetAddress())
 
+	bestServer, _ := qws.GetBestServer()
+
 	if "" == s.serverMonitor.GetAddress() {
-		server, _ := qws.GetBestServer()
-		s.publisher.SendMessage(topics.ConnectToServer, server)
+		s.publisher.SendMessage(topics.ConnectToServer, bestServer)
+	}
+
+	currentServer := GetServer(s.serverMonitor.GetAddress())
+	shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
+
+	if shouldConsiderChange {
+		if bestServer.Score > currentServer.Score {
+			fmt.Println("better server found", bestServer.Address, bestServer.Score)
+			s.publisher.SendMessage(topics.ConnectToServer, bestServer)
+		} else {
+			fmt.Println("currently at best server")
+		}
 	}
 }
 
@@ -213,4 +226,20 @@ func (s *Streambot) OnServerStatusChanged(data zeromq.MessageData) {
 func (s *Streambot) OnServerTitleChanged(data zeromq.MessageData) {
 	fmt.Println("OnServerTitleChanged", data.ToString())
 	//s.twitch.SetTitle(data.ToString())
+}
+
+func GetServer(address string) mvdsv.Mvdsv {
+	nullResult := mvdsv.Mvdsv{}
+
+	if "" == address {
+		return nullResult
+	}
+
+	genericServer, err := serverstat.GetInfo(address)
+
+	if err != nil {
+		return nullResult
+	}
+
+	return convert.ToMvdsv(genericServer)
 }
