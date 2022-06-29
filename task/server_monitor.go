@@ -9,17 +9,28 @@ import (
 )
 
 type ServerMonitor struct {
-	isDone  bool
-	Address string
-	onEvent func(string, any)
+	isDone    bool
+	onEvent   func(string, any)
+	address   string
+	prevState ServerState
 }
 
-func NewServerMonitor(address string, onEvent func(string, any)) ServerMonitor {
+func NewServerMonitor(onEvent func(string, any)) ServerMonitor {
 	return ServerMonitor{
-		isDone:  false,
-		onEvent: onEvent,
-		Address: address,
+		isDone:    false,
+		onEvent:   onEvent,
+		address:   "",
+		prevState: NewServerState(""),
 	}
+}
+
+func (s *ServerMonitor) SetAddress(address string) {
+	s.address = address
+	s.prevState = NewServerState("")
+}
+
+func (s *ServerMonitor) GetAddress() string {
+	return s.address
 }
 
 func (s *ServerMonitor) Start(interval time.Duration) {
@@ -27,15 +38,14 @@ func (s *ServerMonitor) Start(interval time.Duration) {
 
 	go func() {
 		ticker := time.NewTicker(interval)
-		prevState := NewServerState(s.Address)
 
 		for ; true; <-ticker.C {
 			if s.isDone {
 				return
 			}
 
-			currentState := NewServerState(s.Address)
-			diff := NewServerStateDiff(currentState, prevState)
+			currentState := NewServerState(s.address)
+			diff := NewServerStateDiff(currentState, s.prevState)
 
 			if diff.HasChangedTitle {
 				s.onEvent(topics.ServerTitleChanged, currentState.Title)
@@ -49,8 +59,10 @@ func (s *ServerMonitor) Start(interval time.Duration) {
 				s.onEvent(topics.ServerScoreChanged, currentState.Score)
 			}
 
-			prevState = currentState
+			s.prevState = currentState
 		}
+
+		defer ticker.Stop()
 	}()
 }
 
