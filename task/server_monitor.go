@@ -65,22 +65,19 @@ type ServerState struct {
 }
 
 func NewServerState(address string) ServerState {
+	nullState := ServerState{
+		Title: "",
+		Map:   "",
+		Score: 0,
+	}
 	if "" == address {
-		return ServerState{
-			Title: "",
-			Map:   "",
-			Score: 0,
-		}
+		return nullState
 	}
 
 	genericServer, err := serverstat.GetInfo(address)
 
 	if err != nil {
-		return ServerState{
-			Title: "",
-			Map:   "",
-			Score: 0,
-		}
+		return nullState
 	}
 
 	server := convert.ToMvdsv(genericServer)
