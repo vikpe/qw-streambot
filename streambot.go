@@ -26,6 +26,7 @@ type Streambot struct {
 	twitch           twitch.Client
 	publisher        zeromq.Publisher
 	subscriber       zeromq.Subscriber
+	AutoMode         bool
 }
 
 func NewStreambot(
@@ -44,26 +45,23 @@ func NewStreambot(
 		twitch:           twitchClient,
 		publisher:        publisher,
 		subscriber:       subscriber,
+		AutoMode:         true,
 	}
 }
 
 func (s *Streambot) Start() {
 	// event listeners
 	s.subscriber.Start(s.OnMessage)
+	zeromq.WaitForConnection()
 
 	// event dispatchers
 	processMonitor := task.NewProcessMonitor(&s.process, s.publisher.SendMessage)
 	processMonitor.Start(3 * time.Second)
 	s.serverMonitor.Start(5 * time.Second)
 
-	// health check
-	go func() {
-		ticker := time.NewTicker(10 * time.Second)
-
-		for ; true; <-ticker.C {
-			s.publisher.SendMessage(topics.SystemHealthCheck, "")
-		}
-	}()
+	// evaluate every x seconds
+	ev := task.NewPeriodicalTask(func() { s.publisher.SendMessage(topics.Evaluate, "") })
+	ev.Start(10 * time.Second)
 
 	wg := sync.WaitGroup{}
 	wg.Add(1)
@@ -73,11 +71,14 @@ func (s *Streambot) Start() {
 func (s *Streambot) OnMessage(msg zeromq.Message) {
 	handlers := map[string]zeromq.MessageDataHandler{
 		// commands
-		topics.ConnectToServer:   s.OnConnectToServer,
-		topics.ClientCommand:     s.OnClientCommand,
-		topics.StopClient:        s.OnStopClient,
-		topics.SystemUpdate:      s.OnSystemUpdate,
-		topics.SystemHealthCheck: s.OnSystemHealthCheck,
+		topics.EnableAuto:      s.OnEnableAuto,
+		topics.DisableAuto:     s.OnDisableAuto,
+		topics.ConnectToServer: s.OnConnectToServer,
+		topics.SuggestServer:   s.OnSuggestServer,
+		topics.ClientCommand:   s.OnClientCommand,
+		topics.StopClient:      s.OnStopClient,
+		topics.SystemUpdate:    s.OnSystemUpdate,
+		topics.Evaluate:        s.OnSystemEvaluate,
 
 		// client events
 		topics.ClientStarted:      s.OnClientStarted,
@@ -99,31 +100,70 @@ func (s *Streambot) OnMessage(msg zeromq.Message) {
 	}
 }
 
-func (s *Streambot) Evaluate() {
-	fmt.Println("Evaluate", s.serverMonitor.GetAddress())
+func (s *Streambot) OnEnableAuto(data zeromq.MessageData) {
+	s.AutoMode = true
+	s.publisher.SendMessage(topics.EnableAuto, "")
+}
 
-	bestServer, _ := qws.GetBestServer()
+func (s *Streambot) OnDisableAuto(data zeromq.MessageData) {
+	s.AutoMode = false
+}
 
-	if "" == s.serverMonitor.GetAddress() {
-		s.publisher.SendMessage(topics.ConnectToServer, bestServer)
+func (s *Streambot) OnSystemEvaluate(data zeromq.MessageData) {
+	fmt.Println("OnSystemEvaluate")
+
+	if !s.process.IsStarted() {
+		fmt.Println("not started: do nothing (wait until started)")
+		return
 	}
 
-	currentServer := GetServer(s.serverMonitor.GetAddress())
-	shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
+	currentServer := s.CurrentServer()
 
-	if shouldConsiderChange {
-		if bestServer.Score > currentServer.Score {
-			fmt.Println("better server found", bestServer.Address, bestServer.Score)
-			s.publisher.SendMessage(topics.ConnectToServer, bestServer)
-		} else {
-			fmt.Println("currently at best server")
+	if s.AutoMode {
+		shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
+
+		if !shouldConsiderChange {
+			fmt.Println("should not consider change: do nothing")
+			return
 		}
+
+		bestServer, err := qws.GetBestServer()
+
+		if err != nil {
+			fmt.Println("no server found..")
+			return
+		}
+
+		isAtBestServer := currentServer.Score >= bestServer.Score
+
+		if isAtBestServer {
+			fmt.Println("at best server: do nothing")
+			return
+		}
+
+		s.publisher.SendMessage(topics.ConnectToServer, bestServer)
+
+	} else {
+		const MinScore = 30
+		isCrapServer := currentServer.Score < MinScore
+
+		if !isCrapServer {
+			fmt.Println("server is ok: do nothing")
+			return
+		}
+		fmt.Print("server is shit: enable auto")
+
+		s.publisher.SendMessage(topics.EnableAuto, "")
 	}
 }
 
-func (s *Streambot) OnStart() {
-	fmt.Println("OnStart")
-	s.Evaluate()
+func (s *Streambot) CurrentServer() mvdsv.Mvdsv {
+	return GetServer(s.serverMonitor.GetAddress())
+}
+
+func (s *Streambot) OnSuggestServer(data zeromq.MessageData) {
+	s.publisher.SendMessage(topics.DisableAuto, "")
+	s.publisher.SendMessage(topics.ConnectToServer, data)
 }
 
 func (s *Streambot) OnConnectToServer(data zeromq.MessageData) {
@@ -200,11 +240,6 @@ func (s *Streambot) OnClientConnected(data zeromq.MessageData) {
 
 func (s *Streambot) OnClientDisconnected(data zeromq.MessageData) {
 	fmt.Println("OnClientDisconnected", data.ToString())
-}
-
-func (s *Streambot) OnSystemHealthCheck(data zeromq.MessageData) {
-	fmt.Println("OnSystemHealthCheck", data.ToString())
-	s.Evaluate()
 }
 
 func (s *Streambot) OnSystemUpdate(data zeromq.MessageData) {
