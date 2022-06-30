@@ -6,10 +6,8 @@ package topics
 // TemperatureChanging / TemperatureChanged
 // MailArriving / MailArrived
 
+// events
 const (
-	ConnectToServer = "client.connect"
-	ClientCommand   = "client.command"
-
 	ClientStarted      = "client.started"
 	ClientStopped      = "client.stopped"
 	ClientConnected    = "client.connected"
@@ -19,10 +17,19 @@ const (
 	ServerStatusChanged = "server.status_changed"
 	ServerScoreChanged  = "server.score_changed"
 	ServerTitleChanged  = "server.title_changed"
+)
 
-	SystemHealthCheck = "system.health_check"
-	SystemUpdate      = "system.update"
-	StopClient        = "client.stop"
-	StopBrain         = "brain.stop"
-	StopChatbot       = "chatbot.stop"
+// commands
+const (
+	ClientCommand = "client.command"
+	StopClient    = "client.stop"
+	StopBrain     = "brain.stop"
+	StopChatbot   = "chatbot.stop"
+
+	ConnectToServer = "streambot.connect_to_server"
+	SuggestServer   = "streambot.suggest_server"
+	EnableAuto      = "streambot.enable_auto"
+	DisableAuto     = "streambot.disable_auto"
+	Evaluate        = "streambot.evaluate"
+	SystemUpdate    = "streambot.system_update"
 )
