@@ -6,6 +6,9 @@
 apt-get install libzmq3-dev
 ```
 
+## Twitch
+* [Generate OATH for bot](https://twitchapps.com/tmi/)
+
 ## Build
 ### Options
 Prevent interrupted system calls [see docs](https://pkg.go.dev/github.com/pebbe/zmq4#section-documentation).
