@@ -9,10 +9,11 @@ import (
 )
 
 type ServerMonitor struct {
-	isDone    bool
-	onEvent   func(string, any)
-	address   string
-	prevState ServerState
+	isDone           bool
+	onEvent          func(string, any)
+	address          string
+	addressTimestamp time.Time
+	prevState        ServerState
 }
 
 func NewServerMonitor(onEvent func(string, any)) ServerMonitor {
@@ -27,10 +28,15 @@ func NewServerMonitor(onEvent func(string, any)) ServerMonitor {
 func (s *ServerMonitor) SetAddress(address string) {
 	s.address = address
 	s.prevState = NewServerState("")
+	s.addressTimestamp = time.Now()
 }
 
 func (s *ServerMonitor) GetAddress() string {
 	return s.address
+}
+
+func (s *ServerMonitor) GetAddressTimestamp() time.Time {
+	return s.addressTimestamp
 }
 
 func (s *ServerMonitor) Start(interval time.Duration) {
