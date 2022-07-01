@@ -113,15 +113,41 @@ func (s *Streambot) OnStreambotDisableAuto(data zeromq.MessageData) {
 	s.AutoMode = false
 }
 
+func (s *Streambot) ValidateCurrentServer() {
+	if "" == s.serverMonitor.GetAddress() {
+		return
+	}
+
+	secondsConnected := time.Now().Sub(s.serverMonitor.GetAddressTimestamp()).Seconds()
+	connectionGracePeriod := 10.0
+
+	if secondsConnected <= connectionGracePeriod {
+		return
+	}
+
+	currentServer := s.GetCurrentServer()
+	if analyze.HasSpectator(currentServer, s.clientPlayerName) {
+		return
+	}
+
+	fmt.Println("not connected to current server (reset server address)", currentServer.SpectatorNames, currentServer.QtvStream.SpectatorNames)
+	s.serverMonitor.SetAddress("")
+}
+
 func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
 	pp.Print("OnStreambotEvaluate - ")
 
+	// check process
 	if !s.process.IsStarted() {
 		fmt.Println("not started: do nothing (wait until started)")
 		return
 	}
 
-	currentServer := s.CurrentServer()
+	// validate current server
+	s.ValidateCurrentServer()
+
+	// check server
+	currentServer := s.GetCurrentServer()
 
 	if s.AutoMode {
 		shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
@@ -161,7 +187,7 @@ func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
 	}
 }
 
-func (s *Streambot) CurrentServer() mvdsv.Mvdsv {
+func (s *Streambot) GetCurrentServer() mvdsv.Mvdsv {
 	return GetServer(s.serverMonitor.GetAddress())
 }
 
@@ -174,39 +200,25 @@ func (s *Streambot) OnStreambotConnectToServer(data zeromq.MessageData) {
 	var server mvdsv.Mvdsv
 	data.To(&server)
 
-	fmt.Print("OnStreambotConnectToServer", server.Address, data)
+	pp.Print("OnStreambotConnectToServer", server.Address, data)
 
 	if s.serverMonitor.GetAddress() == server.Address {
-		pp.Println(" .. already connected to server")
+		fmt.Println(" .. already connected to server")
 		return
 	}
 
 	if len(server.QtvStream.Url) > 0 {
 		s.ClientCommand(fmt.Sprintf("qtvplay %s", server.QtvStream.Url))
-		s.ClientCommand("bot_track")
 	} else {
 		s.ClientCommand(fmt.Sprintf("connect %s", server.Address))
-
-		time.AfterFunc(4*time.Second, func() {
-			s.ClientCommand("bot_track")
-		})
 	}
 
-	pp.Println(" .. new server!", server.Address)
-	s.serverMonitor.SetAddress(server.Address)
-
-	// validate that we connected
-	time.AfterFunc(8*time.Second, func() {
-		pp.Println("VALIDATE THAT WE ARE ON SERVER")
-		genericServer, _ := serverstat.GetInfo(server.Address)
-		server := convert.ToMvdsv(genericServer)
-
-		if analyze.HasSpectator(server, s.clientPlayerName) {
-			pp.Println(" - oooh yes. ggggggggggggggggggg")
-		} else {
-			pp.Println(" - NIET!")
-		}
+	time.AfterFunc(4*time.Second, func() {
+		s.ClientCommand("bot_track")
 	})
+
+	fmt.Println(" .. new server!", server.Address)
+	s.serverMonitor.SetAddress(server.Address)
 }
 
 func (s *Streambot) ClientCommand(command string) {
