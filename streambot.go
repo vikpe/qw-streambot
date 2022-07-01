@@ -90,10 +90,7 @@ func (s *Streambot) OnMessage(msg zeromq.Message) {
 		topics.ClientStopped: s.OnClientStopped,
 
 		// server events
-		topics.ServerMapChanged:    s.OnServerMapChanged,
-		topics.ServerScoreChanged:  s.OnServerScoreChanged,
-		topics.ServerStatusChanged: s.OnServerStatusChanged,
-		topics.ServerTitleChanged:  s.OnServerTitleChanged,
+		topics.ServerTitleChanged: s.OnServerTitleChanged,
 	}
 
 	if handler, ok := handlers[msg.Topic]; ok {
@@ -261,18 +258,6 @@ func (s *Streambot) OnClientStopped(data zeromq.MessageData) {
 
 func (s *Streambot) OnStreambotSystemUpdate(data zeromq.MessageData) {
 	pp.Println("OnStreambotSystemUpdate", data.ToString())
-}
-
-func (s *Streambot) OnServerMapChanged(data zeromq.MessageData) {
-	pp.Println("OnServerMapChanged", data.ToString())
-}
-
-func (s *Streambot) OnServerScoreChanged(data zeromq.MessageData) {
-	pp.Println("OnServerScoreChanged", data.ToInt())
-}
-
-func (s *Streambot) OnServerStatusChanged(data zeromq.MessageData) {
-	pp.Println("OnServerStatusChanged", data.ToString())
 }
 
 func (s *Streambot) OnServerTitleChanged(data zeromq.MessageData) {

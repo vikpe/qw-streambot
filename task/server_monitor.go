@@ -57,14 +57,6 @@ func (s *ServerMonitor) Start(interval time.Duration) {
 				s.onEvent(topics.ServerTitleChanged, currentState.Title)
 			}
 
-			if diff.HasChangedMap {
-				s.onEvent(topics.ServerMapChanged, currentState.Map)
-			}
-
-			if diff.HasChangedScore {
-				s.onEvent(topics.ServerScoreChanged, currentState.Score)
-			}
-
 			s.prevState = currentState
 		}
 
@@ -109,8 +101,6 @@ func NewServerState(address string) ServerState {
 
 type ServerStateDiff struct {
 	HasChangedTitle bool
-	HasChangedMap   bool
-	HasChangedScore bool
 }
 
 func NewServerStateDiff(current ServerState, prev ServerState) ServerStateDiff {
@@ -118,14 +108,6 @@ func NewServerStateDiff(current ServerState, prev ServerState) ServerStateDiff {
 
 	if current.Title != prev.Title {
 		diff.HasChangedTitle = true
-	}
-
-	if current.Map != prev.Map {
-		diff.HasChangedMap = true
-	}
-
-	if current.Score != prev.Score {
-		diff.HasChangedScore = true
 	}
 
 	return diff
