@@ -27,6 +27,7 @@ type Streambot struct {
 	pipe             ezquake.PipeWriter
 	process          ezquake.Process
 	serverMonitor    task.ServerMonitor
+	evaluateTask     task.PeriodicalTask
 	twitch           twitch.Client
 	publisher        zeromq.Publisher
 	subscriber       zeromq.Subscriber
@@ -46,6 +47,7 @@ func NewStreambot(
 		pipe:             pipe,
 		process:          process,
 		serverMonitor:    task.NewServerMonitor(publisher.SendMessage),
+		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topics.StreambotEvaluate, "") }),
 		twitch:           twitchClient,
 		publisher:        publisher,
 		subscriber:       subscriber,
@@ -63,9 +65,9 @@ func (s *Streambot) Start() {
 	processMonitor.Start(3 * time.Second)
 	s.serverMonitor.Start(5 * time.Second)
 
-	// evaluate every x seconds
-	ev := task.NewPeriodicalTask(func() { s.publisher.SendMessage(topics.StreambotEvaluate, "") })
-	ev.Start(10 * time.Second)
+	if s.process.IsStarted() {
+		s.evaluateTask.Start(10 * time.Second)
+	}
 
 	wg := sync.WaitGroup{}
 	wg.Add(1)
@@ -236,7 +238,9 @@ func (s *Streambot) OnClientCommand(data zeromq.MessageData) {
 func (s *Streambot) OnClientStarted(data zeromq.MessageData) {
 	pp.Println("OnClientStarted", data.ToString())
 
-	time.AfterFunc(4*time.Second, func() {
+	s.evaluateTask.Start(10 * time.Second)
+
+	time.AfterFunc(5*time.Second, func() {
 		s.publisher.SendMessage(topics.ClientCommand, "toggleconsole")
 	})
 }
@@ -248,6 +252,7 @@ func (s *Streambot) OnStopClient(data zeromq.MessageData) {
 
 func (s *Streambot) OnClientStopped(data zeromq.MessageData) {
 	pp.Println("OnClientStopped", data.ToString())
+	s.evaluateTask.Stop()
 }
 
 func (s *Streambot) OnClientConnected(data zeromq.MessageData) {
