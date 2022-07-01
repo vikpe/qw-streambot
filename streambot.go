@@ -119,19 +119,16 @@ func (s *Streambot) ValidateCurrentServer() {
 
 	secondsConnected := time.Now().Sub(s.serverMonitor.GetAddressTimestamp()).Seconds()
 	connectionGracePeriod := 10.0
-
 	if secondsConnected <= connectionGracePeriod {
 		return
 	}
 
 	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
-
 	if analyze.HasSpectator(currentServer, s.clientPlayerName) {
 		return
 	}
 
 	altName := fmt.Sprintf("%s(1)", s.clientPlayerName)
-
 	if analyze.HasSpectator(currentServer, altName) {
 		s.publisher.SendMessage(topics.ClientCommand, fmt.Sprintf("name %s", s.clientPlayerName))
 		return
