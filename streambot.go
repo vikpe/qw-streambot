@@ -144,18 +144,16 @@ func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
 	// validate current server
 	s.ValidateCurrentServer()
 
-	// check server
-	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
-
 	// validate based on auto mode
 	if s.AutoMode {
-		s.evaluateAutoModeEnabled(currentServer)
+		s.evaluateAutoModeEnabled()
 	} else {
-		s.evaluateAutoModeDisabled(currentServer)
+		s.evaluateAutoModeDisabled()
 	}
 }
 
-func (s *Streambot) evaluateAutoModeEnabled(currentServer mvdsv.Mvdsv) {
+func (s *Streambot) evaluateAutoModeEnabled() {
+	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
 	shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
 
 	if !shouldConsiderChange {
@@ -177,7 +175,8 @@ func (s *Streambot) evaluateAutoModeEnabled(currentServer mvdsv.Mvdsv) {
 	s.publisher.SendMessage(topics.StreambotConnectToServer, bestServer)
 }
 
-func (s *Streambot) evaluateAutoModeDisabled(currentServer mvdsv.Mvdsv) {
+func (s *Streambot) evaluateAutoModeDisabled() {
+	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
 	const MinScore = 30
 	isOkServer := currentServer.Score >= MinScore
 
