@@ -169,9 +169,9 @@ func (s *Streambot) evaluateAutoModeEnabled(currentServer mvdsv.Mvdsv) {
 		return
 	}
 
-	isAtBestServer := currentServer.Score >= bestServer.Score
+	shouldStay := currentServer.Score >= bestServer.Score || currentServer.Address == bestServer.Address
 
-	if isAtBestServer {
+	if shouldStay {
 		return
 	}
 
