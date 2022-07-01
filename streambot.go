@@ -102,7 +102,7 @@ func (s *Streambot) OnMessage(msg zeromq.Message) {
 
 func (s *Streambot) OnStreambotEnableAuto(data zeromq.MessageData) {
 	s.AutoMode = true
-	s.publisher.SendMessage(topics.StreambotEnableAuto, "")
+	s.publisher.SendMessage(topics.StreambotEvaluate, "")
 }
 
 func (s *Streambot) OnStreambotDisableAuto(data zeromq.MessageData) {
