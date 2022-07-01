@@ -8,10 +8,8 @@ package topics
 
 // events
 const (
-	ClientStarted      = "client.started"
-	ClientStopped      = "client.stopped"
-	ClientConnected    = "client.connected"
-	ClientDisconnected = "client.disconnected"
+	ClientStarted = "client.started"
+	ClientStopped = "client.stopped"
 
 	ServerMapChanged    = "server.map_changed"
 	ServerStatusChanged = "server.status_changed"

@@ -87,10 +87,8 @@ func (s *Streambot) OnMessage(msg zeromq.Message) {
 		topics.StreambotEvaluate:        s.OnStreambotEvaluate,
 
 		// client events
-		topics.ClientStarted:      s.OnClientStarted,
-		topics.ClientStopped:      s.OnClientStopped,
-		topics.ClientConnected:    s.OnClientConnected,
-		topics.ClientDisconnected: s.OnClientDisconnected,
+		topics.ClientStarted: s.OnClientStarted,
+		topics.ClientStopped: s.OnClientStopped,
 
 		// server events
 		topics.ServerMapChanged:    s.OnServerMapChanged,
@@ -253,14 +251,6 @@ func (s *Streambot) OnStopClient(data zeromq.MessageData) {
 func (s *Streambot) OnClientStopped(data zeromq.MessageData) {
 	pp.Println("OnClientStopped", data.ToString())
 	s.evaluateTask.Stop()
-}
-
-func (s *Streambot) OnClientConnected(data zeromq.MessageData) {
-	pp.Println("OnClientConnected", data.ToString())
-}
-
-func (s *Streambot) OnClientDisconnected(data zeromq.MessageData) {
-	pp.Println("OnClientDisconnected", data.ToString())
 }
 
 func (s *Streambot) OnStreambotSystemUpdate(data zeromq.MessageData) {
