@@ -21,9 +21,14 @@ func NewPrettyPrinter(prefix string, colorCode color.Attribute) PrettyPrinter {
 	}
 }
 
-func (pp PrettyPrinter) Print(args ...any) {
+func (pp PrettyPrinter) Println(args ...any) {
 	fmt.Print(timestamp(), DELIMITER, pp.prefix, DELIMITER)
 	fmt.Println(args...)
+}
+
+func (pp PrettyPrinter) Print(args ...any) {
+	fmt.Print(timestamp(), DELIMITER, pp.prefix, DELIMITER)
+	fmt.Print(args...)
 }
 
 func timestamp() string {
