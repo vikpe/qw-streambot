@@ -134,7 +134,8 @@ func (s *Streambot) ValidateCurrentServer() {
 }
 
 func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
-	pp.Print("\nOnStreambotEvaluate - ")
+	fmt.Println()
+	pp.Print("OnStreambotEvaluate - ")
 
 	// check process
 	if !s.process.IsStarted() {
