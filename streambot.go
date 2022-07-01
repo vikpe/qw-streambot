@@ -148,42 +148,47 @@ func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
 	// check server
 	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
 
+	// validate based on auto mode enabled/disabled
 	if s.AutoMode {
-		shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
-
-		if !shouldConsiderChange {
-			fmt.Println("should not consider change: do nothing")
-			return
-		}
-
-		bestServer, err := qws.GetBestServer()
-
-		if err != nil {
-			fmt.Println("no server found..")
-			return
-		}
-
-		isAtBestServer := currentServer.Score >= bestServer.Score
-
-		if isAtBestServer {
-			fmt.Println("at best server: do nothing")
-			return
-		}
-
-		s.publisher.SendMessage(topics.StreambotConnectToServer, bestServer)
-
+		s.evaluateAutoModeEnabled(currentServer)
 	} else {
-		const MinScore = 30
-		isCrapServer := currentServer.Score < MinScore
-
-		if !isCrapServer {
-			fmt.Println("server is ok: do nothing")
-			return
-		}
-		fmt.Println("server is shit: enable auto")
-
-		s.publisher.SendMessage(topics.StreambotEnableAuto, "")
+		s.evaluateAutoModeDisabled(currentServer)
 	}
+}
+
+func (s *Streambot) evaluateAutoModeEnabled(currentServer mvdsv.Mvdsv) {
+	shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
+
+	if !shouldConsiderChange {
+		return
+	}
+
+	bestServer, err := qws.GetBestServer()
+
+	if err != nil {
+		return
+	}
+
+	isAtBestServer := currentServer.Score >= bestServer.Score
+
+	if isAtBestServer {
+		return
+	}
+
+	s.publisher.SendMessage(topics.StreambotConnectToServer, bestServer)
+}
+
+func (s *Streambot) evaluateAutoModeDisabled(currentServer mvdsv.Mvdsv) {
+	const MinScore = 30
+	isOkServer := currentServer.Score >= MinScore
+
+	if !isOkServer {
+		fmt.Println("server is ok: do nothing")
+		return
+	}
+	fmt.Println("server is shit: enable auto")
+
+	s.publisher.SendMessage(topics.StreambotEnableAuto, "")
 }
 
 func (s *Streambot) OnStreambotSuggestServer(data zeromq.MessageData) {
