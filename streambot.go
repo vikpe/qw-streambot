@@ -189,6 +189,14 @@ func (s *Streambot) evaluateAutoModeDisabled(currentServer mvdsv.Mvdsv) {
 		fmt.Println("server is ok: do nothing")
 		return
 	}
+
+	secondsConnected := time.Now().Sub(s.serverMonitor.GetAddressTimestamp()).Seconds()
+	gracePeriod := 60.0 * 5 // 5 minutes
+
+	if secondsConnected < gracePeriod {
+		return
+	}
+
 	fmt.Println("server is shit: enable auto")
 
 	s.publisher.SendMessage(topics.StreambotEnableAuto, "")
