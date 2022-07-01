@@ -1,5 +1,6 @@
 .idea/
 quake/
+cmd/chatbot/chatbot
 cmd/proxy/proxy
 coverage.out
 streambot
