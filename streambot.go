@@ -136,12 +136,8 @@ func (s *Streambot) ValidateCurrentServer() {
 }
 
 func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
-	fmt.Println()
-	pp.Print("OnStreambotEvaluate - ")
-
 	// check process
 	if !s.process.IsStarted() {
-		fmt.Println("not started: do nothing (wait until started)")
 		return
 	}
 
@@ -151,7 +147,7 @@ func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
 	// check server
 	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
 
-	// validate based on auto mode enabled/disabled
+	// validate based on auto mode
 	if s.AutoMode {
 		s.evaluateAutoModeEnabled(currentServer)
 	} else {
