@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
+	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 )
 
 type ServerList []mvdsv.Mvdsv
@@ -45,21 +46,5 @@ func IsRelevantServer(server mvdsv.Mvdsv) bool {
 		return false
 	}
 
-	return IsSpeccable(server)
-}
-
-func IsSpeccable(server mvdsv.Mvdsv) bool {
-	if len(server.QtvStream.Url) > 0 {
-		return true
-	}
-
-	return server.SpectatorSlots.Free > 0 && !RequiresPassword(server.Settings.GetInt("needpass", 0))
-}
-
-func RequiresPassword(needpass int) bool {
-	if 0 == needpass {
-		return false
-	}
-	const spectatorPasswordBit = 2
-	return (needpass & spectatorPasswordBit) > 0
+	return analyze.IsSpeccable(server)
 }
