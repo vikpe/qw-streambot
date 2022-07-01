@@ -7,14 +7,13 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/vikpe/serverstat"
-	"github.com/vikpe/serverstat/qserver/convert"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 	"github.com/vikpe/streambot/ezquake"
 	"github.com/vikpe/streambot/qws"
 	"github.com/vikpe/streambot/task"
 	"github.com/vikpe/streambot/topics"
+	"github.com/vikpe/streambot/util/sstat"
 	"github.com/vikpe/streambot/util/term"
 	"github.com/vikpe/streambot/util/twitch"
 	"github.com/vikpe/streambot/zeromq"
@@ -125,7 +124,7 @@ func (s *Streambot) ValidateCurrentServer() {
 		return
 	}
 
-	currentServer := s.GetCurrentServer()
+	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
 	if analyze.HasSpectator(currentServer, s.clientPlayerName) {
 		return
 	}
@@ -147,7 +146,7 @@ func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
 	s.ValidateCurrentServer()
 
 	// check server
-	currentServer := s.GetCurrentServer()
+	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
 
 	if s.AutoMode {
 		shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
@@ -185,10 +184,6 @@ func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
 
 		s.publisher.SendMessage(topics.StreambotEnableAuto, "")
 	}
-}
-
-func (s *Streambot) GetCurrentServer() mvdsv.Mvdsv {
-	return GetServer(s.serverMonitor.GetAddress())
 }
 
 func (s *Streambot) OnStreambotSuggestServer(data zeromq.MessageData) {
@@ -272,20 +267,4 @@ func (s *Streambot) OnServerStatusChanged(data zeromq.MessageData) {
 func (s *Streambot) OnServerTitleChanged(data zeromq.MessageData) {
 	pp.Println("OnServerTitleChanged", data.ToString())
 	//s.twitch.SetTitle(data.ToString())
-}
-
-func GetServer(address string) mvdsv.Mvdsv {
-	nullResult := mvdsv.Mvdsv{}
-
-	if "" == address {
-		return nullResult
-	}
-
-	genericServer, err := serverstat.GetInfo(address)
-
-	if err != nil {
-		return nullResult
-	}
-
-	return convert.ToMvdsv(genericServer)
 }
