@@ -64,7 +64,7 @@ func (s *Streambot) Start() {
 	s.serverMonitor.Start(5 * time.Second)
 
 	// evaluate every x seconds
-	ev := task.NewPeriodicalTask(func() { s.publisher.SendMessage(topics.Evaluate, "") })
+	ev := task.NewPeriodicalTask(func() { s.publisher.SendMessage(topics.StreambotEvaluate, "") })
 	ev.Start(10 * time.Second)
 
 	wg := sync.WaitGroup{}
@@ -75,14 +75,14 @@ func (s *Streambot) Start() {
 func (s *Streambot) OnMessage(msg zeromq.Message) {
 	handlers := map[string]zeromq.MessageDataHandler{
 		// commands
-		topics.EnableAuto:      s.OnEnableAuto,
-		topics.DisableAuto:     s.OnDisableAuto,
-		topics.ConnectToServer: s.OnConnectToServer,
-		topics.SuggestServer:   s.OnSuggestServer,
-		topics.ClientCommand:   s.OnClientCommand,
-		topics.StopClient:      s.OnStopClient,
-		topics.SystemUpdate:    s.OnSystemUpdate,
-		topics.Evaluate:        s.OnSystemEvaluate,
+		topics.StreambotEnableAuto:      s.OnStreambotEnableAuto,
+		topics.StreambotDisableAuto:     s.OnStreambotDisableAuto,
+		topics.StreambotConnectToServer: s.OnStreambotConnectToServer,
+		topics.StreambotSuggestServer:   s.OnStreambotSuggestServer,
+		topics.ClientCommand:            s.OnClientCommand,
+		topics.StopClient:               s.OnStopClient,
+		topics.StreambotSystemUpdate:    s.OnStreambotSystemUpdate,
+		topics.StreambotEvaluate:        s.OnStreambotEvaluate,
 
 		// client events
 		topics.ClientStarted:      s.OnClientStarted,
@@ -104,17 +104,17 @@ func (s *Streambot) OnMessage(msg zeromq.Message) {
 	}
 }
 
-func (s *Streambot) OnEnableAuto(data zeromq.MessageData) {
+func (s *Streambot) OnStreambotEnableAuto(data zeromq.MessageData) {
 	s.AutoMode = true
-	s.publisher.SendMessage(topics.EnableAuto, "")
+	s.publisher.SendMessage(topics.StreambotEnableAuto, "")
 }
 
-func (s *Streambot) OnDisableAuto(data zeromq.MessageData) {
+func (s *Streambot) OnStreambotDisableAuto(data zeromq.MessageData) {
 	s.AutoMode = false
 }
 
-func (s *Streambot) OnSystemEvaluate(data zeromq.MessageData) {
-	pp.Print("OnSystemEvaluate")
+func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
+	pp.Print("OnStreambotEvaluate")
 
 	if !s.process.IsStarted() {
 		pp.Print("not started: do nothing (wait until started)")
@@ -145,7 +145,7 @@ func (s *Streambot) OnSystemEvaluate(data zeromq.MessageData) {
 			return
 		}
 
-		s.publisher.SendMessage(topics.ConnectToServer, bestServer)
+		s.publisher.SendMessage(topics.StreambotConnectToServer, bestServer)
 
 	} else {
 		const MinScore = 30
@@ -157,7 +157,7 @@ func (s *Streambot) OnSystemEvaluate(data zeromq.MessageData) {
 		}
 		fmt.Print("server is shit: enable auto")
 
-		s.publisher.SendMessage(topics.EnableAuto, "")
+		s.publisher.SendMessage(topics.StreambotEnableAuto, "")
 	}
 }
 
@@ -165,16 +165,16 @@ func (s *Streambot) CurrentServer() mvdsv.Mvdsv {
 	return GetServer(s.serverMonitor.GetAddress())
 }
 
-func (s *Streambot) OnSuggestServer(data zeromq.MessageData) {
-	s.publisher.SendMessage(topics.DisableAuto, "")
-	s.publisher.SendMessage(topics.ConnectToServer, data)
+func (s *Streambot) OnStreambotSuggestServer(data zeromq.MessageData) {
+	s.publisher.SendMessage(topics.StreambotDisableAuto, "")
+	s.publisher.SendMessage(topics.StreambotConnectToServer, data)
 }
 
-func (s *Streambot) OnConnectToServer(data zeromq.MessageData) {
+func (s *Streambot) OnStreambotConnectToServer(data zeromq.MessageData) {
 	var server mvdsv.Mvdsv
 	data.To(&server)
 
-	fmt.Print("OnConnectToServer", server.Address, data)
+	fmt.Print("OnStreambotConnectToServer", server.Address, data)
 
 	if s.serverMonitor.GetAddress() == server.Address {
 		pp.Print(" .. already connected to server")
@@ -246,8 +246,8 @@ func (s *Streambot) OnClientDisconnected(data zeromq.MessageData) {
 	pp.Print("OnClientDisconnected", data.ToString())
 }
 
-func (s *Streambot) OnSystemUpdate(data zeromq.MessageData) {
-	pp.Print("OnSystemUpdate", data.ToString())
+func (s *Streambot) OnStreambotSystemUpdate(data zeromq.MessageData) {
+	pp.Print("OnStreambotSystemUpdate", data.ToString())
 }
 
 func (s *Streambot) OnServerMapChanged(data zeromq.MessageData) {

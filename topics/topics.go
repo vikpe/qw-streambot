@@ -26,10 +26,10 @@ const (
 	StopBrain     = "brain.stop"
 	StopChatbot   = "chatbot.stop"
 
-	ConnectToServer = "streambot.connect_to_server"
-	SuggestServer   = "streambot.suggest_server"
-	EnableAuto      = "streambot.enable_auto"
-	DisableAuto     = "streambot.disable_auto"
-	Evaluate        = "streambot.evaluate"
-	SystemUpdate    = "streambot.system_update"
+	StreambotConnectToServer = "streambot.connect_to_server"
+	StreambotSuggestServer   = "streambot.suggest_server"
+	StreambotEnableAuto      = "streambot.enable_auto"
+	StreambotDisableAuto     = "streambot.disable_auto"
+	StreambotEvaluate        = "streambot.evaluate"
+	StreambotSystemUpdate    = "streambot.system_update"
 )
