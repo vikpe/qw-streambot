@@ -125,7 +125,15 @@ func (s *Streambot) ValidateCurrentServer() {
 	}
 
 	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
+
 	if analyze.HasSpectator(currentServer, s.clientPlayerName) {
+		return
+	}
+
+	altName := fmt.Sprintf("%s(1)", s.clientPlayerName)
+
+	if analyze.HasSpectator(currentServer, altName) {
+		s.publisher.SendMessage(topics.ClientCommand, fmt.Sprintf("name %s", s.clientPlayerName))
 		return
 	}
 
