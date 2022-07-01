@@ -100,7 +100,7 @@ func TestProcess_Stop(t *testing.T) {
 
 		process.Stop(syscall.SIGTERM)
 		assert.Equal(t, []string{
-			"pgrep -fox /home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64",
+			"pgrep -fo /home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64",
 		}, exec.Calls)
 	})
 
@@ -112,7 +112,7 @@ func TestProcess_Stop(t *testing.T) {
 
 		process.Stop(syscall.SIGTERM)
 		assert.Equal(t, []string{
-			"pgrep -fox /home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64",
+			"pgrep -fo /home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64",
 			"kill -s 15 1818481",
 		}, exec.Calls)
 	})

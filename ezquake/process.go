@@ -22,7 +22,7 @@ func NewProcess(path string) Process {
 }
 
 func (p Process) ID() int {
-	pregCmd := fmt.Sprintf("pgrep -fox %s", p.Path)
+	pregCmd := fmt.Sprintf("pgrep -fo %s", p.Path)
 	prepOutput := p.ExecCommand(pregCmd)
 	id, err := strconv.Atoi(prepOutput)
 	if err != nil {
