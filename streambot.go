@@ -6,6 +6,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/vikpe/serverstat"
 	"github.com/vikpe/serverstat/qserver/convert"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
@@ -14,9 +15,12 @@ import (
 	"github.com/vikpe/streambot/qws"
 	"github.com/vikpe/streambot/task"
 	"github.com/vikpe/streambot/topics"
+	"github.com/vikpe/streambot/util/term"
 	"github.com/vikpe/streambot/util/twitch"
 	"github.com/vikpe/streambot/zeromq"
 )
+
+var pp = term.NewPrettyPrinter("brain", color.FgHiMagenta)
 
 type Streambot struct {
 	clientPlayerName string
@@ -110,10 +114,10 @@ func (s *Streambot) OnDisableAuto(data zeromq.MessageData) {
 }
 
 func (s *Streambot) OnSystemEvaluate(data zeromq.MessageData) {
-	fmt.Println("OnSystemEvaluate")
+	pp.Print("OnSystemEvaluate")
 
 	if !s.process.IsStarted() {
-		fmt.Println("not started: do nothing (wait until started)")
+		pp.Print("not started: do nothing (wait until started)")
 		return
 	}
 
@@ -123,21 +127,21 @@ func (s *Streambot) OnSystemEvaluate(data zeromq.MessageData) {
 		shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
 
 		if !shouldConsiderChange {
-			fmt.Println("should not consider change: do nothing")
+			pp.Print("should not consider change: do nothing")
 			return
 		}
 
 		bestServer, err := qws.GetBestServer()
 
 		if err != nil {
-			fmt.Println("no server found..")
+			pp.Print("no server found..")
 			return
 		}
 
 		isAtBestServer := currentServer.Score >= bestServer.Score
 
 		if isAtBestServer {
-			fmt.Println("at best server: do nothing")
+			pp.Print("at best server: do nothing")
 			return
 		}
 
@@ -148,7 +152,7 @@ func (s *Streambot) OnSystemEvaluate(data zeromq.MessageData) {
 		isCrapServer := currentServer.Score < MinScore
 
 		if !isCrapServer {
-			fmt.Println("server is ok: do nothing")
+			pp.Print("server is ok: do nothing")
 			return
 		}
 		fmt.Print("server is shit: enable auto")
@@ -173,7 +177,7 @@ func (s *Streambot) OnConnectToServer(data zeromq.MessageData) {
 	fmt.Print("OnConnectToServer", server.Address, data)
 
 	if s.serverMonitor.GetAddress() == server.Address {
-		fmt.Println(" .. already connected to server")
+		pp.Print(" .. already connected to server")
 		return
 	}
 
@@ -188,19 +192,19 @@ func (s *Streambot) OnConnectToServer(data zeromq.MessageData) {
 		})
 	}
 
-	fmt.Println(" .. new server!", server.Address)
+	pp.Print(" .. new server!", server.Address)
 	s.serverMonitor.SetAddress(server.Address)
 
 	// validate that we connected
 	time.AfterFunc(8*time.Second, func() {
-		fmt.Println("VALIDATE THAT WE ARE ON SERVER")
+		pp.Print("VALIDATE THAT WE ARE ON SERVER")
 		genericServer, _ := serverstat.GetInfo(server.Address)
 		server := convert.ToMvdsv(genericServer)
 
 		if analyze.HasSpectator(server, s.clientPlayerName) {
-			fmt.Println(" - oooh yes. ggggggggggggggggggg")
+			pp.Print(" - oooh yes. ggggggggggggggggggg")
 		} else {
-			fmt.Println(" - NIET!")
+			pp.Print(" - NIET!")
 		}
 	})
 }
@@ -210,7 +214,7 @@ func (s *Streambot) ClientCommand(command string) {
 }
 
 func (s *Streambot) OnClientCommand(data zeromq.MessageData) {
-	fmt.Println("OnClientCommand", data.ToString())
+	pp.Print("OnClientCommand", data.ToString())
 
 	if s.process.IsStarted() {
 		s.pipe.Write(data.ToString())
@@ -218,7 +222,7 @@ func (s *Streambot) OnClientCommand(data zeromq.MessageData) {
 }
 
 func (s *Streambot) OnClientStarted(data zeromq.MessageData) {
-	fmt.Println("OnClientStarted", data.ToString())
+	pp.Print("OnClientStarted", data.ToString())
 
 	time.AfterFunc(4*time.Second, func() {
 		s.publisher.SendMessage(topics.ClientCommand, "toggleconsole")
@@ -226,40 +230,40 @@ func (s *Streambot) OnClientStarted(data zeromq.MessageData) {
 }
 
 func (s *Streambot) OnStopClient(data zeromq.MessageData) {
-	fmt.Println("OnStopClient", data.ToString())
+	pp.Print("OnStopClient", data.ToString())
 	s.process.Stop(syscall.SIGTERM)
 }
 
 func (s *Streambot) OnClientStopped(data zeromq.MessageData) {
-	fmt.Println("OnClientStopped", data.ToString())
+	pp.Print("OnClientStopped", data.ToString())
 }
 
 func (s *Streambot) OnClientConnected(data zeromq.MessageData) {
-	fmt.Println("OnClientConnected", data.ToString())
+	pp.Print("OnClientConnected", data.ToString())
 }
 
 func (s *Streambot) OnClientDisconnected(data zeromq.MessageData) {
-	fmt.Println("OnClientDisconnected", data.ToString())
+	pp.Print("OnClientDisconnected", data.ToString())
 }
 
 func (s *Streambot) OnSystemUpdate(data zeromq.MessageData) {
-	fmt.Println("OnSystemUpdate", data.ToString())
+	pp.Print("OnSystemUpdate", data.ToString())
 }
 
 func (s *Streambot) OnServerMapChanged(data zeromq.MessageData) {
-	fmt.Println("OnServerMapChanged", data.ToString())
+	pp.Print("OnServerMapChanged", data.ToString())
 }
 
 func (s *Streambot) OnServerScoreChanged(data zeromq.MessageData) {
-	fmt.Println("OnServerScoreChanged", data.ToInt())
+	pp.Print("OnServerScoreChanged", data.ToInt())
 }
 
 func (s *Streambot) OnServerStatusChanged(data zeromq.MessageData) {
-	fmt.Println("OnServerStatusChanged", data.ToString())
+	pp.Print("OnServerStatusChanged", data.ToString())
 }
 
 func (s *Streambot) OnServerTitleChanged(data zeromq.MessageData) {
-	fmt.Println("OnServerTitleChanged", data.ToString())
+	pp.Print("OnServerTitleChanged", data.ToString())
 	//s.twitch.SetTitle(data.ToString())
 }
 
