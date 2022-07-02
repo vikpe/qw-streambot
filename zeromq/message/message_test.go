@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/message"
+	"github.com/vikpe/streambot/zeromq/message"
 )
 
 func TestNewFromMultipart(t *testing.T) {

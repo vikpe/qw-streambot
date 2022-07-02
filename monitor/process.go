@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/vikpe/streambot/ezquake"
-	"github.com/vikpe/streambot/message/topic"
+	"github.com/vikpe/streambot/zeromq/topic"
 )
 
 type ProcessMonitor struct {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/vikpe/serverstat"
 	"github.com/vikpe/serverstat/qserver/convert"
-	"github.com/vikpe/streambot/message/topic"
+	"github.com/vikpe/streambot/zeromq/topic"
 )
 
 type ServerMonitor struct {

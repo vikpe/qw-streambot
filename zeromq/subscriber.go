@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	zmq "github.com/pebbe/zmq4"
-	"github.com/vikpe/streambot/message"
+	"github.com/vikpe/streambot/zeromq/message"
 )
 
 type Subscriber struct {

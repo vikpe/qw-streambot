@@ -10,8 +10,6 @@ import (
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 	"github.com/vikpe/streambot/ezquake"
-	"github.com/vikpe/streambot/message"
-	"github.com/vikpe/streambot/message/topic"
 	"github.com/vikpe/streambot/monitor"
 	"github.com/vikpe/streambot/third_party/qws"
 	"github.com/vikpe/streambot/third_party/sstat"
@@ -19,6 +17,8 @@ import (
 	"github.com/vikpe/streambot/util/task"
 	"github.com/vikpe/streambot/util/term"
 	"github.com/vikpe/streambot/zeromq"
+	"github.com/vikpe/streambot/zeromq/message"
+	"github.com/vikpe/streambot/zeromq/topic"
 )
 
 var pp = term.NewPrettyPrinter("brain", color.FgHiMagenta)
