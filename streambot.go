@@ -265,5 +265,5 @@ func (s *Streambot) OnStreambotSystemUpdate(data zeromq.MessageData) {
 
 func (s *Streambot) OnServerTitleChanged(data zeromq.MessageData) {
 	pp.Println("OnServerTitleChanged", data.ToString())
-	//s.twitch.SetTitle(data.ToString())
+	s.twitch.SetTitle(data.ToString())
 }
