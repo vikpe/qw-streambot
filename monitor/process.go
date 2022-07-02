@@ -1,10 +1,10 @@
-package task
+package monitor
 
 import (
 	"time"
 
 	"github.com/vikpe/streambot/ezquake"
-	"github.com/vikpe/streambot/topics"
+	"github.com/vikpe/streambot/message/topic"
 )
 
 type ProcessMonitor struct {
@@ -26,21 +26,21 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 
 	go func() {
 		ticker := time.NewTicker(interval)
-		prevState := NewProcessState(*p.process)
+		prevState := newProcessState(*p.process)
 
 		for ; true; <-ticker.C {
 			if p.isDone {
 				return
 			}
 
-			currentState := NewProcessState(*p.process)
-			diff := NewProcessDiff(currentState, prevState)
+			currentState := newProcessState(*p.process)
+			diff := newProcessDiff(currentState, prevState)
 
 			if diff.HasStarted {
-				p.onEvent(topics.EzquakeStarted, "")
+				p.onEvent(topic.EzquakeStarted, "")
 
 			} else if diff.HasStopped {
-				p.onEvent(topics.EzquakeStopped, "")
+				p.onEvent(topic.EzquakeStopped, "")
 			}
 
 			prevState = currentState
@@ -52,23 +52,23 @@ func (p *ProcessMonitor) Stop() {
 	p.isDone = true
 }
 
-type ProcessState struct {
+type processState struct {
 	IsStarted bool
 }
 
-func NewProcessState(process ezquake.Process) ProcessState {
-	return ProcessState{
+func newProcessState(process ezquake.Process) processState {
+	return processState{
 		IsStarted: process.IsStarted(),
 	}
 }
 
-type ProcessDiff struct {
+type processDiff struct {
 	HasStarted bool
 	HasStopped bool
 }
 
-func NewProcessDiff(current ProcessState, prev ProcessState) ProcessDiff {
-	diff := ProcessDiff{}
+func newProcessDiff(current processState, prev processState) processDiff {
+	diff := processDiff{}
 
 	if current.IsStarted && !prev.IsStarted {
 		diff.HasStarted = true

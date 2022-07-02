@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/vikpe/streambot/message"
 	"github.com/vikpe/streambot/zeromq"
 )
 
@@ -25,7 +26,7 @@ func TestEndToEnd(t *testing.T) {
 
 	go func() {
 		subscriber := zeromq.NewSubscriber("tcp://localhost:5556", zeromq.TopicsAll)
-		subscriber.Start(func(message zeromq.Message) {
+		subscriber.Start(func(message message.Message) {
 			topicsReceived = append(topicsReceived, message.Topic)
 
 			if len(topicsReceived) == len(topicsToSend) {

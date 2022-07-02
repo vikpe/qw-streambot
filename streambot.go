@@ -10,11 +10,13 @@ import (
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 	"github.com/vikpe/streambot/ezquake"
-	"github.com/vikpe/streambot/task"
+	"github.com/vikpe/streambot/message"
+	"github.com/vikpe/streambot/message/topic"
+	"github.com/vikpe/streambot/monitor"
 	"github.com/vikpe/streambot/third_party/qws"
 	"github.com/vikpe/streambot/third_party/sstat"
 	"github.com/vikpe/streambot/third_party/twitch"
-	"github.com/vikpe/streambot/topics"
+	"github.com/vikpe/streambot/util/task"
 	"github.com/vikpe/streambot/util/term"
 	"github.com/vikpe/streambot/zeromq"
 )
@@ -25,7 +27,7 @@ type Streambot struct {
 	clientPlayerName string
 	pipe             ezquake.PipeWriter
 	process          ezquake.Process
-	serverMonitor    task.ServerMonitor
+	serverMonitor    monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
 	twitch           twitch.Client
 	publisher        zeromq.Publisher
@@ -45,8 +47,8 @@ func NewStreambot(
 		clientPlayerName: clientPlayerName,
 		pipe:             pipe,
 		process:          process,
-		serverMonitor:    task.NewServerMonitor(publisher.SendMessage),
-		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topics.StreambotEvaluate, "") }),
+		serverMonitor:    monitor.NewServerMonitor(publisher.SendMessage),
+		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate, "") }),
 		twitch:           twitchClient,
 		publisher:        publisher,
 		subscriber:       subscriber,
@@ -60,7 +62,7 @@ func (s *Streambot) Start() {
 	zeromq.WaitForConnection()
 
 	// event dispatchers
-	processMonitor := task.NewProcessMonitor(&s.process, s.publisher.SendMessage)
+	processMonitor := monitor.NewProcessMonitor(&s.process, s.publisher.SendMessage)
 	processMonitor.Start(3 * time.Second)
 	s.serverMonitor.Start(5 * time.Second)
 
@@ -73,26 +75,26 @@ func (s *Streambot) Start() {
 	wg.Wait()
 }
 
-func (s *Streambot) OnMessage(msg zeromq.Message) {
-	handlers := map[string]zeromq.MessageDataHandler{
+func (s *Streambot) OnMessage(msg message.Message) {
+	handlers := map[string]message.DataHandler{
 		// commands
-		topics.StreambotEnableAuto:      s.OnStreambotEnableAuto,
-		topics.StreambotDisableAuto:     s.OnStreambotDisableAuto,
-		topics.StreambotConnectToServer: s.OnStreambotConnectToServer,
-		topics.StreambotSuggestServer:   s.OnStreambotSuggestServer,
-		topics.EzquakeCommand:           s.OnEzquakeCommand,
-		topics.EzquakeLastscores:        s.OnEzquakeLastscores,
-		topics.EzquakeShowscores:        s.OnEzquakeShowscores,
-		topics.StopEzquake:              s.OnStopEzquake,
-		topics.StreambotSystemUpdate:    s.OnStreambotSystemUpdate,
-		topics.StreambotEvaluate:        s.OnStreambotEvaluate,
+		topic.StreambotEnableAuto:      s.OnStreambotEnableAuto,
+		topic.StreambotDisableAuto:     s.OnStreambotDisableAuto,
+		topic.StreambotConnectToServer: s.OnStreambotConnectToServer,
+		topic.StreambotSuggestServer:   s.OnStreambotSuggestServer,
+		topic.EzquakeCommand:           s.OnEzquakeCommand,
+		topic.EzquakeLastscores:        s.OnEzquakeLastscores,
+		topic.EzquakeShowscores:        s.OnEzquakeShowscores,
+		topic.StopEzquake:              s.OnStopEzquake,
+		topic.StreambotSystemUpdate:    s.OnStreambotSystemUpdate,
+		topic.StreambotEvaluate:        s.OnStreambotEvaluate,
 
 		// ezquake events
-		topics.EzquakeStarted: s.OnEzquakeStarted,
-		topics.EzquakeStopped: s.OnEzquakeStopped,
+		topic.EzquakeStarted: s.OnEzquakeStarted,
+		topic.EzquakeStopped: s.OnEzquakeStopped,
 
 		// server events
-		topics.ServerTitleChanged: s.OnServerTitleChanged,
+		topic.ServerTitleChanged: s.OnServerTitleChanged,
 	}
 
 	if handler, ok := handlers[msg.Topic]; ok {
@@ -102,12 +104,12 @@ func (s *Streambot) OnMessage(msg zeromq.Message) {
 	}
 }
 
-func (s *Streambot) OnStreambotEnableAuto(data zeromq.MessageData) {
+func (s *Streambot) OnStreambotEnableAuto(data message.Data) {
 	s.AutoMode = true
-	s.publisher.SendMessage(topics.StreambotEvaluate, "")
+	s.publisher.SendMessage(topic.StreambotEvaluate, "")
 }
 
-func (s *Streambot) OnStreambotDisableAuto(data zeromq.MessageData) {
+func (s *Streambot) OnStreambotDisableAuto(data message.Data) {
 	s.AutoMode = false
 }
 
@@ -137,7 +139,7 @@ func (s *Streambot) ValidateCurrentServer() {
 	s.serverMonitor.SetAddress("")
 }
 
-func (s *Streambot) OnStreambotEvaluate(data zeromq.MessageData) {
+func (s *Streambot) OnStreambotEvaluate(data message.Data) {
 	// check process
 	if !s.process.IsStarted() {
 		return
@@ -174,7 +176,7 @@ func (s *Streambot) evaluateAutoModeEnabled() {
 		return
 	}
 
-	s.publisher.SendMessage(topics.StreambotConnectToServer, bestServer)
+	s.publisher.SendMessage(topic.StreambotConnectToServer, bestServer)
 }
 
 func (s *Streambot) evaluateAutoModeDisabled() {
@@ -196,18 +198,18 @@ func (s *Streambot) evaluateAutoModeDisabled() {
 
 	fmt.Println("server is shit: enable auto")
 
-	s.publisher.SendMessage(topics.StreambotEnableAuto, "")
+	s.publisher.SendMessage(topic.StreambotEnableAuto, "")
 }
 
-func (s *Streambot) OnStreambotSuggestServer(data zeromq.MessageData) {
+func (s *Streambot) OnStreambotSuggestServer(data message.Data) {
 	var server mvdsv.Mvdsv
 	data.To(&server)
 
-	s.publisher.SendMessage(topics.StreambotDisableAuto, "")
-	s.publisher.SendMessage(topics.StreambotConnectToServer, server)
+	s.publisher.SendMessage(topic.StreambotDisableAuto, "")
+	s.publisher.SendMessage(topic.StreambotConnectToServer, server)
 }
 
-func (s *Streambot) OnStreambotConnectToServer(data zeromq.MessageData) {
+func (s *Streambot) OnStreambotConnectToServer(data message.Data) {
 	var server mvdsv.Mvdsv
 	data.To(&server)
 
@@ -233,10 +235,10 @@ func (s *Streambot) OnStreambotConnectToServer(data zeromq.MessageData) {
 }
 
 func (s *Streambot) ClientCommand(command string) {
-	s.publisher.SendMessage(topics.EzquakeCommand, command)
+	s.publisher.SendMessage(topic.EzquakeCommand, command)
 }
 
-func (s *Streambot) OnEzquakeCommand(data zeromq.MessageData) {
+func (s *Streambot) OnEzquakeCommand(data message.Data) {
 	pp.Println("OnEzquakeCommand", data.ToString())
 
 	if s.process.IsStarted() {
@@ -244,7 +246,7 @@ func (s *Streambot) OnEzquakeCommand(data zeromq.MessageData) {
 	}
 }
 
-func (s *Streambot) OnEzquakeLastscores(data zeromq.MessageData) {
+func (s *Streambot) OnEzquakeLastscores(data message.Data) {
 	s.ClientCommand("toggleconsole;lastscores")
 
 	time.AfterFunc(8*time.Second, func() {
@@ -252,7 +254,7 @@ func (s *Streambot) OnEzquakeLastscores(data zeromq.MessageData) {
 	})
 }
 
-func (s *Streambot) OnEzquakeShowscores(data zeromq.MessageData) {
+func (s *Streambot) OnEzquakeShowscores(data message.Data) {
 	s.ClientCommand("+showscores")
 
 	time.AfterFunc(8*time.Second, func() {
@@ -260,7 +262,7 @@ func (s *Streambot) OnEzquakeShowscores(data zeromq.MessageData) {
 	})
 }
 
-func (s *Streambot) OnEzquakeStarted(data zeromq.MessageData) {
+func (s *Streambot) OnEzquakeStarted(data message.Data) {
 	pp.Println("OnEzquakeStarted", data.ToString())
 
 	s.evaluateTask.Start(10 * time.Second)
@@ -270,21 +272,21 @@ func (s *Streambot) OnEzquakeStarted(data zeromq.MessageData) {
 	})
 }
 
-func (s *Streambot) OnStopEzquake(data zeromq.MessageData) {
+func (s *Streambot) OnStopEzquake(data message.Data) {
 	pp.Println("OnStopEzquake", data.ToString())
 	s.process.Stop(syscall.SIGTERM)
 }
 
-func (s *Streambot) OnEzquakeStopped(data zeromq.MessageData) {
+func (s *Streambot) OnEzquakeStopped(data message.Data) {
 	pp.Println("OnEzquakeStopped", data.ToString())
 	s.evaluateTask.Stop()
 }
 
-func (s *Streambot) OnStreambotSystemUpdate(data zeromq.MessageData) {
+func (s *Streambot) OnStreambotSystemUpdate(data message.Data) {
 	pp.Println("OnStreambotSystemUpdate", data.ToString())
 }
 
-func (s *Streambot) OnServerTitleChanged(data zeromq.MessageData) {
+func (s *Streambot) OnServerTitleChanged(data message.Data) {
 	pp.Println("OnServerTitleChanged", data.ToString())
 	s.twitch.SetTitle(data.ToString())
 }

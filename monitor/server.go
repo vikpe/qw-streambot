@@ -1,11 +1,11 @@
-package task
+package monitor
 
 import (
 	"time"
 
 	"github.com/vikpe/serverstat"
 	"github.com/vikpe/serverstat/qserver/convert"
-	"github.com/vikpe/streambot/topics"
+	"github.com/vikpe/streambot/message/topic"
 )
 
 type ServerMonitor struct {
@@ -13,7 +13,7 @@ type ServerMonitor struct {
 	onEvent          func(string, any)
 	address          string
 	addressTimestamp time.Time
-	prevState        ServerState
+	prevState        serverState
 }
 
 func NewServerMonitor(onEvent func(string, any)) ServerMonitor {
@@ -21,13 +21,13 @@ func NewServerMonitor(onEvent func(string, any)) ServerMonitor {
 		isDone:    false,
 		onEvent:   onEvent,
 		address:   "",
-		prevState: NewServerState(""),
+		prevState: newServerState(""),
 	}
 }
 
 func (s *ServerMonitor) SetAddress(address string) {
 	s.address = address
-	s.prevState = NewServerState("")
+	s.prevState = newServerState("")
 	s.addressTimestamp = time.Now()
 }
 
@@ -50,11 +50,11 @@ func (s *ServerMonitor) Start(interval time.Duration) {
 				return
 			}
 
-			currentState := NewServerState(s.address)
-			diff := NewServerStateDiff(currentState, s.prevState)
+			currentState := newServerState(s.address)
+			diff := newServerStateDiff(currentState, s.prevState)
 
 			if diff.HasChangedTitle {
-				s.onEvent(topics.ServerTitleChanged, currentState.Title)
+				s.onEvent(topic.ServerTitleChanged, currentState.Title)
 			}
 
 			s.prevState = currentState
@@ -68,14 +68,14 @@ func (s *ServerMonitor) Stop() {
 	s.isDone = true
 }
 
-type ServerState struct {
+type serverState struct {
 	Title string
 	Map   string
 	Score int
 }
 
-func NewServerState(address string) ServerState {
-	nullState := ServerState{
+func newServerState(address string) serverState {
+	nullState := serverState{
 		Title: "",
 		Map:   "",
 		Score: 0,
@@ -92,19 +92,19 @@ func NewServerState(address string) ServerState {
 
 	server := convert.ToMvdsv(genericServer)
 
-	return ServerState{
+	return serverState{
 		Title: server.Title,
 		Map:   server.Settings.Get("map", ""),
 		Score: server.Score,
 	}
 }
 
-type ServerStateDiff struct {
+type serverStateDiff struct {
 	HasChangedTitle bool
 }
 
-func NewServerStateDiff(current ServerState, prev ServerState) ServerStateDiff {
-	diff := ServerStateDiff{}
+func newServerStateDiff(current serverState, prev serverState) serverStateDiff {
+	diff := serverStateDiff{}
 
 	if current.Title != prev.Title {
 		diff.HasChangedTitle = true

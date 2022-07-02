@@ -1,35 +1,33 @@
-package zeromq
+package message
 
-import (
-	"github.com/goccy/go-json"
-)
+import "github.com/goccy/go-json"
 
 type Message struct {
 	Topic    string
-	Data     MessageData
+	Data     Data
 	DataType string
 }
-type MessageHandler func(Message)
-type MessageDataHandler func(data MessageData)
-type MessageData string
+type Handler func(Message)
+type DataHandler func(data Data)
+type Data string
 
-func (d MessageData) ToString() string {
+func (d Data) ToString() string {
 	var target string
 	d.To(&target)
 	return target
 }
 
-func (d MessageData) ToInt() int {
+func (d Data) ToInt() int {
 	var target int
 	d.To(&target)
 	return target
 }
 
-func (d MessageData) To(target interface{}) {
+func (d Data) To(target interface{}) {
 	json.Unmarshal([]byte(d), &target)
 }
 
-func NewMessage(zmqMsg []string) Message {
+func New(zmqMsg []string) Message {
 	topic := zmqMsg[0]
 	msgLength := len(zmqMsg)
 
@@ -50,8 +48,7 @@ func NewMessage(zmqMsg []string) Message {
 
 	return Message{
 		Topic:    topic,
-		Data:     MessageData(data),
+		Data:     Data(data),
 		DataType: dataType,
 	}
-
 }

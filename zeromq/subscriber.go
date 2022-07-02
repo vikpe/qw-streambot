@@ -4,12 +4,13 @@ import (
 	"fmt"
 
 	zmq "github.com/pebbe/zmq4"
+	"github.com/vikpe/streambot/message"
 )
 
 type Subscriber struct {
 	address   string
 	topics    string
-	onMessage MessageHandler
+	onMessage message.Handler
 }
 
 func NewSubscriber(address string, topics string) Subscriber {
@@ -19,7 +20,7 @@ func NewSubscriber(address string, topics string) Subscriber {
 	}
 }
 
-func (s *Subscriber) Start(onMessage MessageHandler) {
+func (s *Subscriber) Start(onMessage message.Handler) {
 	go func() {
 		subSocket, _ := zmq.NewSocket(zmq.SUB)
 		defer subSocket.Close()
@@ -33,7 +34,7 @@ func (s *Subscriber) Start(onMessage MessageHandler) {
 			if err != nil {
 				fmt.Println("Error recieving message", err)
 			} else {
-				msg := NewMessage(zmqMsg)
+				msg := message.New(zmqMsg)
 				onMessage(msg)
 			}
 		}

@@ -1,4 +1,4 @@
-package topics
+package topic
 
 // Examples — for events raised before/after state change:
 //
