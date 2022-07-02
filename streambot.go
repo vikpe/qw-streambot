@@ -81,6 +81,8 @@ func (s *Streambot) OnMessage(msg zeromq.Message) {
 		topics.StreambotConnectToServer: s.OnStreambotConnectToServer,
 		topics.StreambotSuggestServer:   s.OnStreambotSuggestServer,
 		topics.ClientCommand:            s.OnClientCommand,
+		topics.ClientCommandLastscores:  s.OnClientCommandLastscores,
+		topics.ClientCommandShowscores:  s.OnClientCommandShowscores,
 		topics.StopClient:               s.OnStopClient,
 		topics.StreambotSystemUpdate:    s.OnStreambotSystemUpdate,
 		topics.StreambotEvaluate:        s.OnStreambotEvaluate,
@@ -198,8 +200,11 @@ func (s *Streambot) evaluateAutoModeDisabled() {
 }
 
 func (s *Streambot) OnStreambotSuggestServer(data zeromq.MessageData) {
+	var server mvdsv.Mvdsv
+	data.To(&server)
+
 	s.publisher.SendMessage(topics.StreambotDisableAuto, "")
-	s.publisher.SendMessage(topics.StreambotConnectToServer, data)
+	s.publisher.SendMessage(topics.StreambotConnectToServer, server)
 }
 
 func (s *Streambot) OnStreambotConnectToServer(data zeromq.MessageData) {
@@ -237,6 +242,22 @@ func (s *Streambot) OnClientCommand(data zeromq.MessageData) {
 	if s.process.IsStarted() {
 		s.pipe.Write(data.ToString())
 	}
+}
+
+func (s *Streambot) OnClientCommandLastscores(data zeromq.MessageData) {
+	s.publisher.SendMessage(topics.ClientCommand, "toggleconsole;lastscores")
+
+	time.AfterFunc(8*time.Second, func() {
+		s.publisher.SendMessage(topics.ClientCommand, "toggleconsole")
+	})
+}
+
+func (s *Streambot) OnClientCommandShowscores(data zeromq.MessageData) {
+	s.publisher.SendMessage(topics.ClientCommand, "+showscores")
+
+	time.AfterFunc(8*time.Second, func() {
+		s.publisher.SendMessage(topics.ClientCommand, "-showscores")
+	})
 }
 
 func (s *Streambot) OnClientStarted(data zeromq.MessageData) {

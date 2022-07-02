@@ -16,8 +16,10 @@ const (
 
 // commands
 const (
-	ClientCommand = "client.command"
-	StopClient    = "client.stop"
+	ClientCommand           = "client.command"
+	ClientCommandLastscores = "client.command.lastscores"
+	ClientCommandShowscores = "client.command.showscores"
+	StopClient              = "client.stop"
 
 	StreambotConnectToServer = "streambot.connect_to_server"
 	StreambotSuggestServer   = "streambot.suggest_server"
