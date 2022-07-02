@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	zmq "github.com/pebbe/zmq4"
 )
@@ -12,9 +13,9 @@ import (
 type Proxy struct {
 	frontendAddress string
 	backendAddress  string
+	stopChan        chan os.Signal
 	OnStart         func()
 	OnStop          func(os.Signal)
-	OnError         func(error)
 }
 
 func NewProxy(frontend string, backend string) Proxy {
@@ -23,14 +24,13 @@ func NewProxy(frontend string, backend string) Proxy {
 		backendAddress:  backend,
 		OnStart:         func() {},
 		OnStop:          func(sig os.Signal) {},
-		OnError:         func(err error) {},
 	}
 }
 
-func (p Proxy) Start() error {
+func (p *Proxy) Start() error {
 	// catch SIGETRM and SIGINTERRUPT
-	cancelChan := make(chan os.Signal, 1)
-	signal.Notify(cancelChan, syscall.SIGTERM, syscall.SIGINT)
+	p.stopChan = make(chan os.Signal, 1)
+	signal.Notify(p.stopChan, syscall.SIGTERM, syscall.SIGINT)
 
 	var err error
 
@@ -61,16 +61,19 @@ func (p Proxy) Start() error {
 
 		if err != nil {
 			fmt.Println("proxy interrupted:", err.Error())
-			return
 		}
 	}()
-	sig := <-cancelChan
-
-	if err != nil {
-		p.OnError(err)
-	}
+	sig := <-p.stopChan
 
 	p.OnStop(sig)
 
 	return err
+}
+
+func (p *Proxy) Stop() {
+	if p.stopChan == nil {
+		return
+	}
+	p.stopChan <- syscall.SIGINT
+	time.Sleep(10 * time.Millisecond)
 }

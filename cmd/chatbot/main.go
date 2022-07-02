@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"os"
-	"sync"
 
+	"github.com/fatih/color"
 	"github.com/joho/godotenv"
 	"github.com/vikpe/streambot/chatbot"
+	"github.com/vikpe/streambot/util/term"
 )
 
 func main() {
@@ -16,9 +18,9 @@ func main() {
 		os.Getenv("TWITCH_BOT_CHAT_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_NAME"),
 	)
+	pp := term.NewPrettyPrinter("chatbot", color.FgHiBlue)
+	bot.OnConnect = func() { pp.Println("connected as", os.Getenv("TWITCH_BOT_USERNAME")) }
+	bot.OnStart = func() { pp.Println("start") }
+	bot.OnStop = func(sig os.Signal) { pp.Println(fmt.Sprintf("stop (%s)", sig)) }
 	bot.Start()
-
-	wg := sync.WaitGroup{}
-	wg.Add(1)
-	wg.Wait()
 }

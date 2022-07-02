@@ -18,11 +18,11 @@ func main() {
 		os.Getenv("ZMQ_PROXY_BACKEND_ADDRESS"),
 	)
 	pp := term.NewPrettyPrinter("proxy", color.FgHiGreen)
-	proxy.OnStart = func() { pp.Println("started") }
-	proxy.OnStop = func(sig os.Signal) { pp.Println(fmt.Sprintf("stopped (%s)", sig)) }
+	proxy.OnStart = func() { pp.Println("start") }
+	proxy.OnStop = func(sig os.Signal) { pp.Println(fmt.Sprintf("stop (%s)", sig)) }
 
 	err := proxy.Start()
 	if err != nil {
-		return
+		pp.Println("error", err)
 	}
 }

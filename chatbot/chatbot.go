@@ -2,50 +2,58 @@ package chatbot
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gempir/go-twitch-irc/v3"
 )
 
 type Chatbot struct {
-	client  *twitch.Client
-	channel string
+	client    *twitch.Client
+	stopChan  chan os.Signal
+	OnStart   func()
+	OnConnect func()
+	OnStop    func(sig os.Signal)
 }
 
 func New(username string, oath string, channel string) *Chatbot {
 	client := twitch.NewClient(username, oath)
 
-	client.OnConnect(func() {
-		fmt.Println("connected as", username)
-	})
-
 	client.OnPrivateMessage(func(message twitch.PrivateMessage) {
 		fmt.Println("OnPrivateMessage", message)
 	})
 
+	client.Join(channel)
+
 	return &Chatbot{
-		client:  client,
-		channel: channel,
+		client:    client,
+		OnStart:   func() {},
+		OnConnect: func() {},
+		OnStop:    func(sig os.Signal) {},
 	}
 }
 
 func (c *Chatbot) Start() {
-	c.client.Join(c.channel)
+	c.OnStart()
+
+	c.stopChan = make(chan os.Signal, 1)
+	signal.Notify(c.stopChan, syscall.SIGTERM, syscall.SIGINT)
 
 	go func() {
-		err := c.client.Connect()
-		if err != nil {
-			fmt.Println("chatbot connect error", err)
-			return
-		}
+		c.client.OnConnect(c.OnConnect)
+		c.client.Connect()
+		defer c.client.Disconnect()
 	}()
-	time.Sleep(time.Second)
+	sig := <-c.stopChan
+	c.OnStop(sig)
 }
 
 func (c *Chatbot) Stop() {
-	err := c.client.Disconnect()
-	if err != nil {
-		fmt.Println("chatbot disconnect error", err)
+	if c.stopChan == nil {
 		return
 	}
+	c.stopChan <- syscall.SIGINT
+	time.Sleep(10 * time.Millisecond)
 }
