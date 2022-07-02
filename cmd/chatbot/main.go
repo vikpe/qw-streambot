@@ -15,7 +15,7 @@ func main() {
 
 	bot := chatbot.New(
 		os.Getenv("TWITCH_BOT_USERNAME"),
-		os.Getenv("TWITCH_BOT_ACCESS_TOKEN"),
+		os.Getenv("TWITCH_BOT_CHAT_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_USERNAME"),
 	)
 	pp := term.NewPrettyPrinter("chatbot", color.FgHiBlue)
