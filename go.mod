@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/fatih/color v1.13.0
+	github.com/gempir/go-twitch-irc/v3 v3.2.0
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goccy/go-json v0.9.8
 	github.com/joho/godotenv v1.4.0
@@ -16,7 +17,6 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/gempir/go-twitch-irc/v3 v3.2.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
@@ -30,7 +30,7 @@ require (
 	github.com/vikpe/udpclient v0.1.3 // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	golang.org/x/net v0.0.0-20220630215102-69896b714898 // indirect
-	golang.org/x/sys v0.0.0-20220627191245-f75cf1eec38b // indirect
+	golang.org/x/sys v0.0.0-20220702020025-31831981b65f // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
