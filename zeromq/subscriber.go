@@ -34,7 +34,7 @@ func (s *Subscriber) Start(onMessage message.Handler) {
 			if err != nil {
 				fmt.Println("Error recieving message", err)
 			} else {
-				msg := message.New(zmqMsg)
+				msg := message.NewFromMultipart(zmqMsg)
 				onMessage(msg)
 			}
 		}

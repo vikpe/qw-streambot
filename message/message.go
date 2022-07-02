@@ -27,7 +27,7 @@ func (d Data) To(target interface{}) {
 	json.Unmarshal([]byte(d), &target)
 }
 
-func New(zmqMsg []string) Message {
+func NewFromMultipart(zmqMsg []string) Message {
 	topic := zmqMsg[0]
 	msgLength := len(zmqMsg)
 

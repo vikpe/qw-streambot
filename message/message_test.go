@@ -7,14 +7,14 @@ import (
 	"github.com/vikpe/streambot/message"
 )
 
-func TestEventFromMessage(t *testing.T) {
+func TestNewFromMultipart(t *testing.T) {
 	t.Run("1 arg", func(t *testing.T) {
 		expect := message.Message{
 			Topic:    "HELLO",
 			Data:     "",
 			DataType: "string",
 		}
-		assert.Equal(t, expect, message.New([]string{"HELLO"}))
+		assert.Equal(t, expect, message.NewFromMultipart([]string{"HELLO"}))
 	})
 
 	t.Run("2 args", func(t *testing.T) {
@@ -23,7 +23,7 @@ func TestEventFromMessage(t *testing.T) {
 			Data:     "WORLD",
 			DataType: "string",
 		}
-		assert.Equal(t, expect, message.New([]string{"HELLO", "WORLD"}))
+		assert.Equal(t, expect, message.NewFromMultipart([]string{"HELLO", "WORLD"}))
 	})
 
 	t.Run("3 args", func(t *testing.T) {
@@ -32,7 +32,7 @@ func TestEventFromMessage(t *testing.T) {
 			Data:     "6",
 			DataType: "int",
 		}
-		assert.Equal(t, expect, message.New([]string{"SCORE", "6", "int"}))
+		assert.Equal(t, expect, message.NewFromMultipart([]string{"SCORE", "6", "int"}))
 	})
 
 	t.Run("3+ args", func(t *testing.T) {
@@ -41,6 +41,6 @@ func TestEventFromMessage(t *testing.T) {
 			Data:     "6",
 			DataType: "int",
 		}
-		assert.Equal(t, expect, message.New([]string{"SCORE", "6", "int", "foo", "bar"}))
+		assert.Equal(t, expect, message.NewFromMultipart([]string{"SCORE", "6", "int", "foo", "bar"}))
 	})
 }
