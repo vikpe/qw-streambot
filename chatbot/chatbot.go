@@ -1,7 +1,6 @@
 package chatbot
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,12 +19,10 @@ type Chatbot struct {
 
 func New(username string, accessToken string, channel string) *Chatbot {
 	client := twitch.NewClient(username, accessToken)
-
-	client.OnPrivateMessage(func(message twitch.PrivateMessage) {
-		fmt.Println("OnPrivateMessage", message)
-	})
-
 	client.Join(channel)
+
+	handler := NewMessageHandler(client)
+	client.OnPrivateMessage(handler.OnPrivateMessage)
 
 	return &Chatbot{
 		client:    client,
