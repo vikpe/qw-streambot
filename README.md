@@ -7,7 +7,9 @@ apt-get install libzmq3-dev
 ```
 
 ## Twitch
-* [Generate OATH for bot](https://twitchapps.com/tmi/)
+**Generate access tokens**
+* [Chat acess token for bot](https://twitchapps.com/tmi/)
+* [General access token](https://twitchtokengenerator.com/)
 
 ## Build
 ### Options
