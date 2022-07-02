@@ -20,9 +20,6 @@ func main() {
 	pp := term.NewPrettyPrinter("proxy", color.FgHiGreen)
 	proxy.OnStart = func() { pp.Println("start") }
 	proxy.OnStop = func(sig os.Signal) { pp.Println(fmt.Sprintf("stop (%s)", sig)) }
-
-	err := proxy.Start()
-	if err != nil {
-		pp.Println("error", err)
-	}
+	proxy.OnError = func(err error) { pp.Println("error", err) }
+	proxy.Start()
 }

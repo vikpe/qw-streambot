@@ -15,6 +15,7 @@ type Proxy struct {
 	backendAddress  string
 	stopChan        chan os.Signal
 	OnStart         func()
+	OnError         func(error)
 	OnStop          func(os.Signal)
 }
 
@@ -23,11 +24,12 @@ func NewProxy(frontend string, backend string) Proxy {
 		frontendAddress: frontend,
 		backendAddress:  backend,
 		OnStart:         func() {},
+		OnError:         func(err error) {},
 		OnStop:          func(sig os.Signal) {},
 	}
 }
 
-func (p *Proxy) Start() error {
+func (p *Proxy) Start() {
 	// catch SIGETRM and SIGINTERRUPT
 	p.stopChan = make(chan os.Signal, 1)
 	signal.Notify(p.stopChan, syscall.SIGTERM, syscall.SIGINT)
@@ -65,9 +67,11 @@ func (p *Proxy) Start() error {
 	}()
 	sig := <-p.stopChan
 
-	p.OnStop(sig)
+	if err != nil {
+		p.OnError(err)
+	}
 
-	return err
+	p.OnStop(sig)
 }
 
 func (p *Proxy) Stop() {
