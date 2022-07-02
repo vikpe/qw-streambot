@@ -5,7 +5,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/vikpe/streambot/ezquake"
-	"github.com/vikpe/streambot/util/twitch"
+	"github.com/vikpe/streambot/third_party/twitch"
 	"github.com/vikpe/streambot/zeromq"
 )
 

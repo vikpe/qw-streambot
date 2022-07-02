@@ -10,12 +10,12 @@ import (
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 	"github.com/vikpe/streambot/ezquake"
-	"github.com/vikpe/streambot/qws"
 	"github.com/vikpe/streambot/task"
+	"github.com/vikpe/streambot/third_party/qws"
+	"github.com/vikpe/streambot/third_party/sstat"
+	"github.com/vikpe/streambot/third_party/twitch"
 	"github.com/vikpe/streambot/topics"
-	"github.com/vikpe/streambot/util/sstat"
 	"github.com/vikpe/streambot/util/term"
-	"github.com/vikpe/streambot/util/twitch"
 	"github.com/vikpe/streambot/zeromq"
 )
 
