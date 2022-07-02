@@ -18,8 +18,8 @@ type Chatbot struct {
 	OnStop    func(sig os.Signal)
 }
 
-func New(username string, oath string, channel string) *Chatbot {
-	client := twitch.NewClient(username, oath)
+func New(username string, accessToken string, channel string) *Chatbot {
+	client := twitch.NewClient(username, fmt.Sprintf("oauth:%s", accessToken))
 
 	client.OnPrivateMessage(func(message twitch.PrivateMessage) {
 		fmt.Println("OnPrivateMessage", message)
