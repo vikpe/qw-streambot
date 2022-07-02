@@ -245,18 +245,18 @@ func (s *Streambot) OnClientCommand(data zeromq.MessageData) {
 }
 
 func (s *Streambot) OnClientCommandLastscores(data zeromq.MessageData) {
-	s.publisher.SendMessage(topics.ClientCommand, "toggleconsole;lastscores")
+	s.ClientCommand("toggleconsole;lastscores")
 
 	time.AfterFunc(8*time.Second, func() {
-		s.publisher.SendMessage(topics.ClientCommand, "toggleconsole")
+		s.ClientCommand("toggleconsole")
 	})
 }
 
 func (s *Streambot) OnClientCommandShowscores(data zeromq.MessageData) {
-	s.publisher.SendMessage(topics.ClientCommand, "+showscores")
+	s.ClientCommand("+showscores")
 
 	time.AfterFunc(8*time.Second, func() {
-		s.publisher.SendMessage(topics.ClientCommand, "-showscores")
+		s.ClientCommand("-showscores")
 	})
 }
 
@@ -266,7 +266,7 @@ func (s *Streambot) OnClientStarted(data zeromq.MessageData) {
 	s.evaluateTask.Start(10 * time.Second)
 
 	time.AfterFunc(5*time.Second, func() {
-		s.publisher.SendMessage(topics.ClientCommand, "toggleconsole")
+		s.ClientCommand("toggleconsole")
 	})
 }
 
