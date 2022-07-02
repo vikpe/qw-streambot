@@ -129,7 +129,7 @@ func (s *Streambot) ValidateCurrentServer() {
 
 	altName := fmt.Sprintf("%s(1)", s.clientPlayerName)
 	if analyze.HasSpectator(currentServer, altName) {
-		s.publisher.SendMessage(topics.EzquakeCommand, fmt.Sprintf("name %s", s.clientPlayerName))
+		s.ClientCommand(fmt.Sprintf("name %s", s.clientPlayerName))
 		return
 	}
 
