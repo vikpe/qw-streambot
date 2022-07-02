@@ -4,6 +4,8 @@ import (
 	"github.com/nicklaw5/helix/v2"
 )
 
+const quakeGameId = "7348"
+
 type Client struct {
 	client        *helix.Client
 	broadcasterId string
@@ -22,5 +24,6 @@ func (a Client) SetTitle(title string) {
 	a.client.EditChannelInformation(&helix.EditChannelInformationParams{
 		BroadcasterID: a.broadcasterId,
 		Title:         title,
+		GameID:        quakeGameId,
 	})
 }
