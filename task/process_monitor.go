@@ -37,10 +37,10 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 			diff := NewProcessDiff(currentState, prevState)
 
 			if diff.HasStarted {
-				p.onEvent(topics.ClientStarted, "")
+				p.onEvent(topics.EzquakeStarted, "")
 
 			} else if diff.HasStopped {
-				p.onEvent(topics.ClientStopped, "")
+				p.onEvent(topics.EzquakeStopped, "")
 			}
 
 			prevState = currentState

@@ -8,18 +8,18 @@ package topics
 
 // events
 const (
-	ClientStarted = "client.started"
-	ClientStopped = "client.stopped"
+	EzquakeStarted = "ezquake.started"
+	EzquakeStopped = "ezquake.stopped"
 
 	ServerTitleChanged = "server.title_changed"
 )
 
 // commands
 const (
-	ClientCommand           = "client.command"
-	ClientCommandLastscores = "client.command.lastscores"
-	ClientCommandShowscores = "client.command.showscores"
-	StopClient              = "client.stop"
+	EzquakeCommand    = "ezquake.command"
+	EzquakeLastscores = "ezquake.command.lastscores"
+	EzquakeShowscores = "ezquake.command.showscores"
+	StopEzquake       = "ezquake.stop"
 
 	StreambotConnectToServer = "streambot.connect_to_server"
 	StreambotSuggestServer   = "streambot.suggest_server"

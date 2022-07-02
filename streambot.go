@@ -80,16 +80,16 @@ func (s *Streambot) OnMessage(msg zeromq.Message) {
 		topics.StreambotDisableAuto:     s.OnStreambotDisableAuto,
 		topics.StreambotConnectToServer: s.OnStreambotConnectToServer,
 		topics.StreambotSuggestServer:   s.OnStreambotSuggestServer,
-		topics.ClientCommand:            s.OnClientCommand,
-		topics.ClientCommandLastscores:  s.OnClientCommandLastscores,
-		topics.ClientCommandShowscores:  s.OnClientCommandShowscores,
-		topics.StopClient:               s.OnStopClient,
+		topics.EzquakeCommand:           s.OnEzquakeCommand,
+		topics.EzquakeLastscores:        s.OnEzquakeLastscores,
+		topics.EzquakeShowscores:        s.OnEzquakeShowscores,
+		topics.StopEzquake:              s.OnStopEzquake,
 		topics.StreambotSystemUpdate:    s.OnStreambotSystemUpdate,
 		topics.StreambotEvaluate:        s.OnStreambotEvaluate,
 
-		// client events
-		topics.ClientStarted: s.OnClientStarted,
-		topics.ClientStopped: s.OnClientStopped,
+		// ezquake events
+		topics.EzquakeStarted: s.OnEzquakeStarted,
+		topics.EzquakeStopped: s.OnEzquakeStopped,
 
 		// server events
 		topics.ServerTitleChanged: s.OnServerTitleChanged,
@@ -129,7 +129,7 @@ func (s *Streambot) ValidateCurrentServer() {
 
 	altName := fmt.Sprintf("%s(1)", s.clientPlayerName)
 	if analyze.HasSpectator(currentServer, altName) {
-		s.publisher.SendMessage(topics.ClientCommand, fmt.Sprintf("name %s", s.clientPlayerName))
+		s.publisher.SendMessage(topics.EzquakeCommand, fmt.Sprintf("name %s", s.clientPlayerName))
 		return
 	}
 
@@ -233,18 +233,18 @@ func (s *Streambot) OnStreambotConnectToServer(data zeromq.MessageData) {
 }
 
 func (s *Streambot) ClientCommand(command string) {
-	s.publisher.SendMessage(topics.ClientCommand, command)
+	s.publisher.SendMessage(topics.EzquakeCommand, command)
 }
 
-func (s *Streambot) OnClientCommand(data zeromq.MessageData) {
-	pp.Println("OnClientCommand", data.ToString())
+func (s *Streambot) OnEzquakeCommand(data zeromq.MessageData) {
+	pp.Println("OnEzquakeCommand", data.ToString())
 
 	if s.process.IsStarted() {
 		s.pipe.Write(data.ToString())
 	}
 }
 
-func (s *Streambot) OnClientCommandLastscores(data zeromq.MessageData) {
+func (s *Streambot) OnEzquakeLastscores(data zeromq.MessageData) {
 	s.ClientCommand("toggleconsole;lastscores")
 
 	time.AfterFunc(8*time.Second, func() {
@@ -252,7 +252,7 @@ func (s *Streambot) OnClientCommandLastscores(data zeromq.MessageData) {
 	})
 }
 
-func (s *Streambot) OnClientCommandShowscores(data zeromq.MessageData) {
+func (s *Streambot) OnEzquakeShowscores(data zeromq.MessageData) {
 	s.ClientCommand("+showscores")
 
 	time.AfterFunc(8*time.Second, func() {
@@ -260,8 +260,8 @@ func (s *Streambot) OnClientCommandShowscores(data zeromq.MessageData) {
 	})
 }
 
-func (s *Streambot) OnClientStarted(data zeromq.MessageData) {
-	pp.Println("OnClientStarted", data.ToString())
+func (s *Streambot) OnEzquakeStarted(data zeromq.MessageData) {
+	pp.Println("OnEzquakeStarted", data.ToString())
 
 	s.evaluateTask.Start(10 * time.Second)
 
@@ -270,13 +270,13 @@ func (s *Streambot) OnClientStarted(data zeromq.MessageData) {
 	})
 }
 
-func (s *Streambot) OnStopClient(data zeromq.MessageData) {
-	pp.Println("OnStopClient", data.ToString())
+func (s *Streambot) OnStopEzquake(data zeromq.MessageData) {
+	pp.Println("OnStopEzquake", data.ToString())
 	s.process.Stop(syscall.SIGTERM)
 }
 
-func (s *Streambot) OnClientStopped(data zeromq.MessageData) {
-	pp.Println("OnClientStopped", data.ToString())
+func (s *Streambot) OnEzquakeStopped(data zeromq.MessageData) {
+	pp.Println("OnEzquakeStopped", data.ToString())
 	s.evaluateTask.Stop()
 }
 
