@@ -83,8 +83,7 @@ func (s *Streambot) OnMessage(msg message.Message) {
 		topic.StreambotConnectToServer: s.OnStreambotConnectToServer,
 		topic.StreambotSuggestServer:   s.OnStreambotSuggestServer,
 		topic.EzquakeCommand:           s.OnEzquakeCommand,
-		topic.EzquakeLastscores:        s.OnEzquakeLastscores,
-		topic.EzquakeShowscores:        s.OnEzquakeShowscores,
+		topic.EzquakeScript:            s.OnEzquakeScript,
 		topic.StopEzquake:              s.OnStopEzquake,
 		topic.StreambotSystemUpdate:    s.OnStreambotSystemUpdate,
 		topic.StreambotEvaluate:        s.OnStreambotEvaluate,
@@ -248,20 +247,17 @@ func (s *Streambot) OnEzquakeCommand(msg message.Message) {
 	s.pipe.Write(msg.Content.ToString())
 }
 
-func (s *Streambot) OnEzquakeLastscores(msg message.Message) {
-	s.ClientCommand("toggleconsole;lastscores")
+func (s *Streambot) OnEzquakeScript(msg message.Message) {
+	script := msg.Content.ToString()
 
-	time.AfterFunc(8*time.Second, func() {
-		s.ClientCommand("toggleconsole")
-	})
-}
-
-func (s *Streambot) OnEzquakeShowscores(msg message.Message) {
-	s.ClientCommand("+showscores")
-
-	time.AfterFunc(8*time.Second, func() {
-		s.ClientCommand("-showscores")
-	})
+	switch script {
+	case "lastscores":
+		s.ClientCommand("toggleconsole;lastscores")
+		time.AfterFunc(8*time.Second, func() { s.ClientCommand("toggleconsole") })
+	case "showscores":
+		s.ClientCommand("+showscores")
+		time.AfterFunc(8*time.Second, func() { s.ClientCommand("-showscores") })
+	}
 }
 
 func (s *Streambot) OnEzquakeStarted(msg message.Message) {
@@ -269,9 +265,7 @@ func (s *Streambot) OnEzquakeStarted(msg message.Message) {
 
 	s.evaluateTask.Start(10 * time.Second)
 
-	time.AfterFunc(5*time.Second, func() {
-		s.ClientCommand("toggleconsole")
-	})
+	time.AfterFunc(5*time.Second, func() { s.ClientCommand("toggleconsole") })
 }
 
 func (s *Streambot) OnStopEzquake(msg message.Message) {

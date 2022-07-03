@@ -16,10 +16,9 @@ const (
 
 // commands
 const (
-	EzquakeCommand    = "ezquake.command"
-	EzquakeLastscores = "ezquake.command.lastscores"
-	EzquakeShowscores = "ezquake.command.showscores"
-	StopEzquake       = "ezquake.stop"
+	EzquakeCommand = "ezquake.command"
+	EzquakeScript  = "ezquake.script"
+	StopEzquake    = "ezquake.stop"
 
 	StreambotConnectToServer = "streambot.connect_to_server"
 	StreambotSuggestServer   = "streambot.suggest_server"
