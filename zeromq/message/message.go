@@ -12,7 +12,6 @@ const (
 )
 
 type Handler func(Message)
-type ContentHandler func(Content)
 
 type Message struct {
 	Topic       string
