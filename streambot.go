@@ -241,9 +241,11 @@ func (s *Streambot) ClientCommand(command string) {
 func (s *Streambot) OnEzquakeCommand(msg message.Message) {
 	pp.Println("OnEzquakeCommand", msg.Content.ToString())
 
-	if s.process.IsStarted() {
-		s.pipe.Write(msg.Content.ToString())
+	if !s.process.IsStarted() {
+		return
 	}
+
+	s.pipe.Write(msg.Content.ToString())
 }
 
 func (s *Streambot) OnEzquakeLastscores(msg message.Message) {
