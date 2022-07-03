@@ -12,7 +12,7 @@ func TestNewMessageFromParts(t *testing.T) {
 		expect := message.Message{}
 		msg, err := message.NewMessageFromFrames([]string{})
 		assert.Equal(t, expect, msg)
-		assert.ErrorContains(t, err, "expected 1-3 message frames, got 0")
+		assert.EqualError(t, err, "expected 1-3 message frames, got 0")
 	})
 
 	t.Run("1 arg", func(t *testing.T) {
@@ -66,6 +66,6 @@ func TestNewMessageFromParts(t *testing.T) {
 		expect := message.Message{}
 		msg, err := message.NewMessageFromFrames([]string{"a", "b", "c", "d"})
 		assert.Equal(t, expect, msg)
-		assert.ErrorContains(t, err, "expected 1-3 message frames, got 4")
+		assert.EqualError(t, err, "expected 1-3 message frames, got 4")
 	})
 }
