@@ -13,8 +13,14 @@ import (
 type ServerList []mvdsv.Mvdsv
 
 func GetMvdsvServers() ServerList {
+	return GetMvdsvServersByQueryParams(nil)
+}
+
+func GetMvdsvServersByQueryParams(queryParams map[string]string) ServerList {
 	serversUrl := "https://metaqtv.quake.se/v2/servers/mvdsv"
-	resp, err := resty.New().R().SetResult(ServerList{}).Get(serversUrl)
+	resp, err := resty.New().R().SetResult(ServerList{}).SetQueryParams(queryParams).Get(serversUrl)
+
+	fmt.Println(resp.Request.URL)
 
 	if err != nil {
 		fmt.Println("server fetch error", err.Error())
