@@ -12,12 +12,12 @@ import (
 )
 
 type Chatbot struct {
-	client    *twitch.Client
-	publisher zeromq.Publisher
-	stopChan  chan os.Signal
-	OnStart   func()
-	OnConnect func()
-	OnStop    func(sig os.Signal)
+	client      *twitch.Client
+	publisher   zeromq.Publisher
+	stopChan    chan os.Signal
+	OnStarted   func()
+	OnConnected func()
+	OnStopped   func(sig os.Signal)
 }
 
 func New(username string, accessToken string, channel string, publisherAddress string) *Chatbot {
@@ -33,16 +33,16 @@ func New(username string, accessToken string, channel string, publisherAddress s
 	})
 
 	return &Chatbot{
-		client:    client,
-		publisher: zeromq.NewPublisher(publisherAddress),
-		OnStart:   func() {},
-		OnConnect: func() {},
-		OnStop:    func(sig os.Signal) {},
+		client:      client,
+		publisher:   zeromq.NewPublisher(publisherAddress),
+		OnStarted:   func() {},
+		OnConnected: func() {},
+		OnStopped:   func(sig os.Signal) {},
 	}
 }
 
 func (c *Chatbot) Start() {
-	c.OnStart()
+	c.OnStarted()
 
 	c.stopChan = make(chan os.Signal, 1)
 	signal.Notify(c.stopChan, syscall.SIGTERM, syscall.SIGINT)
@@ -50,7 +50,7 @@ func (c *Chatbot) Start() {
 	go func() {
 		c.client.OnConnect(func() {
 			c.publisher.SendMessage(topic.ChatbotConnected)
-			c.OnConnect()
+			c.OnConnected()
 		})
 		c.client.Connect()
 		defer c.client.Disconnect()
@@ -58,7 +58,7 @@ func (c *Chatbot) Start() {
 	sig := <-c.stopChan
 
 	c.publisher.SendMessage(topic.ChatbotDisconnected)
-	c.OnStop(sig)
+	c.OnStopped(sig)
 }
 
 func (c *Chatbot) Stop() {

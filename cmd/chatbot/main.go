@@ -20,8 +20,8 @@ func main() {
 		os.Getenv("ZMQ_PUBLISHER_ADDRESS"),
 	)
 	pp := term.NewPrettyPrinter("chatbot", color.FgHiBlue)
-	bot.OnConnect = func() { pp.Println("connected as", os.Getenv("TWITCH_BOT_USERNAME")) }
-	bot.OnStart = func() { pp.Println("start") }
-	bot.OnStop = func(sig os.Signal) { pp.Println(fmt.Sprintf("stop (%s)", sig)) }
+	bot.OnConnected = func() { pp.Println("connected as", os.Getenv("TWITCH_BOT_USERNAME")) }
+	bot.OnStarted = func() { pp.Println("start") }
+	bot.OnStopped = func(sig os.Signal) { pp.Println(fmt.Sprintf("stop (%s)", sig)) }
 	bot.Start()
 }
