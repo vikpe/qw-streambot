@@ -66,5 +66,5 @@ func (c *Chatbot) Stop() {
 		return
 	}
 	c.stopChan <- syscall.SIGINT
-	time.Sleep(10 * time.Millisecond)
+	time.Sleep(50 * time.Millisecond)
 }
