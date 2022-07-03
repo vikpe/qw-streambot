@@ -263,7 +263,7 @@ func (s *Streambot) OnEzquakeShowscores(msg message.Message) {
 }
 
 func (s *Streambot) OnEzquakeStarted(msg message.Message) {
-	pp.Println("OnEzquakeStarted", msg.Content.ToString())
+	pp.Println("OnEzquakeStarted")
 
 	s.evaluateTask.Start(10 * time.Second)
 
@@ -273,17 +273,17 @@ func (s *Streambot) OnEzquakeStarted(msg message.Message) {
 }
 
 func (s *Streambot) OnStopEzquake(msg message.Message) {
-	pp.Println("OnStopEzquake", msg.Content.ToString())
+	pp.Println("OnStopEzquake")
 	s.process.Stop(syscall.SIGTERM)
 }
 
 func (s *Streambot) OnEzquakeStopped(msg message.Message) {
-	pp.Println("OnEzquakeStopped", msg.Content.ToString())
+	pp.Println("OnEzquakeStopped")
 	s.evaluateTask.Stop()
 }
 
 func (s *Streambot) OnStreambotSystemUpdate(msg message.Message) {
-	pp.Println("OnStreambotSystemUpdate", msg.Content.ToString())
+	pp.Println("OnStreambotSystemUpdate")
 }
 
 func (s *Streambot) OnServerTitleChanged(msg message.Message) {
