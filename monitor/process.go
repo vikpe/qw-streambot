@@ -10,10 +10,10 @@ import (
 type ProcessMonitor struct {
 	isDone  bool
 	process *ezquake.Process
-	onEvent func(string, any)
+	onEvent func(string, ...any)
 }
 
-func NewProcessMonitor(process *ezquake.Process, onEvent func(string, any)) ProcessMonitor {
+func NewProcessMonitor(process *ezquake.Process, onEvent func(string, ...any)) ProcessMonitor {
 	return ProcessMonitor{
 		isDone:  false,
 		process: process,
@@ -37,10 +37,10 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 			diff := newProcessDiff(currentState, prevState)
 
 			if diff.HasStarted {
-				p.onEvent(topic.EzquakeStarted, "")
+				p.onEvent(topic.EzquakeStarted)
 
 			} else if diff.HasStopped {
-				p.onEvent(topic.EzquakeStopped, "")
+				p.onEvent(topic.EzquakeStopped)
 			}
 
 			prevState = currentState

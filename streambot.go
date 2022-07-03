@@ -76,7 +76,7 @@ func (s *Streambot) Start() {
 }
 
 func (s *Streambot) OnMessage(msg message.Message) {
-	handlers := map[string]message.DataHandler{
+	handlers := map[string]message.ContentHandler{
 		// commands
 		topic.StreambotEnableAuto:      s.OnStreambotEnableAuto,
 		topic.StreambotDisableAuto:     s.OnStreambotDisableAuto,
@@ -98,18 +98,18 @@ func (s *Streambot) OnMessage(msg message.Message) {
 	}
 
 	if handler, ok := handlers[msg.Topic]; ok {
-		handler(msg.Data)
+		handler(msg.Content)
 	} else {
-		fmt.Println("no handler defined for", msg.Topic, fmt.Sprintf("%T", msg.Topic), msg.Data)
+		fmt.Println("no handler defined for", msg.Topic, fmt.Sprintf("%T", msg.Topic), msg.Content)
 	}
 }
 
-func (s *Streambot) OnStreambotEnableAuto(data message.Data) {
+func (s *Streambot) OnStreambotEnableAuto(content message.Content) {
 	s.AutoMode = true
-	s.publisher.SendMessage(topic.StreambotEvaluate, "")
+	s.publisher.SendMessage(topic.StreambotEvaluate)
 }
 
-func (s *Streambot) OnStreambotDisableAuto(data message.Data) {
+func (s *Streambot) OnStreambotDisableAuto(content message.Content) {
 	s.AutoMode = false
 }
 
@@ -139,7 +139,7 @@ func (s *Streambot) ValidateCurrentServer() {
 	s.serverMonitor.SetAddress("")
 }
 
-func (s *Streambot) OnStreambotEvaluate(data message.Data) {
+func (s *Streambot) OnStreambotEvaluate(content message.Content) {
 	// check process
 	if !s.process.IsStarted() {
 		return
@@ -198,22 +198,22 @@ func (s *Streambot) evaluateAutoModeDisabled() {
 
 	fmt.Println("server is shit: enable auto")
 
-	s.publisher.SendMessage(topic.StreambotEnableAuto, "")
+	s.publisher.SendMessage(topic.StreambotEnableAuto)
 }
 
-func (s *Streambot) OnStreambotSuggestServer(data message.Data) {
+func (s *Streambot) OnStreambotSuggestServer(content message.Content) {
 	var server mvdsv.Mvdsv
-	data.To(&server)
+	content.To(&server)
 
-	s.publisher.SendMessage(topic.StreambotDisableAuto, "")
+	s.publisher.SendMessage(topic.StreambotDisableAuto)
 	s.publisher.SendMessage(topic.StreambotConnectToServer, server)
 }
 
-func (s *Streambot) OnStreambotConnectToServer(data message.Data) {
+func (s *Streambot) OnStreambotConnectToServer(content message.Content) {
 	var server mvdsv.Mvdsv
-	data.To(&server)
+	content.To(&server)
 
-	pp.Print("OnStreambotConnectToServer", server.Address, data)
+	pp.Print("OnStreambotConnectToServer", server.Address, content)
 
 	if s.serverMonitor.GetAddress() == server.Address {
 		fmt.Println(" .. already connected to server")
@@ -238,15 +238,15 @@ func (s *Streambot) ClientCommand(command string) {
 	s.publisher.SendMessage(topic.EzquakeCommand, command)
 }
 
-func (s *Streambot) OnEzquakeCommand(data message.Data) {
-	pp.Println("OnEzquakeCommand", data.ToString())
+func (s *Streambot) OnEzquakeCommand(content message.Content) {
+	pp.Println("OnEzquakeCommand", content.ToString())
 
 	if s.process.IsStarted() {
-		s.pipe.Write(data.ToString())
+		s.pipe.Write(content.ToString())
 	}
 }
 
-func (s *Streambot) OnEzquakeLastscores(data message.Data) {
+func (s *Streambot) OnEzquakeLastscores(content message.Content) {
 	s.ClientCommand("toggleconsole;lastscores")
 
 	time.AfterFunc(8*time.Second, func() {
@@ -254,7 +254,7 @@ func (s *Streambot) OnEzquakeLastscores(data message.Data) {
 	})
 }
 
-func (s *Streambot) OnEzquakeShowscores(data message.Data) {
+func (s *Streambot) OnEzquakeShowscores(content message.Content) {
 	s.ClientCommand("+showscores")
 
 	time.AfterFunc(8*time.Second, func() {
@@ -262,8 +262,8 @@ func (s *Streambot) OnEzquakeShowscores(data message.Data) {
 	})
 }
 
-func (s *Streambot) OnEzquakeStarted(data message.Data) {
-	pp.Println("OnEzquakeStarted", data.ToString())
+func (s *Streambot) OnEzquakeStarted(content message.Content) {
+	pp.Println("OnEzquakeStarted", content.ToString())
 
 	s.evaluateTask.Start(10 * time.Second)
 
@@ -272,21 +272,21 @@ func (s *Streambot) OnEzquakeStarted(data message.Data) {
 	})
 }
 
-func (s *Streambot) OnStopEzquake(data message.Data) {
-	pp.Println("OnStopEzquake", data.ToString())
+func (s *Streambot) OnStopEzquake(content message.Content) {
+	pp.Println("OnStopEzquake", content.ToString())
 	s.process.Stop(syscall.SIGTERM)
 }
 
-func (s *Streambot) OnEzquakeStopped(data message.Data) {
-	pp.Println("OnEzquakeStopped", data.ToString())
+func (s *Streambot) OnEzquakeStopped(content message.Content) {
+	pp.Println("OnEzquakeStopped", content.ToString())
 	s.evaluateTask.Stop()
 }
 
-func (s *Streambot) OnStreambotSystemUpdate(data message.Data) {
-	pp.Println("OnStreambotSystemUpdate", data.ToString())
+func (s *Streambot) OnStreambotSystemUpdate(content message.Content) {
+	pp.Println("OnStreambotSystemUpdate", content.ToString())
 }
 
-func (s *Streambot) OnServerTitleChanged(data message.Data) {
-	pp.Println("OnServerTitleChanged", data.ToString())
-	s.twitch.SetTitle(data.ToString())
+func (s *Streambot) OnServerTitleChanged(content message.Content) {
+	pp.Println("OnServerTitleChanged", content.ToString())
+	s.twitch.SetTitle(content.ToString())
 }

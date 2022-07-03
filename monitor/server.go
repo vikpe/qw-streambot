@@ -10,13 +10,13 @@ import (
 
 type ServerMonitor struct {
 	isDone           bool
-	onEvent          func(string, any)
+	onEvent          func(string, ...any)
 	address          string
 	addressTimestamp time.Time
 	prevState        serverState
 }
 
-func NewServerMonitor(onEvent func(string, any)) ServerMonitor {
+func NewServerMonitor(onEvent func(string, ...any)) ServerMonitor {
 	return ServerMonitor{
 		isDone:    false,
 		onEvent:   onEvent,

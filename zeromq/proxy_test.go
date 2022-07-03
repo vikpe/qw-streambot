@@ -41,7 +41,7 @@ func TestEndToEnd(t *testing.T) {
 		publisher := zeromq.NewPublisher("tcp://localhost:5555")
 
 		for _, topic := range topicsToSend {
-			publisher.SendMessage(topic, "")
+			publisher.SendMessage(topic)
 		}
 	}()
 
