@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	CommandPrefix      = "!"
+	CommandPrefix      = "#"
 	CommandFind        = "find"
 	CommandDisableAuto = "manual"
 	CommandEnableAuto  = "auto"
