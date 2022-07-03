@@ -17,12 +17,17 @@ type Chatbot struct {
 	OnStop    func(sig os.Signal)
 }
 
-func New(username string, accessToken string, channel string) *Chatbot {
+func New(username string, accessToken string, channel string, publisherAddress string) *Chatbot {
 	client := twitch.NewClient(username, accessToken)
 	client.Join(channel)
 
-	handler := NewMessageHandler(client)
-	client.OnPrivateMessage(handler.OnPrivateMessage)
+	handler := NewMessageHandler(client, publisherAddress)
+
+	client.OnPrivateMessage(func(message twitch.PrivateMessage) {
+		if message.Channel == channel {
+			handler.OnPrivateMessage(message)
+		}
+	})
 
 	return &Chatbot{
 		client:    client,

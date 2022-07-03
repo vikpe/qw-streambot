@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gempir/go-twitch-irc/v3"
+	"github.com/vikpe/streambot/zeromq"
 	"golang.org/x/exp/slices"
 )
 
@@ -13,11 +14,15 @@ func IsModerator(name string) bool {
 }
 
 type MessageHandler struct {
-	client *twitch.Client
+	client    *twitch.Client
+	publisher zeromq.Publisher
 }
 
-func NewMessageHandler(client *twitch.Client) MessageHandler {
-	return MessageHandler{client: client}
+func NewMessageHandler(client *twitch.Client, publisherAddress string) *MessageHandler {
+	return &MessageHandler{
+		client:    client,
+		publisher: zeromq.NewPublisher(publisherAddress),
+	}
 }
 
 func (c *MessageHandler) OnPrivateMessage(message twitch.PrivateMessage) {
