@@ -10,7 +10,7 @@ import (
 func TestNewMessageFromParts(t *testing.T) {
 	t.Run("0 args", func(t *testing.T) {
 		expect := message.Message{}
-		msg, err := message.NewMessageFromParts([]string{})
+		msg, err := message.NewMessageFromFrames([]string{})
 		assert.Equal(t, expect, msg)
 		assert.ErrorContains(t, err, "expected 1-3 message frames, got 0")
 	})
@@ -21,7 +21,7 @@ func TestNewMessageFromParts(t *testing.T) {
 			Content:     `""`,
 			ContentType: "string",
 		}
-		msg, err := message.NewMessageFromParts([]string{"HELLO"})
+		msg, err := message.NewMessageFromFrames([]string{"HELLO"})
 		assert.Equal(t, expect, msg)
 		assert.Nil(t, err)
 	})
@@ -32,7 +32,7 @@ func TestNewMessageFromParts(t *testing.T) {
 			Content:     `"WORLD"`,
 			ContentType: "string",
 		}
-		msg, err := message.NewMessageFromParts([]string{"HELLO", "WORLD"})
+		msg, err := message.NewMessageFromFrames([]string{"HELLO", "WORLD"})
 		assert.Equal(t, expect, msg)
 		assert.Nil(t, err)
 	})
@@ -45,7 +45,7 @@ func TestNewMessageFromParts(t *testing.T) {
 				Content:     `"WORLD"`,
 				ContentType: "string",
 			}
-			msg, err := message.NewMessageFromParts([]string{"HELLO", "string", "WORLD"})
+			msg, err := message.NewMessageFromFrames([]string{"HELLO", "string", "WORLD"})
 			assert.Equal(t, expect, msg)
 			assert.Nil(t, err)
 		})
@@ -56,7 +56,7 @@ func TestNewMessageFromParts(t *testing.T) {
 				Content:     `"3"`,
 				ContentType: "int",
 			}
-			msg, err := message.NewMessageFromParts([]string{"HELLO", "int", "3"})
+			msg, err := message.NewMessageFromFrames([]string{"HELLO", "int", "3"})
 			assert.Equal(t, expect, msg)
 			assert.Nil(t, err)
 		})
@@ -64,7 +64,7 @@ func TestNewMessageFromParts(t *testing.T) {
 
 	t.Run("3+ args", func(t *testing.T) {
 		expect := message.Message{}
-		msg, err := message.NewMessageFromParts([]string{"a", "b", "c", "d"})
+		msg, err := message.NewMessageFromFrames([]string{"a", "b", "c", "d"})
 		assert.Equal(t, expect, msg)
 		assert.ErrorContains(t, err, "expected 1-3 message frames, got 4")
 	})

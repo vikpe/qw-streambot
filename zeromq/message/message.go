@@ -50,7 +50,7 @@ func (d Content) To(target interface{}) {
 	Unserialize(string(d), &target)
 }
 
-func NewMessageFromParts(frames []string) (Message, error) {
+func NewMessageFromFrames(frames []string) (Message, error) {
 	frameCount := len(frames)
 
 	switch frameCount {
