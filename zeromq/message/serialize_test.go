@@ -9,47 +9,37 @@ import (
 
 func TestSerialization(t *testing.T) {
 	t.Run("string", func(t *testing.T) {
-		var value = "hello"
-		serialized := message.Serialize(value)
-
-		var unserialized string
-		message.Unserialize(serialized, &unserialized)
-		assert.Equal(t, value, unserialized)
+		var valueBefore = "hello"
+		var valueAfter string
+		message.Unserialize(message.Serialize(valueBefore), &valueAfter)
+		assert.Equal(t, valueBefore, valueAfter)
 	})
 
 	t.Run("int", func(t *testing.T) {
-		var value = 5
-		serialized := message.Serialize(value)
-
-		var unserialized int
-		message.Unserialize(serialized, &unserialized)
-		assert.Equal(t, value, unserialized)
+		var valueBefore = 5
+		var valueAfter int
+		message.Unserialize(message.Serialize(valueBefore), &valueAfter)
+		assert.Equal(t, valueBefore, valueAfter)
 	})
 
 	t.Run("float64", func(t *testing.T) {
-		var value = 5.5
-		serialized := message.Serialize(value)
-
-		var unserialized float64
-		message.Unserialize(serialized, &unserialized)
-		assert.Equal(t, value, unserialized)
+		var valueBefore = 5.5
+		var valueAfter float64
+		message.Unserialize(message.Serialize(valueBefore), &valueAfter)
+		assert.Equal(t, valueBefore, valueAfter)
 	})
 
 	t.Run("[]string", func(t *testing.T) {
-		var value = []string{"a", "b"}
-		serialized := message.Serialize(value)
-
-		var unserialized []string
-		message.Unserialize(serialized, &unserialized)
-		assert.Equal(t, value, unserialized)
+		var valueBefore = []string{"a", "b"}
+		var valueAfter []string
+		message.Unserialize(message.Serialize(valueBefore), &valueAfter)
+		assert.Equal(t, valueBefore, valueAfter)
 	})
 
 	t.Run("map", func(t *testing.T) {
-		var value = map[string]int{"foo": 2}
-		serialized := message.Serialize(value)
-
-		var unserialized map[string]int
-		message.Unserialize(serialized, &unserialized)
-		assert.Equal(t, value, unserialized)
+		var valueBefore = map[string]int{"foo": 2}
+		var valueAfter map[string]int
+		message.Unserialize(message.Serialize(valueBefore), &valueAfter)
+		assert.Equal(t, valueBefore, valueAfter)
 	})
 }
