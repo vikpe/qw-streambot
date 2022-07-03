@@ -48,7 +48,7 @@ func NewStreambot(
 		pipe:             pipe,
 		process:          process,
 		serverMonitor:    monitor.NewServerMonitor(publisher.SendMessage),
-		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate, "") }),
+		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
 		twitch:           twitchClient,
 		publisher:        publisher,
 		subscriber:       subscriber,
