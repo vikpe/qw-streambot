@@ -11,6 +11,9 @@ const (
 	EzquakeStarted = "ezquake.started"
 	EzquakeStopped = "ezquake.stopped"
 
+	ChatbotConnected    = "chatbot.connected"
+	ChatbotDisconnected = "chatbot.disconnected"
+
 	ServerTitleChanged = "server.title_changed"
 )
 

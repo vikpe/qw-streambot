@@ -7,10 +7,13 @@ import (
 	"time"
 
 	"github.com/gempir/go-twitch-irc/v3"
+	"github.com/vikpe/streambot/zeromq"
+	"github.com/vikpe/streambot/zeromq/topic"
 )
 
 type Chatbot struct {
 	client    *twitch.Client
+	publisher zeromq.Publisher
 	stopChan  chan os.Signal
 	OnStart   func()
 	OnConnect func()
@@ -31,6 +34,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 
 	return &Chatbot{
 		client:    client,
+		publisher: zeromq.NewPublisher(publisherAddress),
 		OnStart:   func() {},
 		OnConnect: func() {},
 		OnStop:    func(sig os.Signal) {},
@@ -44,11 +48,16 @@ func (c *Chatbot) Start() {
 	signal.Notify(c.stopChan, syscall.SIGTERM, syscall.SIGINT)
 
 	go func() {
-		c.client.OnConnect(c.OnConnect)
+		c.client.OnConnect(func() {
+			c.publisher.SendMessage(topic.ChatbotConnected)
+			c.OnConnect()
+		})
 		c.client.Connect()
 		defer c.client.Disconnect()
 	}()
 	sig := <-c.stopChan
+
+	c.publisher.SendMessage(topic.ChatbotDisconnected)
 	c.OnStop(sig)
 }
 
