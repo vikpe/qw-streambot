@@ -1,6 +1,7 @@
 package chatbot
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -21,7 +22,7 @@ type Chatbot struct {
 }
 
 func New(username string, accessToken string, channel string, publisherAddress string) *Chatbot {
-	client := twitch.NewClient(username, accessToken)
+	client := twitch.NewClient(username, fmt.Sprintf("oauth:%s", accessToken))
 	client.Join(channel)
 
 	handler := NewMessageHandler(client, publisherAddress)
