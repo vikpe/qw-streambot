@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -11,14 +12,13 @@ import (
 )
 
 type Bot struct {
-	client           *twitch.Client
-	channel          string
-	channelCommands  map[string]command.Handler
-	stopChan         chan os.Signal
-	OnStarted        func()
-	OnConnected      func()
-	OnUnknownCommand func(call command.Command, msg twitch.PrivateMessage)
-	OnStopped        func(os.Signal)
+	client          *twitch.Client
+	channel         string
+	channelCommands map[string]command.Handler
+	stopChan        chan os.Signal
+	OnStarted       func()
+	OnConnected     func()
+	OnStopped       func(os.Signal)
 }
 
 func New(username string, oauth string, channel string, commandPrefix rune) *Bot {
@@ -26,13 +26,12 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 	client.Join(channel)
 
 	bot := Bot{
-		client:           client,
-		channel:          channel,
-		channelCommands:  make(map[string]command.Handler, 0),
-		OnStarted:        func() {},
-		OnConnected:      func() {},
-		OnUnknownCommand: func(command.Command, twitch.PrivateMessage) {},
-		OnStopped:        func(os.Signal) {},
+		client:          client,
+		channel:         channel,
+		channelCommands: make(map[string]command.Handler, 0),
+		OnStarted:       func() {},
+		OnConnected:     func() {},
+		OnStopped:       func(os.Signal) {},
 	}
 
 	client.OnPrivateMessage(func(msg twitch.PrivateMessage) {
@@ -49,7 +48,7 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 		if cmdHandler, ok := bot.channelCommands[cmd.Name]; ok {
 			cmdHandler(cmd, msg)
 		} else {
-			bot.OnUnknownCommand(cmd, msg)
+			bot.Reply(msg, fmt.Sprintf(`unknown command "%s".`, cmd.Name))
 		}
 	})
 
