@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gempir/go-twitch-irc/v3"
-	"github.com/vikpe/streambot/irc/bot/command"
+	"github.com/vikpe/streambot/chatbot/irc/bot/command"
 )
 
 type Bot struct {
