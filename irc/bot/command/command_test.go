@@ -19,6 +19,7 @@ func TestIsCommand(t *testing.T) {
 		"!.":     false,
 		"!.find": false,
 		"!!":     false,
+		"!123":   false,
 
 		"!find":       true,
 		" !find":      true,

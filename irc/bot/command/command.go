@@ -40,7 +40,7 @@ func IsCommand(prefix rune, text string) bool {
 	}
 
 	firstRune := rune(parts[0][0])
-	return unicode.IsLetter(firstRune) || unicode.IsDigit(firstRune)
+	return unicode.IsLetter(firstRune)
 }
 
 func NewFromText(prefix rune, text string) (Command, error) {
