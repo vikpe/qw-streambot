@@ -14,6 +14,7 @@ import (
 	"github.com/vikpe/streambot/third_party/qws"
 	"github.com/vikpe/streambot/third_party/sstat"
 	"github.com/vikpe/streambot/third_party/twitch"
+	"github.com/vikpe/streambot/util/calc"
 	"github.com/vikpe/streambot/util/task"
 	"github.com/vikpe/streambot/util/term"
 	"github.com/vikpe/streambot/zeromq"
@@ -93,7 +94,8 @@ func (s *Streambot) OnMessage(msg message.Message) {
 		topic.EzquakeStopped: s.OnEzquakeStopped,
 
 		// server events
-		topic.ServerTitleChanged: s.OnServerTitleChanged,
+		topic.ServerTitleChanged:    s.OnServerTitleChanged,
+		topic.ServerMatchtagChanged: s.OnServerMatchtagChanged,
 	}
 
 	if handler, ok := handlers[msg.Topic]; ok {
@@ -262,7 +264,6 @@ func (s *Streambot) OnEzquakeScript(msg message.Message) {
 
 func (s *Streambot) OnEzquakeStarted(msg message.Message) {
 	pp.Println("OnEzquakeStarted")
-
 	s.evaluateTask.Start(10 * time.Second)
 
 	time.AfterFunc(5*time.Second, func() { s.ClientCommand("toggleconsole") })
@@ -286,4 +287,10 @@ func (s *Streambot) OnStreambotSystemUpdate(msg message.Message) {
 func (s *Streambot) OnServerTitleChanged(msg message.Message) {
 	pp.Println("OnServerTitleChanged", msg.Content.ToString())
 	s.twitch.SetTitle(msg.Content.ToString())
+}
+
+func (s *Streambot) OnServerMatchtagChanged(msg message.Message) {
+	matchtag := msg.Content.ToString()
+	textScale := calc.StaticTextScale(matchtag)
+	s.ClientCommand(fmt.Sprintf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag))
 }
