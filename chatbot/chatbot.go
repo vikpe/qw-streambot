@@ -16,17 +16,19 @@ import (
 )
 
 func New(username string, accessToken string, channel string, publisherAddress string) *bot.Bot {
-	publisher := zeromq.NewPublisher(publisherAddress)
-	cmder := commander.NewCommander(publisher.SendMessage)
 	pp := term.NewPrettyPrinter("chatbot", color.FgHiBlue)
+	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
 	chatbot := bot.New(username, accessToken, channel, '#')
+
 	chatbot.OnConnected = func() {
 		pp.Println("connected as", username)
 	}
+
 	chatbot.OnStarted = func() {
 		pp.Println("start")
 	}
+
 	chatbot.OnStopped = func(sig os.Signal) {
 		pp.Println(fmt.Sprintf("stop (%s)", sig))
 	}
