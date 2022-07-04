@@ -57,6 +57,10 @@ func (s *ServerMonitor) Start(interval time.Duration) {
 				s.onEvent(topic.ServerTitleChanged, currentState.Title)
 			}
 
+			if diff.HasChangedMatchtag {
+				s.onEvent(topic.ServerMatchtagChanged, currentState.Matchtag)
+			}
+
 			s.prevState = currentState
 		}
 
@@ -69,16 +73,18 @@ func (s *ServerMonitor) Stop() {
 }
 
 type serverState struct {
-	Title string
-	Map   string
-	Score int
+	Map      string
+	Matchtag string
+	Score    int
+	Title    string
 }
 
 func newServerState(address string) serverState {
 	nullState := serverState{
-		Title: "",
-		Map:   "",
-		Score: 0,
+		Map:      "",
+		Matchtag: "",
+		Score:    0,
+		Title:    "",
 	}
 	if "" == address {
 		return nullState
@@ -93,14 +99,16 @@ func newServerState(address string) serverState {
 	server := convert.ToMvdsv(genericServer)
 
 	return serverState{
-		Title: server.Title,
-		Map:   server.Settings.Get("map", ""),
-		Score: server.Score,
+		Map:      server.Settings.Get("map", ""),
+		Matchtag: server.Settings.Get("matchtag", ""),
+		Score:    server.Score,
+		Title:    server.Title,
 	}
 }
 
 type serverStateDiff struct {
-	HasChangedTitle bool
+	HasChangedTitle    bool
+	HasChangedMatchtag bool
 }
 
 func newServerStateDiff(current serverState, prev serverState) serverStateDiff {
@@ -108,6 +116,10 @@ func newServerStateDiff(current serverState, prev serverState) serverStateDiff {
 
 	if current.Title != prev.Title {
 		diff.HasChangedTitle = true
+	}
+
+	if current.Matchtag != prev.Matchtag {
+		diff.HasChangedMatchtag = true
 	}
 
 	return diff

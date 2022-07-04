@@ -11,7 +11,8 @@ const (
 	EzquakeStarted = "ezquake.started"
 	EzquakeStopped = "ezquake.stopped"
 
-	ServerTitleChanged = "server.title_changed"
+	ServerTitleChanged    = "server.title_changed"
+	ServerMatchtagChanged = "server.matchtag_changed"
 )
 
 // commands
