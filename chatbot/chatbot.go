@@ -48,6 +48,11 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		cmder.Autotrack()
 	})
 
+	chatbot.OnCommand("console", func(call command.Command, msg twitch.PrivateMessage) {
+		pp.Println("console", call.Args)
+		cmder.Command("toggleconsole")
+	})
+
 	chatbot.OnCommand("find", func(call command.Command, msg twitch.PrivateMessage) {
 		pp.Println("find player", call.Args)
 		server, err := qws.FindPlayer(call.ArgsAsString())
@@ -55,6 +60,16 @@ func New(username string, accessToken string, channel string, publisherAddress s
 			chatbot.Reply(msg, err.Error())
 		}
 		cmder.SuggestServer(server)
+	})
+
+	chatbot.OnCommand("lastscores", func(call command.Command, msg twitch.PrivateMessage) {
+		pp.Println("lastscores", call.Args)
+		cmder.Lastscores()
+	})
+
+	chatbot.OnCommand("showscores", func(call command.Command, msg twitch.PrivateMessage) {
+		pp.Println("showscores", call.Args)
+		cmder.Showscores()
 	})
 
 	chatbot.OnCommand("track", func(call command.Command, msg twitch.PrivateMessage) {
