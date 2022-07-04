@@ -86,3 +86,7 @@ func BenchmarkNewCommandFromText(b *testing.B) {
 		command.NewFromText('!', "!find xantom")
 	}
 }
+
+func TestArgsAsString(t *testing.T) {
+	assert.Equal(t, "foo bar", command.New("find", "foo", "bar").ArgsAsString())
+}

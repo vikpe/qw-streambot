@@ -13,11 +13,15 @@ type Command struct {
 	Args []string
 }
 
-func New(name string, args []string) Command {
+func New(name string, args ...string) Command {
 	return Command{
 		Name: name,
 		Args: args,
 	}
+}
+
+func (c Command) ArgsAsString() string {
+	return strings.Join(c.Args, " ")
 }
 
 type Handler func(Command, twitch.PrivateMessage)
@@ -48,5 +52,5 @@ func NewFromText(prefix rune, text string) (Command, error) {
 	parts := strings.FieldsFunc(txt, unicode.IsSpace)
 	name := parts[0]
 	args := parts[1:]
-	return New(name, args), nil
+	return New(name, args...), nil
 }
