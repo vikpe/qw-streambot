@@ -1,12 +1,24 @@
 package message
 
-import "github.com/goccy/go-json"
+import (
+	"fmt"
 
-func Serialize(data any) string {
-	dataAsJson, _ := json.Marshal(data)
-	return string(dataAsJson)
+	"github.com/goccy/go-json"
+)
+
+func Serialize(data any) []byte {
+	dataAsJson, err := json.Marshal(data)
+
+	if err != nil {
+		fmt.Println("Serialize error", data, err)
+	}
+
+	return dataAsJson
 }
 
-func Unserialize(data string, target interface{}) {
-	json.Unmarshal([]byte(data), &target)
+func Unserialize(data []byte, target interface{}) {
+	err := json.Unmarshal(data, &target)
+	if err != nil {
+		fmt.Println("Unserialize error", data, err)
+	}
 }
