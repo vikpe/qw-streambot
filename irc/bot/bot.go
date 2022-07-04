@@ -1,23 +1,20 @@
 package bot
 
 import (
-	"errors"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 	"time"
-	"unicode"
 
 	"github.com/gempir/go-twitch-irc/v3"
+	"github.com/vikpe/streambot/irc/bot/command"
 )
 
 type Bot struct {
 	client          *twitch.Client
 	channel         string
-	channelCommands map[string]CommandCallHandler
+	channelCommands map[string]command.Handler
 	stopChan        chan os.Signal
-	CommandPrefix   rune
 	OnStarted       func()
 	OnConnected     func()
 	OnStopped       func(os.Signal)
@@ -30,8 +27,7 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 	bot := Bot{
 		client:          client,
 		channel:         channel,
-		channelCommands: make(map[string]CommandCallHandler, 0),
-		CommandPrefix:   commandPrefix,
+		channelCommands: make(map[string]command.Handler, 0),
 		OnStarted:       func() {},
 		OnConnected:     func() {},
 		OnStopped:       func(os.Signal) {},
@@ -42,21 +38,21 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 			return
 		}
 
-		cmdCall, err := NewCommandCallFromMessage(msg.Message)
+		cmd, err := command.NewFromText(commandPrefix, msg.Message)
 
 		if err != nil {
 			return
 		}
 
-		if handler, ok := bot.channelCommands[cmdCall.Name]; ok {
-			handler(cmdCall, msg)
+		if handler, ok := bot.channelCommands[cmd.Name]; ok {
+			handler(cmd, msg)
 		}
 	})
 
 	return &bot
 }
 
-func (b *Bot) OnCommand(name string, handler CommandCallHandler) {
+func (b *Bot) OnCommand(name string, handler command.Handler) {
 	b.channelCommands[name] = handler
 }
 
@@ -92,46 +88,4 @@ func (b *Bot) Stop() {
 	}
 	b.stopChan <- syscall.SIGINT
 	time.Sleep(50 * time.Millisecond)
-}
-
-const (
-	CommandPrefix = "#"
-)
-
-type CommandCall struct {
-	Name string
-	Args []string
-}
-
-type CommandCallHandler func(CommandCall, twitch.PrivateMessage)
-
-func IsCommandCall(text string) bool {
-	txt := strings.TrimLeft(text, " ")
-
-	if !strings.HasPrefix(txt, CommandPrefix) {
-		return false
-	}
-
-	parts := strings.FieldsFunc(txt[1:], unicode.IsSpace)
-
-	if 0 == len(parts) {
-		return false
-	}
-
-	firstRune := rune(parts[0][0])
-	return unicode.IsLetter(firstRune) || unicode.IsDigit(firstRune)
-}
-
-func NewCommandCallFromMessage(text string) (CommandCall, error) {
-	if !IsCommandCall(text) {
-		return CommandCall{}, errors.New("unable to parse command call")
-	}
-
-	s := strings.TrimLeft(text, " ")[1:]
-	parts := strings.FieldsFunc(strings.ToLower(s), unicode.IsSpace)
-
-	return CommandCall{
-		Name: parts[0],
-		Args: parts[1:],
-	}, nil
 }
