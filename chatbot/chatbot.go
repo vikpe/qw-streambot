@@ -85,6 +85,10 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		cmder.Lastscores()
 	})
 
+	chatbot.OnCommand("restart", func(cmd command.Command, msg twitch.PrivateMessage) {
+		cmder.StopEzquake()
+	})
+
 	chatbot.OnCommand("showscores", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Showscores()
 	})
