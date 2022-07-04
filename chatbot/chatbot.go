@@ -41,7 +41,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		pp.Println(fmt.Sprintf("stop (%s)", sig))
 	}
 
-	chatbot.OnCommand("auto", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("auto", func(cmd command.Command, msg twitch.PrivateMessage) {
 		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsAsString())
 
 		if shouldDisable {
@@ -51,15 +51,15 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		}
 	})
 
-	chatbot.OnCommand("autotrack", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("autotrack", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Autotrack()
 	})
 
-	chatbot.OnCommand("cfg_load", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("cfg_load", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Command("cfg_load")
 	})
 
-	chatbot.OnCommand("cmd", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("cmd", func(cmd command.Command, msg twitch.PrivateMessage) {
 		if !IsBroadcaster(msg.User) {
 			chatbot.Reply(msg, "cmd is a mod-only command.")
 			return
@@ -68,11 +68,11 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		cmder.Command(cmd.ArgsAsString())
 	})
 
-	chatbot.OnCommand("console", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("console", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Command("toggleconsole")
 	})
 
-	chatbot.OnCommand("find", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("find", func(cmd command.Command, msg twitch.PrivateMessage) {
 		server, err := qws.FindPlayer(cmd.ArgsAsString())
 		if err != nil {
 			chatbot.Reply(msg, err.Error())
@@ -81,19 +81,19 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		cmder.SuggestServer(server)
 	})
 
-	chatbot.OnCommand("lastscores", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("lastscores", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Lastscores()
 	})
 
-	chatbot.OnCommand("restart", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("restart", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.StopEzquake()
 	})
 
-	chatbot.OnCommand("showscores", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("showscores", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Showscores()
 	})
 
-	chatbot.OnCommand("track", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommandHandler("track", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Track(cmd.ArgsAsString())
 	})
 

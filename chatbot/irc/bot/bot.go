@@ -55,7 +55,7 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 	return &bot
 }
 
-func (b *Bot) OnCommand(name string, handler command.Handler) {
+func (b *Bot) AddCommandHandler(name string, handler command.Handler) {
 	b.channelCommands[name] = handler
 }
 
