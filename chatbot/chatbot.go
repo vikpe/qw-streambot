@@ -34,9 +34,9 @@ func New(username string, accessToken string, channel string, publisherAddress s
 	}
 
 	chatbot.OnCommand("auto", func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("auto", call.Args)
+		shouldDisable := slices.Contains([]string{"0", "off"}, call.ArgsAsString())
 
-		if slices.Contains([]string{"0", "off"}, call.ArgsAsString()) {
+		if shouldDisable {
 			cmder.DisableAuto()
 		} else {
 			cmder.EnableAuto()
@@ -44,17 +44,14 @@ func New(username string, accessToken string, channel string, publisherAddress s
 	})
 
 	chatbot.OnCommand("autotrack", func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("autotrack", call.Args)
 		cmder.Autotrack()
 	})
 
 	chatbot.OnCommand("console", func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("console", call.Args)
 		cmder.Command("toggleconsole")
 	})
 
 	chatbot.OnCommand("find", func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("find player", call.Args)
 		server, err := qws.FindPlayer(call.ArgsAsString())
 		if err != nil {
 			chatbot.Reply(msg, err.Error())
@@ -64,17 +61,14 @@ func New(username string, accessToken string, channel string, publisherAddress s
 	})
 
 	chatbot.OnCommand("lastscores", func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("lastscores", call.Args)
 		cmder.Lastscores()
 	})
 
 	chatbot.OnCommand("showscores", func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("showscores", call.Args)
 		cmder.Showscores()
 	})
 
 	chatbot.OnCommand("track", func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("track", call.Args)
 		cmder.Track(call.ArgsAsString())
 	})
 
