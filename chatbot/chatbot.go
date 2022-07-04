@@ -33,8 +33,8 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		pp.Println(fmt.Sprintf("stop (%s)", sig))
 	}
 
-	chatbot.OnCommand("auto", func(call command.Command, msg twitch.PrivateMessage) {
-		shouldDisable := slices.Contains([]string{"0", "off"}, call.ArgsAsString())
+	chatbot.OnCommand("auto", func(cmd command.Command, msg twitch.PrivateMessage) {
+		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsAsString())
 
 		if shouldDisable {
 			cmder.DisableAuto()
@@ -43,16 +43,16 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		}
 	})
 
-	chatbot.OnCommand("autotrack", func(call command.Command, msg twitch.PrivateMessage) {
+	chatbot.OnCommand("autotrack", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Autotrack()
 	})
 
-	chatbot.OnCommand("console", func(call command.Command, msg twitch.PrivateMessage) {
+	chatbot.OnCommand("console", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Command("toggleconsole")
 	})
 
-	chatbot.OnCommand("find", func(call command.Command, msg twitch.PrivateMessage) {
-		server, err := qws.FindPlayer(call.ArgsAsString())
+	chatbot.OnCommand("find", func(cmd command.Command, msg twitch.PrivateMessage) {
+		server, err := qws.FindPlayer(cmd.ArgsAsString())
 		if err != nil {
 			chatbot.Reply(msg, err.Error())
 			return
@@ -60,16 +60,16 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		cmder.SuggestServer(server)
 	})
 
-	chatbot.OnCommand("lastscores", func(call command.Command, msg twitch.PrivateMessage) {
+	chatbot.OnCommand("lastscores", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Lastscores()
 	})
 
-	chatbot.OnCommand("showscores", func(call command.Command, msg twitch.PrivateMessage) {
+	chatbot.OnCommand("showscores", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Showscores()
 	})
 
-	chatbot.OnCommand("track", func(call command.Command, msg twitch.PrivateMessage) {
-		cmder.Track(call.ArgsAsString())
+	chatbot.OnCommand("track", func(cmd command.Command, msg twitch.PrivateMessage) {
+		cmder.Track(cmd.ArgsAsString())
 	})
 
 	return chatbot
