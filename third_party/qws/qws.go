@@ -20,8 +20,6 @@ func GetMvdsvServersByQueryParams(queryParams map[string]string) ServerList {
 	serversUrl := "https://metaqtv.quake.se/v2/servers/mvdsv"
 	resp, err := resty.New().R().SetResult(ServerList{}).SetQueryParams(queryParams).Get(serversUrl)
 
-	fmt.Println(resp.Request.URL)
-
 	if err != nil {
 		fmt.Println("server fetch error", err.Error())
 		return make(ServerList, 0)
