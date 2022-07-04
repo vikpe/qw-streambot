@@ -32,6 +32,17 @@ func TestCommander_Autotrack(t *testing.T) {
 	assert.Equal(t, expectedCalls, publisher.calls)
 }
 
+func TestCommander_Command(t *testing.T) {
+	publisher := publisherMock{}
+	cmder := commander.NewCommander(publisher.SendMessage)
+	cmder.Command("console")
+
+	expectedCalls := []call{{
+		topic: "ezquake.command", args: []any{"console"},
+	}}
+	assert.Equal(t, expectedCalls, publisher.calls)
+}
+
 func TestCommander_DisableAuto(t *testing.T) {
 	publisher := publisherMock{}
 	cmder := commander.NewCommander(publisher.SendMessage)
@@ -54,6 +65,17 @@ func TestCommander_EnableAuto(t *testing.T) {
 	assert.Equal(t, expectedCalls, publisher.calls)
 }
 
+func TestCommander_Lastscores(t *testing.T) {
+	publisher := publisherMock{}
+	cmder := commander.NewCommander(publisher.SendMessage)
+	cmder.Lastscores()
+
+	expectedCalls := []call{{
+		topic: "ezquake.script", args: []any{"lastscores"},
+	}}
+	assert.Equal(t, expectedCalls, publisher.calls)
+}
+
 func TestCommander_SuggestServer(t *testing.T) {
 	publisher := publisherMock{}
 	cmder := commander.NewCommander(publisher.SendMessage)
@@ -62,6 +84,17 @@ func TestCommander_SuggestServer(t *testing.T) {
 
 	expectedCalls := []call{{
 		topic: "streambot.suggest_server", args: []any{server},
+	}}
+	assert.Equal(t, expectedCalls, publisher.calls)
+}
+
+func TestCommander_Showscores(t *testing.T) {
+	publisher := publisherMock{}
+	cmder := commander.NewCommander(publisher.SendMessage)
+	cmder.Showscores()
+
+	expectedCalls := []call{{
+		topic: "ezquake.script", args: []any{"showscores"},
 	}}
 	assert.Equal(t, expectedCalls, publisher.calls)
 }

@@ -22,12 +22,24 @@ func (c Commander) Autotrack() {
 	c.sendMessage(topic.EzquakeCommand, "bot_track")
 }
 
+func (c Commander) Command(cmd string) {
+	c.sendMessage(topic.EzquakeCommand, cmd)
+}
+
 func (c Commander) EnableAuto() {
 	c.sendMessage(topic.StreambotEnableAuto)
 }
 
 func (c Commander) DisableAuto() {
 	c.sendMessage(topic.StreambotDisableAuto)
+}
+
+func (c Commander) Lastscores() {
+	c.sendMessage(topic.EzquakeScript, "lastscores")
+}
+
+func (c Commander) Showscores() {
+	c.sendMessage(topic.EzquakeScript, "showscores")
 }
 
 func (c Commander) SuggestServer(server mvdsv.Mvdsv) {
