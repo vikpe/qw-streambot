@@ -15,6 +15,14 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+func IsBroadcaster(user twitch.User) bool {
+	if broadcasterValue, ok := user.Badges["broadcaster"]; ok {
+		return 1 == broadcasterValue
+	}
+
+	return false
+}
+
 func New(username string, accessToken string, channel string, publisherAddress string) *bot.Bot {
 	pp := term.NewPrettyPrinter("chatbot", color.FgHiBlue)
 	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
@@ -45,6 +53,15 @@ func New(username string, accessToken string, channel string, publisherAddress s
 
 	chatbot.OnCommand("autotrack", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Autotrack()
+	})
+
+	chatbot.OnCommand("cmd", func(cmd command.Command, msg twitch.PrivateMessage) {
+		if !IsBroadcaster(msg.User) {
+			chatbot.Reply(msg, "cmd is a mod-only command.")
+			return
+		}
+
+		cmder.Command(cmd.ArgsAsString())
 	})
 
 	chatbot.OnCommand("console", func(cmd command.Command, msg twitch.PrivateMessage) {
