@@ -27,7 +27,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 	pp := term.NewPrettyPrinter("chatbot", color.FgHiBlue)
 	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
-	chatbot := bot.New(username, accessToken, channel, '#')
+	chatbot := bot.New(username, accessToken, channel, '!')
 
 	chatbot.OnConnected = func() {
 		pp.Println("connected as", username)
