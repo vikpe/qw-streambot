@@ -8,17 +8,16 @@ import (
 	"github.com/gempir/go-twitch-irc/v3"
 	"github.com/vikpe/streambot/irc/bot"
 	"github.com/vikpe/streambot/irc/bot/command"
+	"github.com/vikpe/streambot/third_party/qws"
 	"github.com/vikpe/streambot/util/term"
-)
-
-const (
-	CommandFindPlayer  = "find"
-	CommandEnableAuto  = "auto"
-	CommandDisableAuto = "manual"
+	"github.com/vikpe/streambot/zeromq"
+	"github.com/vikpe/streambot/zeromq/commander"
+	"golang.org/x/exp/slices"
 )
 
 func New(username string, accessToken string, channel string, publisherAddress string) *bot.Bot {
-	//publisher := zeromq.NewPublisher(publisherAddress)
+	publisher := zeromq.NewPublisher(publisherAddress)
+	cmder := commander.NewCommander(publisher.SendMessage)
 	pp := term.NewPrettyPrinter("chatbot", color.FgHiBlue)
 
 	chatbot := bot.New(username, accessToken, channel, '#')
@@ -32,35 +31,33 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		pp.Println(fmt.Sprintf("stop (%s)", sig))
 	}
 
-	chatbot.OnCommand(CommandFindPlayer, func(call command.Command, msg twitch.PrivateMessage) {
+	chatbot.OnCommand("find", func(call command.Command, msg twitch.PrivateMessage) {
 		pp.Println("find player", call.Args)
-
-		/*playerName := strings.TrimSpace(strings.Join(call.Args, " "))
-		const minFindLength = 2
-
-		if len(playerName) < minFindLength {
-			chatbot.Reply(msg, fmt.Sprintf(`Provide at least %d characters.`, minFindLength))
+		server, err := qws.FindPlayer(call.ArgsAsString())
+		if err != nil {
+			chatbot.Reply(msg, err.Error())
 		}
+		cmder.SuggestServer(server)
+	})
 
-		servers := qws.GetMvdsvServersByQueryParams(map[string]string{
-			"has_player": playerName,
-		})
+	chatbot.OnCommand("auto", func(call command.Command, msg twitch.PrivateMessage) {
+		pp.Println("auto", call.Args)
 
-		if len(servers) > 0 {
-			publisher.SendMessage(topic.StreambotSuggestServer, servers[0])
-			fmt.Println("found player", servers[0].Address)
-
+		if slices.Contains([]string{"0", "off"}, call.ArgsAsString()) {
+			cmder.DisableAuto()
 		} else {
-			chatbot.Reply(msg, fmt.Sprintf(`"%s" not found.`, playerName))
-		}*/
+			cmder.EnableAuto()
+		}
 	})
 
-	chatbot.OnCommand(CommandEnableAuto, func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("enable auto", call.Args)
+	chatbot.OnCommand("track", func(call command.Command, msg twitch.PrivateMessage) {
+		pp.Println("track", call.Args)
+		cmder.Track(call.ArgsAsString())
 	})
 
-	chatbot.OnCommand(CommandDisableAuto, func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("disable auto", call.Args)
+	chatbot.OnCommand("autotrack", func(call command.Command, msg twitch.PrivateMessage) {
+		pp.Println("autotrack", call.Args)
+		cmder.Autotrack()
 	})
 
 	return chatbot
