@@ -55,6 +55,10 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		cmder.Autotrack()
 	})
 
+	chatbot.OnCommand("cfg_load", func(cmd command.Command, msg twitch.PrivateMessage) {
+		cmder.Command("cfg_load")
+	})
+
 	chatbot.OnCommand("cmd", func(cmd command.Command, msg twitch.PrivateMessage) {
 		if !IsBroadcaster(msg.User) {
 			chatbot.Reply(msg, "cmd is a mod-only command.")
