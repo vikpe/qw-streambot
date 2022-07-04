@@ -42,7 +42,7 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 			return
 		}
 
-		cmdCall, err := ParseCommandCall(msg.Message)
+		cmdCall, err := NewCommandCallFromMessage(msg.Message)
 
 		if err != nil {
 			return
@@ -105,7 +105,7 @@ type CommandCall struct {
 
 type CommandCallHandler func(CommandCall, twitch.PrivateMessage)
 
-func IsCommand(text string) bool {
+func IsCommandCall(text string) bool {
 	txt := strings.TrimLeft(text, " ")
 
 	if !strings.HasPrefix(txt, CommandPrefix) {
@@ -122,9 +122,9 @@ func IsCommand(text string) bool {
 	return unicode.IsLetter(firstRune) || unicode.IsDigit(firstRune)
 }
 
-func ParseCommandCall(text string) (CommandCall, error) {
-	if !IsCommand(text) {
-		return CommandCall{}, errors.New("unable to parse command")
+func NewCommandCallFromMessage(text string) (CommandCall, error) {
+	if !IsCommandCall(text) {
+		return CommandCall{}, errors.New("unable to parse command call")
 	}
 
 	s := strings.TrimLeft(text, " ")[1:]

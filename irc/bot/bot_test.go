@@ -7,7 +7,7 @@ import (
 	"github.com/vikpe/streambot/irc/bot"
 )
 
-func TestIsCommand(t *testing.T) {
+func TestIsCommandCall(t *testing.T) {
 	testCases := map[string]bool{
 		"":       false,
 		" ":      false,
@@ -29,14 +29,14 @@ func TestIsCommand(t *testing.T) {
 
 	for text, expect := range testCases {
 		t.Run(text, func(t *testing.T) {
-			assert.Equal(t, expect, bot.IsCommand(text))
+			assert.Equal(t, expect, bot.IsCommandCall(text))
 		})
 	}
 }
 
-func TestParseCommandCall(t *testing.T) {
+func TestNewCommandCallFromMessage(t *testing.T) {
 	t.Run("invalid", func(t *testing.T) {
-		command, err := bot.ParseCommandCall("")
+		command, err := bot.NewCommandCallFromMessage("")
 		assert.Equal(t, command, bot.CommandCall{})
 		assert.EqualError(t, err, "unable to parse command")
 	})
@@ -49,7 +49,7 @@ func TestParseCommandCall(t *testing.T) {
 
 		for text, expect := range testCases {
 			t.Run(text, func(t *testing.T) {
-				foo, err := bot.ParseCommandCall(text)
+				foo, err := bot.NewCommandCallFromMessage(text)
 				assert.Equal(t, expect, foo)
 				assert.Nil(t, err)
 			})
