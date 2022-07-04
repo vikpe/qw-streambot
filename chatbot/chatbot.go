@@ -58,6 +58,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		server, err := qws.FindPlayer(call.ArgsAsString())
 		if err != nil {
 			chatbot.Reply(msg, err.Error())
+			return
 		}
 		cmder.SuggestServer(server)
 	})
