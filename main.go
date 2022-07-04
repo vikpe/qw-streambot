@@ -17,7 +17,7 @@ func main() {
 	pipe := ezquake.NewPipeWriter(os.Getenv("EZQUAKE_PROCESS_USERNAME"))
 	twitchClient := twitch.NewClient(
 		os.Getenv("TWITCH_BOT_CLIENT_ID"),
-		os.Getenv("TWITCH_BOT_ACCESS_TOKEN"),
+		os.Getenv("TWITCH_CHANNEL_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_BROADCASTER_ID"),
 	)
 	publisher := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))

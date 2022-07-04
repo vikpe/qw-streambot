@@ -12,7 +12,7 @@ type Client struct {
 }
 
 func NewClient(clientID string, accessToken string, broadcasterID string) Client {
-	client, _ := helix.NewClient(&helix.Options{ClientID: clientID, AppAccessToken: accessToken})
+	client, _ := helix.NewClient(&helix.Options{ClientID: clientID, UserAccessToken: accessToken})
 
 	return Client{
 		client:        client,
