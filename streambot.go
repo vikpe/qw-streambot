@@ -275,6 +275,7 @@ func (s *Streambot) OnStopEzquake(msg message.Message) {
 
 func (s *Streambot) OnEzquakeStopped(msg message.Message) {
 	pp.Println("OnEzquakeStopped")
+	s.serverMonitor.SetAddress("")
 	s.evaluateTask.Stop()
 }
 
