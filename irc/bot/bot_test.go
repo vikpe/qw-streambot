@@ -38,7 +38,7 @@ func TestNewCommandCallFromMessage(t *testing.T) {
 	t.Run("invalid", func(t *testing.T) {
 		command, err := bot.NewCommandCallFromMessage("")
 		assert.Equal(t, command, bot.CommandCall{})
-		assert.EqualError(t, err, "unable to parse command")
+		assert.EqualError(t, err, "unable to parse command call")
 	})
 
 	t.Run("valid", func(t *testing.T) {
