@@ -33,15 +33,6 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		pp.Println(fmt.Sprintf("stop (%s)", sig))
 	}
 
-	chatbot.OnCommand("find", func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("find player", call.Args)
-		server, err := qws.FindPlayer(call.ArgsAsString())
-		if err != nil {
-			chatbot.Reply(msg, err.Error())
-		}
-		cmder.SuggestServer(server)
-	})
-
 	chatbot.OnCommand("auto", func(call command.Command, msg twitch.PrivateMessage) {
 		pp.Println("auto", call.Args)
 
@@ -52,14 +43,23 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		}
 	})
 
-	chatbot.OnCommand("track", func(call command.Command, msg twitch.PrivateMessage) {
-		pp.Println("track", call.Args)
-		cmder.Track(call.ArgsAsString())
-	})
-
 	chatbot.OnCommand("autotrack", func(call command.Command, msg twitch.PrivateMessage) {
 		pp.Println("autotrack", call.Args)
 		cmder.Autotrack()
+	})
+
+	chatbot.OnCommand("find", func(call command.Command, msg twitch.PrivateMessage) {
+		pp.Println("find player", call.Args)
+		server, err := qws.FindPlayer(call.ArgsAsString())
+		if err != nil {
+			chatbot.Reply(msg, err.Error())
+		}
+		cmder.SuggestServer(server)
+	})
+
+	chatbot.OnCommand("track", func(call command.Command, msg twitch.PrivateMessage) {
+		pp.Println("track", call.Args)
+		cmder.Track(call.ArgsAsString())
 	})
 
 	return chatbot
