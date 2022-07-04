@@ -24,7 +24,7 @@ func (c Command) ArgsAsString() string {
 	return strings.Join(c.Args, " ")
 }
 
-type Handler func(Command, twitch.PrivateMessage)
+type Handler func(cmd Command, msg twitch.PrivateMessage)
 
 func IsCommand(prefix rune, text string) bool {
 	txt := strings.TrimLeft(text, " ")
