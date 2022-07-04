@@ -33,7 +33,7 @@ func TestNewMessageFromParts(t *testing.T) {
 		t.Run("string", func(t *testing.T) {
 			expect := message.Message{
 				Topic:       "HELLO",
-				Content:     []byte(`"WORLD"`),
+				Content:     message.SerializedValue(`"WORLD"`),
 				ContentType: "string",
 			}
 			msg, err := message.NewMessageFromFrames([]string{"HELLO", "string", `"WORLD"`})
@@ -45,7 +45,7 @@ func TestNewMessageFromParts(t *testing.T) {
 		t.Run("int", func(t *testing.T) {
 			expect := message.Message{
 				Topic:       "HELLO",
-				Content:     []byte("33"),
+				Content:     message.SerializedValue("33"),
 				ContentType: "int",
 			}
 			msg, err := message.NewMessageFromFrames([]string{"HELLO", "int", "33"})
@@ -57,7 +57,7 @@ func TestNewMessageFromParts(t *testing.T) {
 		t.Run("slice of strings", func(t *testing.T) {
 			expect := message.Message{
 				Topic:       "HELLO",
-				Content:     []byte(`["a","b"]`),
+				Content:     message.SerializedValue(`["a","b"]`),
 				ContentType: "int",
 			}
 			msg, err := message.NewMessageFromFrames([]string{"HELLO", "int", `["a","b"]`})

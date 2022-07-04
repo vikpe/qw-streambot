@@ -27,10 +27,10 @@ func NewMessage(topic string, content any) Message {
 	}
 }
 
-type SerializedValue []byte
+type SerializedValue string
 
 func NewSerializedValue(value any) SerializedValue {
-	return Serialize(value)
+	return SerializedValue(Serialize(value))
 }
 
 func (d SerializedValue) ToString() string {
@@ -46,7 +46,7 @@ func (d SerializedValue) ToInt() int {
 }
 
 func (d SerializedValue) To(target interface{}) {
-	Unserialize(d, target)
+	Unserialize([]byte(d), target)
 }
 
 func NewMessageFromFrames(frames []string) (Message, error) {
@@ -62,8 +62,6 @@ func NewMessageFromFrames(frames []string) (Message, error) {
 		Content:     SerializedValue(frames[IndexContent]),
 		ContentType: frames[IndexContentType],
 	}
-
-	fmt.Println("NewMessageFromFrames", "msg.Topic=", msg.Topic, msg.ContentType, "msg.Content=", msg.Content, "msg.Content.ToString()=", msg.Content.ToString())
 
 	return msg, nil
 }
