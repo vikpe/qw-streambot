@@ -1,10 +1,10 @@
-package chatbot_test
+package bot_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/chatbot"
+	"github.com/vikpe/streambot/irc/bot"
 )
 
 func TestIsCommand(t *testing.T) {
@@ -29,27 +29,27 @@ func TestIsCommand(t *testing.T) {
 
 	for text, expect := range testCases {
 		t.Run(text, func(t *testing.T) {
-			assert.Equal(t, expect, chatbot.IsCommand(text))
+			assert.Equal(t, expect, bot.IsCommand(text))
 		})
 	}
 }
 
-func TestParse(t *testing.T) {
+func TestParseCommandCall(t *testing.T) {
 	t.Run("invalid", func(t *testing.T) {
-		command, err := chatbot.Parse("")
-		assert.Equal(t, command, chatbot.Foo{})
+		command, err := bot.ParseCommandCall("")
+		assert.Equal(t, command, bot.CommandCall{})
 		assert.EqualError(t, err, "unable to parse command")
 	})
 
 	t.Run("valid", func(t *testing.T) {
-		testCases := map[string]chatbot.Foo{
+		testCases := map[string]bot.CommandCall{
 			"#find":         {Name: "find", Args: []string{}},
 			" #find XantoM": {Name: "find", Args: []string{"xantom"}},
 		}
 
 		for text, expect := range testCases {
 			t.Run(text, func(t *testing.T) {
-				foo, err := chatbot.Parse(text)
+				foo, err := bot.ParseCommandCall(text)
 				assert.Equal(t, expect, foo)
 				assert.Nil(t, err)
 			})
