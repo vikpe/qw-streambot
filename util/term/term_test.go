@@ -18,7 +18,7 @@ func TestPrettyPrinter_Println(t *testing.T) {
 		printer.Println("hello", 123)
 	}
 
-	expect := fmt.Sprintf("\x1b[37m%s\x1b[0m  \x1b[36malpha\x1b[0m  hello 123\n", time.Now().Format("15:04:05"))
+	expect := fmt.Sprintf("%s  alpha  hello 123\n", time.Now().Format("15:04:05"))
 	output := getFuncStdOutput(testRun)
 	assert.Equal(t, expect, output)
 }
@@ -29,7 +29,7 @@ func TestPrettyPrinter_Print(t *testing.T) {
 		printer.Print("hello", 123)
 	}
 
-	expect := fmt.Sprintf("\x1b[37m%s\x1b[0m  \x1b[36malpha\x1b[0m  hello123", time.Now().Format("15:04:05"))
+	expect := fmt.Sprintf("%s  alpha  hello123", time.Now().Format("15:04:05"))
 	output := getFuncStdOutput(testRun)
 	assert.Equal(t, expect, output)
 }
