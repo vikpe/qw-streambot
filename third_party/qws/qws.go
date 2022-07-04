@@ -31,6 +31,23 @@ func GetMvdsvServersByQueryParams(queryParams map[string]string) ServerList {
 	return *servers
 }
 
+func FindPlayer(name string) (mvdsv.Mvdsv, error) {
+	const minFindLength = 2
+
+	if len(name) < minFindLength {
+		return mvdsv.Mvdsv{}, errors.New(fmt.Sprintf(`provide at least %d characters.`, minFindLength))
+	}
+
+	queryParams := map[string]string{"has_player": name}
+	servers := GetMvdsvServersByQueryParams(queryParams)
+
+	if 0 == len(servers) {
+		return mvdsv.Mvdsv{}, errors.New(fmt.Sprintf(`player "%s" not found.`, name))
+	}
+
+	return servers[0], nil
+}
+
 func GetBestServer() (mvdsv.Mvdsv, error) {
 	servers := GetMvdsvServers()
 
