@@ -214,7 +214,7 @@ func (s *Streambot) OnStreambotConnectToServer(msg message.Message) {
 	var server mvdsv.Mvdsv
 	msg.Content.To(&server)
 
-	pp.Print("OnStreambotConnectToServer", server.Address, msg.Content)
+	pp.Println("OnStreambotConnectToServer", server.Address, msg.Content)
 
 	if s.serverMonitor.GetAddress() == server.Address {
 		fmt.Println(" .. already connected to server")
@@ -231,7 +231,6 @@ func (s *Streambot) OnStreambotConnectToServer(msg message.Message) {
 		s.ClientCommand("bot_track")
 	})
 
-	fmt.Println(" .. new server!", server.Address)
 	s.serverMonitor.SetAddress(server.Address)
 }
 
