@@ -6,117 +6,87 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/streambot/zeromq/commander"
+	"github.com/vikpe/streambot/zeromq/test_helpers"
 )
 
-type call struct {
-	topic string
-	args  []any
-}
-
-type publisherMock struct {
-	calls []call
-}
-
-func (s *publisherMock) SendMessage(topic string, args ...any) {
-	s.calls = append(s.calls, call{topic: topic, args: args})
-}
-
 func TestCommander_Autotrack(t *testing.T) {
-	publisher := publisherMock{}
+	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Autotrack()
 
-	expectedCalls := []call{{
-		topic: "ezquake.irccommand", args: []any{"bot_track"},
-	}}
-	assert.Equal(t, expectedCalls, publisher.calls)
+	expectedCalls := [][]any{{"ezquake.command", "bot_track"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
 func TestCommander_Command(t *testing.T) {
-	publisher := publisherMock{}
+	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Command("console")
 
-	expectedCalls := []call{{
-		topic: "ezquake.irccommand", args: []any{"console"},
-	}}
-	assert.Equal(t, expectedCalls, publisher.calls)
+	expectedCalls := [][]any{{"ezquake.command", "console"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
 func TestCommander_DisableAuto(t *testing.T) {
-	publisher := publisherMock{}
+	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.DisableAuto()
 
-	expectedCalls := []call{{
-		topic: "streambot.disable_auto", args: nil,
-	}}
-	assert.Equal(t, expectedCalls, publisher.calls)
+	expectedCalls := [][]any{{"streambot.disable_auto"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
 func TestCommander_EnableAuto(t *testing.T) {
-	publisher := publisherMock{}
+	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.EnableAuto()
 
-	expectedCalls := []call{{
-		topic: "streambot.enable_auto", args: nil,
-	}}
-	assert.Equal(t, expectedCalls, publisher.calls)
+	expectedCalls := [][]any{{"streambot.enable_auto"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
 func TestCommander_Lastscores(t *testing.T) {
-	publisher := publisherMock{}
+	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Lastscores()
 
-	expectedCalls := []call{{
-		topic: "ezquake.script", args: []any{"lastscores"},
-	}}
-	assert.Equal(t, expectedCalls, publisher.calls)
+	expectedCalls := [][]any{{"ezquake.script", "lastscores"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
 func TestCommander_SuggestServer(t *testing.T) {
-	publisher := publisherMock{}
+	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	server := mvdsv.Mvdsv{Address: "qw.fopp.dk:27501"}
 	cmder.SuggestServer(server)
 
-	expectedCalls := []call{{
-		topic: "streambot.suggest_server", args: []any{server},
-	}}
-	assert.Equal(t, expectedCalls, publisher.calls)
+	expectedCalls := [][]any{{"streambot.suggest_server", server}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
 func TestCommander_Showscores(t *testing.T) {
-	publisher := publisherMock{}
+	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Showscores()
 
-	expectedCalls := []call{{
-		topic: "ezquake.script", args: []any{"showscores"},
-	}}
-	assert.Equal(t, expectedCalls, publisher.calls)
+	expectedCalls := [][]any{{"ezquake.script", "showscores"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
 func TestCommander_StopEzquake(t *testing.T) {
-	publisher := publisherMock{}
+	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.StopEzquake()
 
-	expectedCalls := []call{{
-		topic: "ezquake.stop", args: nil,
-	}}
-	assert.Equal(t, expectedCalls, publisher.calls)
+	expectedCalls := [][]any{{"ezquake.stop"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
 func TestCommander_Track(t *testing.T) {
-	publisher := publisherMock{}
+	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Track("xantom")
 
-	expectedCalls := []call{{
-		topic: "ezquake.irccommand", args: []any{"bot_track xantom"},
-	}}
-	assert.Equal(t, expectedCalls, publisher.calls)
+	expectedCalls := [][]any{{"ezquake.command", "bot_track xantom"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }

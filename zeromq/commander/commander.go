@@ -5,14 +5,15 @@ import (
 	"fmt"
 
 	"github.com/vikpe/serverstat/qserver/mvdsv"
+	"github.com/vikpe/streambot/zeromq"
 	"github.com/vikpe/streambot/zeromq/topic"
 )
 
 type Commander struct {
-	sendMessage func(string, ...any)
+	sendMessage zeromq.EventHandler
 }
 
-func NewCommander(sendMessage func(string, ...any)) Commander {
+func NewCommander(sendMessage zeromq.EventHandler) Commander {
 	return Commander{
 		sendMessage: sendMessage,
 	}
