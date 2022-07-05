@@ -30,7 +30,7 @@ func TestProcessMonitor(t *testing.T) {
 	publisherMock := test_helpers.NewPublisherMock()
 	processMonitor = monitor.NewProcessMonitor(getIsStarted, publisherMock.SendMessage)
 	processMonitor.Start(time.Microsecond)
-	time.Sleep(time.Millisecond)
+	time.Sleep(time.Millisecond * 20)
 
 	expectCalls := [][]any{
 		{"ezquake.started"},
