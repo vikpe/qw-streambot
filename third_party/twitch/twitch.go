@@ -1,6 +1,8 @@
 package twitch
 
 import (
+	"fmt"
+
 	"github.com/nicklaw5/helix/v2"
 )
 
@@ -21,9 +23,14 @@ func NewClient(clientID string, accessToken string, broadcasterID string) Client
 }
 
 func (a Client) SetTitle(title string) {
-	a.client.EditChannelInformation(&helix.EditChannelInformationParams{
+	_, err := a.client.EditChannelInformation(&helix.EditChannelInformationParams{
 		BroadcasterID: a.broadcasterId,
 		Title:         title,
 		GameID:        quakeGameId,
 	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
