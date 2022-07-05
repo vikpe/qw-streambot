@@ -3,31 +3,35 @@ package monitor
 import (
 	"time"
 
-	"github.com/vikpe/serverstat"
-	"github.com/vikpe/serverstat/qserver/convert"
+	"github.com/vikpe/serverstat/qserver/mvdsv"
+	"github.com/vikpe/streambot/zeromq"
 	"github.com/vikpe/streambot/zeromq/topic"
 )
 
+type MvdsvProvider func(address string) mvdsv.Mvdsv
+
 type ServerMonitor struct {
 	isDone           bool
-	onEvent          func(string, ...any)
+	onEvent          zeromq.EventHandler
+	getInfo          MvdsvProvider
 	address          string
 	addressTimestamp time.Time
-	prevState        serverState
+	prevState        ServerState
 }
 
-func NewServerMonitor(onEvent func(string, ...any)) ServerMonitor {
+func NewServerMonitor(getInfo MvdsvProvider, onEvent zeromq.EventHandler) ServerMonitor {
 	return ServerMonitor{
 		isDone:    false,
+		getInfo:   getInfo,
 		onEvent:   onEvent,
 		address:   "",
-		prevState: newServerState(""),
+		prevState: ServerState{},
 	}
 }
 
 func (s *ServerMonitor) SetAddress(address string) {
 	s.address = address
-	s.prevState = newServerState("")
+	s.prevState = ServerState{}
 	s.addressTimestamp = time.Now()
 }
 
@@ -50,77 +54,45 @@ func (s *ServerMonitor) Start(interval time.Duration) {
 				return
 			}
 
-			currentState := newServerState(s.address)
-			diff := newServerStateDiff(currentState, s.prevState)
-
-			if diff.HasChangedTitle {
-				s.onEvent(topic.ServerTitleChanged, currentState.Title)
-			}
-
-			if diff.HasChangedMatchtag {
-				s.onEvent(topic.ServerMatchtagChanged, currentState.Matchtag)
-			}
-
-			s.prevState = currentState
+			s.CompareStates()
 		}
 
 		defer ticker.Stop()
 	}()
 }
 
+func (s *ServerMonitor) CompareStates() {
+	currentState := NewServerState(s.getInfo, s.address)
+
+	if currentState.Matchtag != s.prevState.Matchtag {
+		s.onEvent(topic.ServerMatchtagChanged, currentState.Matchtag)
+	}
+
+	if currentState.Title != s.prevState.Title {
+		s.onEvent(topic.ServerTitleChanged, currentState.Title)
+	}
+
+	s.prevState = currentState
+}
+
 func (s *ServerMonitor) Stop() {
 	s.isDone = true
 }
 
-type serverState struct {
+type ServerState struct {
 	Map      string
 	Matchtag string
 	Score    int
 	Title    string
 }
 
-func newServerState(address string) serverState {
-	nullState := serverState{
-		Map:      "",
-		Matchtag: "",
-		Score:    0,
-		Title:    "",
-	}
-	if "" == address {
-		return nullState
-	}
+func NewServerState(getInfo MvdsvProvider, address string) ServerState {
+	server := getInfo(address)
 
-	genericServer, err := serverstat.GetInfo(address)
-
-	if err != nil {
-		return nullState
-	}
-
-	server := convert.ToMvdsv(genericServer)
-
-	return serverState{
+	return ServerState{
 		Map:      server.Settings.Get("map", ""),
 		Matchtag: server.Settings.Get("matchtag", ""),
 		Score:    server.Score,
 		Title:    server.Title,
 	}
-}
-
-type serverStateDiff struct {
-	HasChangedTitle    bool
-	HasChangedMatchtag bool
-}
-
-func newServerStateDiff(current serverState, prev serverState) serverStateDiff {
-	diff := serverStateDiff{}
-
-	if current.Title != prev.Title {
-		diff.HasChangedTitle = true
-	}
-
-	if current.Matchtag != prev.Matchtag {
-		diff.HasChangedMatchtag = true
-	}
-
-	return diff
 }
