@@ -271,6 +271,12 @@ func (s *Streambot) OnEzquakeStarted(msg message.Message) {
 func (s *Streambot) OnStopEzquake(msg message.Message) {
 	pp.Println("OnStopEzquake")
 	s.process.Stop(syscall.SIGTERM)
+
+	time.AfterFunc(2*time.Second, func() {
+		if s.process.IsStarted() {
+			s.process.Stop(syscall.SIGKILL)
+		}
+	})
 }
 
 func (s *Streambot) OnEzquakeStopped(msg message.Message) {
