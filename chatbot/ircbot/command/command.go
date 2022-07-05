@@ -4,8 +4,6 @@ import (
 	"errors"
 	"strings"
 	"unicode"
-
-	"github.com/gempir/go-twitch-irc/v3"
 )
 
 type Command struct {
@@ -23,8 +21,6 @@ func New(name string, args ...string) Command {
 func (c Command) ArgsToString() string {
 	return strings.Join(c.Args, " ")
 }
-
-type Handler func(cmd Command, msg twitch.PrivateMessage)
 
 func IsCommand(prefix rune, text string) bool {
 	txt := strings.TrimLeft(text, " ")

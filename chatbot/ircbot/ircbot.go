@@ -14,12 +14,14 @@ import (
 type Bot struct {
 	client          *twitch.Client
 	channel         string
-	commandHandlers map[string]command.Handler
+	commandHandlers map[string]CommandHandler
 	stopChan        chan os.Signal
 	OnStarted       func()
 	OnConnected     func()
 	OnStopped       func(os.Signal)
 }
+
+type CommandHandler func(cmd command.Command, msg twitch.PrivateMessage)
 
 func New(username string, oauth string, channel string, commandPrefix rune) *Bot {
 	client := twitch.NewClient(username, oauth)
@@ -28,7 +30,7 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 	bot := Bot{
 		client:          client,
 		channel:         channel,
-		commandHandlers: make(map[string]command.Handler, 0),
+		commandHandlers: make(map[string]CommandHandler, 0),
 		OnStarted:       func() {},
 		OnConnected:     func() {},
 		OnStopped:       func(os.Signal) {},
@@ -55,7 +57,7 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 	return &bot
 }
 
-func (b *Bot) AddCommand(name string, handler command.Handler) {
+func (b *Bot) AddCommand(name string, handler CommandHandler) {
 	b.commandHandlers[name] = handler
 }
 
