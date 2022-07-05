@@ -15,14 +15,6 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func IsBroadcaster(user twitch.User) bool {
-	if broadcasterValue, ok := user.Badges["broadcaster"]; ok {
-		return 1 == broadcasterValue
-	}
-
-	return false
-}
-
 func New(username string, accessToken string, channel string, publisherAddress string) *ircbot.Bot {
 	pp := term.NewPrettyPrinter("chatbot", color.FgHiBlue)
 	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
@@ -41,7 +33,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		pp.Println(fmt.Sprintf("stop (%s)", sig))
 	}
 
-	chatbot.AddCommandHandler("auto", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommand("auto", func(cmd command.Command, msg twitch.PrivateMessage) {
 		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsAsString())
 
 		if shouldDisable {
@@ -51,16 +43,16 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		}
 	})
 
-	chatbot.AddCommandHandler("autotrack", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommand("autotrack", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Autotrack()
 	})
 
-	chatbot.AddCommandHandler("cfg_load", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommand("cfg_load", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Command("cfg_load")
 	})
 
-	chatbot.AddCommandHandler("cmd", func(cmd command.Command, msg twitch.PrivateMessage) {
-		if !IsBroadcaster(msg.User) {
+	chatbot.AddCommand("cmd", func(cmd command.Command, msg twitch.PrivateMessage) {
+		if !ircbot.IsBroadcaster(msg.User) {
 			chatbot.Reply(msg, "cmd is a mod-only command.")
 			return
 		}
@@ -68,11 +60,11 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		cmder.Command(cmd.ArgsAsString())
 	})
 
-	chatbot.AddCommandHandler("console", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommand("console", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Command("toggleconsole")
 	})
 
-	chatbot.AddCommandHandler("find", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommand("find", func(cmd command.Command, msg twitch.PrivateMessage) {
 		server, err := qws.FindPlayer(cmd.ArgsAsString())
 		if err != nil {
 			chatbot.Reply(msg, err.Error())
@@ -81,19 +73,19 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		cmder.SuggestServer(server)
 	})
 
-	chatbot.AddCommandHandler("lastscores", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommand("lastscores", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Lastscores()
 	})
 
-	chatbot.AddCommandHandler("restart", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommand("restart", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.StopEzquake()
 	})
 
-	chatbot.AddCommandHandler("showscores", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommand("showscores", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Showscores()
 	})
 
-	chatbot.AddCommandHandler("track", func(cmd command.Command, msg twitch.PrivateMessage) {
+	chatbot.AddCommand("track", func(cmd command.Command, msg twitch.PrivateMessage) {
 		cmder.Track(cmd.ArgsAsString())
 	})
 
