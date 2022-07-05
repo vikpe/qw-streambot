@@ -6,8 +6,8 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gempir/go-twitch-irc/v3"
-	"github.com/vikpe/streambot/chatbot/irc/bot"
-	"github.com/vikpe/streambot/chatbot/irc/bot/command"
+	"github.com/vikpe/streambot/chatbot/ircbot"
+	"github.com/vikpe/streambot/chatbot/ircbot/command"
 	"github.com/vikpe/streambot/third_party/qws"
 	"github.com/vikpe/streambot/util/term"
 	"github.com/vikpe/streambot/zeromq"
@@ -23,11 +23,11 @@ func IsBroadcaster(user twitch.User) bool {
 	return false
 }
 
-func New(username string, accessToken string, channel string, publisherAddress string) *bot.Bot {
+func New(username string, accessToken string, channel string, publisherAddress string) *ircbot.Bot {
 	pp := term.NewPrettyPrinter("chatbot", color.FgHiBlue)
 	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
-	chatbot := bot.New(username, accessToken, channel, '!')
+	chatbot := ircbot.New(username, accessToken, channel, '!')
 
 	chatbot.OnConnected = func() {
 		pp.Println("connected as", username)
