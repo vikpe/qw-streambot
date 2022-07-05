@@ -63,7 +63,7 @@ func (s *Streambot) Start() {
 	zeromq.WaitForConnection()
 
 	// event dispatchers
-	processMonitor := monitor.NewProcessMonitor(&s.process, s.publisher.SendMessage)
+	processMonitor := monitor.NewProcessMonitor(s.process.IsStarted, s.publisher.SendMessage)
 	processMonitor.Start(3 * time.Second)
 	s.serverMonitor.Start(5 * time.Second)
 
