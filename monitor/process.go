@@ -4,16 +4,17 @@ import (
 	"time"
 
 	"github.com/vikpe/streambot/ezquake"
+	"github.com/vikpe/streambot/zeromq"
 	"github.com/vikpe/streambot/zeromq/topic"
 )
 
 type ProcessMonitor struct {
 	isDone  bool
 	process *ezquake.Process
-	onEvent func(string, ...any)
+	onEvent zeromq.EventHandler
 }
 
-func NewProcessMonitor(process *ezquake.Process, onEvent func(string, ...any)) ProcessMonitor {
+func NewProcessMonitor(process *ezquake.Process, onEvent zeromq.EventHandler) ProcessMonitor {
 	return ProcessMonitor{
 		isDone:  false,
 		process: process,
@@ -26,55 +27,27 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 
 	go func() {
 		ticker := time.NewTicker(interval)
-		prevState := newProcessState(*p.process)
+		prevIsStarted := p.process.IsStarted()
 
 		for ; true; <-ticker.C {
 			if p.isDone {
 				return
 			}
 
-			currentState := newProcessState(*p.process)
-			diff := newProcessDiff(currentState, prevState)
+			isStarted := p.process.IsStarted()
 
-			if diff.HasStarted {
+			if isStarted && !prevIsStarted {
 				p.onEvent(topic.EzquakeStarted)
 
-			} else if diff.HasStopped {
+			} else if !isStarted && prevIsStarted {
 				p.onEvent(topic.EzquakeStopped)
 			}
 
-			prevState = currentState
+			prevIsStarted = isStarted
 		}
 	}()
 }
 
 func (p *ProcessMonitor) Stop() {
 	p.isDone = true
-}
-
-type processState struct {
-	IsStarted bool
-}
-
-func newProcessState(process ezquake.Process) processState {
-	return processState{
-		IsStarted: process.IsStarted(),
-	}
-}
-
-type processDiff struct {
-	HasStarted bool
-	HasStopped bool
-}
-
-func newProcessDiff(current processState, prev processState) processDiff {
-	diff := processDiff{}
-
-	if current.IsStarted && !prev.IsStarted {
-		diff.HasStarted = true
-	} else if !current.IsStarted && prev.IsStarted {
-		diff.HasStopped = true
-	}
-
-	return diff
 }
