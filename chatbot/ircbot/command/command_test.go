@@ -88,6 +88,6 @@ func BenchmarkNewCommandFromText(b *testing.B) {
 	}
 }
 
-func TestArgsAsString(t *testing.T) {
-	assert.Equal(t, "foo bar", command.New("find", "foo", "bar").ArgsAsString())
+func TestArgsToString(t *testing.T) {
+	assert.Equal(t, "foo bar", command.New("find", "foo", "bar").ArgsToString())
 }

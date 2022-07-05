@@ -34,7 +34,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 	}
 
 	chatbot.AddCommand("auto", func(cmd command.Command, msg twitch.PrivateMessage) {
-		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsAsString())
+		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsToString())
 
 		if shouldDisable {
 			cmder.DisableAuto()
@@ -57,7 +57,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 			return
 		}
 
-		cmder.Command(cmd.ArgsAsString())
+		cmder.Command(cmd.ArgsToString())
 	})
 
 	chatbot.AddCommand("console", func(cmd command.Command, msg twitch.PrivateMessage) {
@@ -65,7 +65,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 	})
 
 	chatbot.AddCommand("find", func(cmd command.Command, msg twitch.PrivateMessage) {
-		server, err := qws.FindPlayer(cmd.ArgsAsString())
+		server, err := qws.FindPlayer(cmd.ArgsToString())
 		if err != nil {
 			chatbot.Reply(msg, err.Error())
 			return
@@ -86,7 +86,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 	})
 
 	chatbot.AddCommand("track", func(cmd command.Command, msg twitch.PrivateMessage) {
-		cmder.Track(cmd.ArgsAsString())
+		cmder.Track(cmd.ArgsToString())
 	})
 
 	return chatbot

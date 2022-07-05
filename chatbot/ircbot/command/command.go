@@ -20,7 +20,7 @@ func New(name string, args ...string) Command {
 	}
 }
 
-func (c Command) ArgsAsString() string {
+func (c Command) ArgsToString() string {
 	return strings.Join(c.Args, " ")
 }
 
