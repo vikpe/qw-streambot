@@ -2,42 +2,40 @@ package monitor_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/serverstat/qserver/qsettings"
 	"github.com/vikpe/streambot/monitor"
 	"github.com/vikpe/streambot/zeromq/test_helpers"
 )
 
-func TestServerMonitor_CompareStates(t *testing.T) {
-	// mock server info responses
-	mInfo := []mvdsv.Mvdsv{
-		{Title: "1on1: x vs y [dm2]"},
-		{Title: "1on1: x vs y [dm2]"},
-		{
-			Title:    "kombat / 1on1: x vs y [dm2]",
-			Settings: qsettings.Settings{"matchtag": "kombat"},
-		},
+func TestProcessMonitor(t *testing.T) {
+	var processMonitor monitor.ProcessMonitor
+
+	// return mocked values and stop after x calls
+	mockedResponses := []bool{false, false, true, false, true}
+	callCount := 0
+	getIsStarted := func() bool {
+		value := mockedResponses[callCount]
+		callCount++
+
+		if callCount >= len(mockedResponses) {
+			processMonitor.Stop()
+		}
+
+		return value
 	}
 
-	infoCallCount := 0
-	getInfo := func(address string) mvdsv.Mvdsv {
-		server := mInfo[infoCallCount]
-		infoCallCount++
-		return server
-	}
+	// run monitor
 	publisherMock := test_helpers.NewPublisherMock()
-	serverMonitor := monitor.NewServerMonitor(getInfo, publisherMock.SendMessage)
-
-	for i := 0; i < len(mInfo); i++ {
-		serverMonitor.CompareStates()
-	}
+	processMonitor = monitor.NewProcessMonitor(getIsStarted, publisherMock.SendMessage)
+	processMonitor.Start(time.Microsecond)
+	time.Sleep(time.Millisecond)
 
 	expectCalls := [][]any{
-		{"server.title_changed", "1on1: x vs y [dm2]"},
-		{"server.matchtag_changed", "kombat"},
-		{"server.title_changed", "kombat / 1on1: x vs y [dm2]"},
+		{"ezquake.started"},
+		{"ezquake.stopped"},
+		{"ezquake.started"},
 	}
 	assert.Equal(t, expectCalls, publisherMock.SendMessageCalls)
 }
