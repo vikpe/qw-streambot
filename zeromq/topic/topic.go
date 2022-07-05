@@ -17,7 +17,7 @@ const (
 
 // commands
 const (
-	EzquakeCommand = "ezquake.command"
+	EzquakeCommand = "ezquake.irccommand"
 	EzquakeScript  = "ezquake.script"
 	StopEzquake    = "ezquake.stop"
 

@@ -1,4 +1,4 @@
-package ircbot
+package irc
 
 import (
 	"fmt"
@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/gempir/go-twitch-irc/v3"
-	"github.com/vikpe/streambot/chatbot/ircbot/command"
 )
 
 type Bot struct {
@@ -21,9 +20,7 @@ type Bot struct {
 	OnStopped       func(os.Signal)
 }
 
-type CommandHandler func(cmd command.Command, msg twitch.PrivateMessage)
-
-func New(username string, oauth string, channel string, commandPrefix rune) *Bot {
+func NewBot(username string, oauth string, channel string, commandPrefix rune) *Bot {
 	client := twitch.NewClient(username, oauth)
 	client.Join(channel)
 
@@ -41,7 +38,7 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 			return
 		}
 
-		cmd, err := command.NewFromText(commandPrefix, msg.Message)
+		cmd, err := NewCommandFromText(commandPrefix, msg.Message)
 
 		if err != nil {
 			return
@@ -50,7 +47,7 @@ func New(username string, oauth string, channel string, commandPrefix rune) *Bot
 		if cmdHandler, ok := bot.commandHandlers[cmd.Name]; ok {
 			cmdHandler(cmd, msg)
 		} else {
-			bot.Reply(msg, fmt.Sprintf(`unknown command "%s".`, cmd.Name))
+			bot.Reply(msg, fmt.Sprintf(`unknown irccommand "%s".`, cmd.Name))
 		}
 	})
 

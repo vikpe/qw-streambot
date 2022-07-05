@@ -1,9 +1,11 @@
-package command
+package irc
 
 import (
 	"errors"
 	"strings"
 	"unicode"
+
+	"github.com/gempir/go-twitch-irc/v3"
 )
 
 type Command struct {
@@ -11,11 +13,25 @@ type Command struct {
 	Args []string
 }
 
-func New(name string, args ...string) Command {
+type CommandHandler func(cmd Command, msg twitch.PrivateMessage)
+
+func NewCommand(name string, args ...string) Command {
 	return Command{
 		Name: name,
 		Args: args,
 	}
+}
+
+func NewCommandFromText(prefix rune, text string) (Command, error) {
+	if !IsCommand(prefix, text) {
+		return Command{}, errors.New("unable to parse irccommand call")
+	}
+	txt := strings.TrimLeft(text, " ")
+	txt = strings.ToLower(txt[1:])
+	parts := strings.FieldsFunc(txt, unicode.IsSpace)
+	name := parts[0]
+	args := parts[1:]
+	return NewCommand(name, args...), nil
 }
 
 func (c Command) ArgsToString() string {
@@ -37,16 +53,4 @@ func IsCommand(prefix rune, text string) bool {
 
 	firstRune := rune(parts[0][0])
 	return unicode.IsLetter(firstRune)
-}
-
-func NewFromText(prefix rune, text string) (Command, error) {
-	if !IsCommand(prefix, text) {
-		return Command{}, errors.New("unable to parse command call")
-	}
-	txt := strings.TrimLeft(text, " ")
-	txt = strings.ToLower(txt[1:])
-	parts := strings.FieldsFunc(txt, unicode.IsSpace)
-	name := parts[0]
-	args := parts[1:]
-	return New(name, args...), nil
 }

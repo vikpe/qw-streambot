@@ -27,7 +27,7 @@ func TestCommander_Autotrack(t *testing.T) {
 	cmder.Autotrack()
 
 	expectedCalls := []call{{
-		topic: "ezquake.command", args: []any{"bot_track"},
+		topic: "ezquake.irccommand", args: []any{"bot_track"},
 	}}
 	assert.Equal(t, expectedCalls, publisher.calls)
 }
@@ -38,7 +38,7 @@ func TestCommander_Command(t *testing.T) {
 	cmder.Command("console")
 
 	expectedCalls := []call{{
-		topic: "ezquake.command", args: []any{"console"},
+		topic: "ezquake.irccommand", args: []any{"console"},
 	}}
 	assert.Equal(t, expectedCalls, publisher.calls)
 }
@@ -116,7 +116,7 @@ func TestCommander_Track(t *testing.T) {
 	cmder.Track("xantom")
 
 	expectedCalls := []call{{
-		topic: "ezquake.command", args: []any{"bot_track xantom"},
+		topic: "ezquake.irccommand", args: []any{"bot_track xantom"},
 	}}
 	assert.Equal(t, expectedCalls, publisher.calls)
 }

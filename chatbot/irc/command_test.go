@@ -1,10 +1,10 @@
-package command_test
+package irc_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/chatbot/ircbot/command"
+	"github.com/vikpe/streambot/chatbot/irc"
 )
 
 func TestIsCommand(t *testing.T) {
@@ -33,7 +33,7 @@ func TestIsCommand(t *testing.T) {
 
 	for text, expect := range testCases {
 		t.Run(text, func(t *testing.T) {
-			assert.Equal(t, expect, command.IsCommand(prefix, text))
+			assert.Equal(t, expect, irc.IsCommand(prefix, text))
 		})
 	}
 }
@@ -43,25 +43,25 @@ func BenchmarkIsCommand(b *testing.B) {
 	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
-		command.IsCommand('!', "!find xantom")
+		irc.IsCommand('!', "!find xantom")
 	}
 }
 
 func TestNewCommandFromText(t *testing.T) {
 	t.Run("invalid prefix", func(t *testing.T) {
-		cmd, err := command.NewFromText('!', "#bar")
-		assert.Equal(t, cmd, command.Command{})
-		assert.EqualError(t, err, "unable to parse command call")
+		cmd, err := irc.NewCommandFromText('!', "#bar")
+		assert.Equal(t, cmd, irc.Command{})
+		assert.EqualError(t, err, "unable to parse irccommand call")
 	})
 
-	t.Run("invalid command", func(t *testing.T) {
-		cmd, err := command.NewFromText('#', "##")
-		assert.Equal(t, cmd, command.Command{})
-		assert.EqualError(t, err, "unable to parse command call")
+	t.Run("invalid irccommand", func(t *testing.T) {
+		cmd, err := irc.NewCommandFromText('#', "##")
+		assert.Equal(t, cmd, irc.Command{})
+		assert.EqualError(t, err, "unable to parse irccommand call")
 	})
 
 	t.Run("valid", func(t *testing.T) {
-		testCases := map[string]command.Command{
+		testCases := map[string]irc.Command{
 			"!find":       {Name: "find", Args: []string{}},
 			" !find arg1": {Name: "find", Args: []string{"arg1"}},
 			"!find a b c": {Name: "find", Args: []string{"a", "b", "c"}},
@@ -71,7 +71,7 @@ func TestNewCommandFromText(t *testing.T) {
 
 		for text, expect := range testCases {
 			t.Run(text, func(t *testing.T) {
-				foo, err := command.NewFromText(prefix, text)
+				foo, err := irc.NewCommandFromText(prefix, text)
 				assert.Equal(t, expect, foo)
 				assert.Nil(t, err)
 			})
@@ -84,10 +84,10 @@ func BenchmarkNewCommandFromText(b *testing.B) {
 	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
-		command.NewFromText('!', "!find xantom")
+		irc.NewCommandFromText('!', "!find xantom")
 	}
 }
 
 func TestArgsToString(t *testing.T) {
-	assert.Equal(t, "foo bar", command.New("find", "foo", "bar").ArgsToString())
+	assert.Equal(t, "foo bar", irc.NewCommand("find", "foo", "bar").ArgsToString())
 }
