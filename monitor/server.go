@@ -16,7 +16,7 @@ type ServerMonitor struct {
 	getInfo          MvdsvProvider
 	address          string
 	addressTimestamp time.Time
-	prevState        ServerState
+	prevState        serverState
 }
 
 func NewServerMonitor(getInfo MvdsvProvider, onEvent zeromq.EventHandler) ServerMonitor {
@@ -25,13 +25,13 @@ func NewServerMonitor(getInfo MvdsvProvider, onEvent zeromq.EventHandler) Server
 		getInfo:   getInfo,
 		onEvent:   onEvent,
 		address:   "",
-		prevState: ServerState{},
+		prevState: serverState{},
 	}
 }
 
 func (s *ServerMonitor) SetAddress(address string) {
 	s.address = address
-	s.prevState = ServerState{}
+	s.prevState = serverState{}
 	s.addressTimestamp = time.Now()
 }
 
@@ -62,7 +62,7 @@ func (s *ServerMonitor) Start(interval time.Duration) {
 }
 
 func (s *ServerMonitor) CompareStates() {
-	currentState := NewServerState(s.getInfo, s.address)
+	currentState := newServerState(s.getInfo, s.address)
 
 	if currentState.Matchtag != s.prevState.Matchtag {
 		s.onEvent(topic.ServerMatchtagChanged, currentState.Matchtag)
@@ -79,17 +79,17 @@ func (s *ServerMonitor) Stop() {
 	s.isDone = true
 }
 
-type ServerState struct {
+type serverState struct {
 	Map      string
 	Matchtag string
 	Score    int
 	Title    string
 }
 
-func NewServerState(getInfo MvdsvProvider, address string) ServerState {
+func newServerState(getInfo MvdsvProvider, address string) serverState {
 	server := getInfo(address)
 
-	return ServerState{
+	return serverState{
 		Map:      server.Settings.Get("map", ""),
 		Matchtag: server.Settings.Get("matchtag", ""),
 		Score:    server.Score,
