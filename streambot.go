@@ -27,7 +27,7 @@ var pp = prettyprint.New("brain", color.FgHiMagenta)
 type Streambot struct {
 	clientPlayerName string
 	pipe             ezquake.PipeWriter
-	process          ezquake.Process
+	process          ezquake.ProcessController
 	serverMonitor    monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
 	twitch           twitch.Client
@@ -38,7 +38,7 @@ type Streambot struct {
 
 func NewStreambot(
 	clientPlayerName string,
-	process ezquake.Process,
+	process ezquake.ProcessController,
 	pipe ezquake.PipeWriter,
 	twitchClient twitch.Client,
 	publisher zeromq.Publisher,
