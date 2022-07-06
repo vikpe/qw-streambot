@@ -14,8 +14,19 @@ import (
 
 func TestPrettyPrinter_Println(t *testing.T) {
 	testRun := func() {
-		printer := prettyfmt.New("alpha", color.FgCyan)
-		printer.Println("hello", 123)
+		pfmt := prettyfmt.New("alpha", color.FgCyan)
+		pfmt.Println("hello", 123)
+	}
+
+	expect := fmt.Sprintf("%s  alpha  hello 123\n", time.Now().Format("15:04:05"))
+	output := getFuncStdOutput(testRun)
+	assert.Equal(t, expect, output)
+}
+
+func TestPrettyPrinter_Printfln(t *testing.T) {
+	testRun := func() {
+		pfmt := prettyfmt.New("alpha", color.FgCyan)
+		pfmt.Printfln("hello %d", 123)
 	}
 
 	expect := fmt.Sprintf("%s  alpha  hello 123\n", time.Now().Format("15:04:05"))
@@ -25,8 +36,19 @@ func TestPrettyPrinter_Println(t *testing.T) {
 
 func TestPrettyPrinter_Print(t *testing.T) {
 	testRun := func() {
-		printer := prettyfmt.New("alpha", color.FgCyan)
-		printer.Print("hello", 123)
+		pfmt := prettyfmt.New("alpha", color.FgCyan)
+		pfmt.Print("hello", 123)
+	}
+
+	expect := fmt.Sprintf("%s  alpha  hello123", time.Now().Format("15:04:05"))
+	output := getFuncStdOutput(testRun)
+	assert.Equal(t, expect, output)
+}
+
+func TestPrettyPrinter_Printf(t *testing.T) {
+	testRun := func() {
+		pfmt := prettyfmt.New("alpha", color.FgCyan)
+		pfmt.Printf("hello%d", 123)
 	}
 
 	expect := fmt.Sprintf("%s  alpha  hello123", time.Now().Format("15:04:05"))
