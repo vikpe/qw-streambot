@@ -60,37 +60,6 @@ func TestProcess_GetProcessID(t *testing.T) {
 	})
 }
 
-func TestProcess_GetTcpSocketAddress(t *testing.T) {
-	t.Run("not started", func(t *testing.T) {
-		exec := NewExecMock()
-		exec.Output["pgrep"] = ""
-		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
-		process.ExecCommand = exec.Command
-
-		assert.Equal(t, "", process.TcpAddress())
-	})
-
-	t.Run("invalid ss response", func(t *testing.T) {
-		exec := NewExecMock()
-		exec.Output["pgrep"] = "1818481"
-		exec.Output["ss"] = "0          0              192.168.2.194:41706"
-		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
-		process.ExecCommand = exec.Command
-
-		assert.Equal(t, "", process.TcpAddress())
-	})
-
-	t.Run("non-empty ss response", func(t *testing.T) {
-		exec := NewExecMock()
-		exec.Output["pgrep"] = "1818481"
-		exec.Output["ss"] = "0          0              192.168.2.194:41706           46.227.68.148:28000      users:((\"ezquake-linux-x\",pid=1818481,fd=53))"
-		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
-		process.ExecCommand = exec.Command
-
-		assert.Equal(t, "46.227.68.148:28000", process.TcpAddress())
-	})
-}
-
 func TestProcess_Stop(t *testing.T) {
 	t.Run("not started", func(t *testing.T) {
 		exec := NewExecMock()

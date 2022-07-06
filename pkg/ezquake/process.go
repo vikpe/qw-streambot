@@ -3,7 +3,6 @@ package ezquake
 import (
 	"fmt"
 	"strconv"
-	"strings"
 	"syscall"
 
 	"github.com/vikpe/streambot/pkg/ezquake/shell"
@@ -49,25 +48,4 @@ func (p Process) IsStarted() bool {
 
 func (p Process) IsStopped() bool {
 	return !p.IsStarted()
-}
-
-func (p Process) TcpAddress() string {
-	pid := p.ID()
-
-	if 0 == pid {
-		return ""
-	}
-
-	pidNeedle := fmt.Sprintf("pid=%d", pid)
-	ssCmd := "ss -nptH -o state established dport eq 28000"
-	ssOutput := p.ExecCommand(ssCmd)
-	// 0          0              192.168.2.194:41706           46.227.68.148:28000      users:(("ezquake-linux-x",pid=1818481,fd=53))
-
-	if !strings.Contains(ssOutput, pidNeedle) {
-		return ""
-	}
-
-	ssFields := strings.Fields(ssOutput)
-	const destAddressIndex = 3
-	return ssFields[destAddressIndex]
 }
