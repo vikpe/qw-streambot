@@ -9,15 +9,12 @@ import (
 )
 
 func TestPeriodicalTask(t *testing.T) {
-	callCount := 0
-
-	countTask := task.NewPeriodicalTask(func() {
-		callCount++
-	})
+	count := 0
+	countTask := task.NewPeriodicalTask(func() { count++ })
 	interval := time.Millisecond
 	countTask.Start(interval)
 	time.Sleep(4 * interval)
 	countTask.Stop()
 
-	assert.Equal(t, 5, callCount)
+	assert.Equal(t, 5, count)
 }
