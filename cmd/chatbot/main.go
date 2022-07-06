@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/chatbot"
+	"github.com/vikpe/streambot/internal/chatbot"
 )
 
 func main() {
