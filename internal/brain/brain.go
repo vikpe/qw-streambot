@@ -44,8 +44,8 @@ func NewBrain(
 	twitchClient twitch.Client,
 	publisher zeromq.Publisher,
 	subscriber zeromq.Subscriber,
-) Brain {
-	return Brain{
+) *Brain {
+	return &Brain{
 		clientPlayerName: clientPlayerName,
 		pipe:             pipe,
 		process:          process,
