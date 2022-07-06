@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/vikpe/streambot/pkg/ezquake/proc/shell"
+	"github.com/vikpe/streambot/internal/brain/util/proc/shell"
 )
 
 type ProcessController struct {

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/pkg/ezquake/proc/shell"
+	"github.com/vikpe/streambot/internal/brain/util/proc/shell"
 )
 
 func TestExecCommand(t *testing.T) {
