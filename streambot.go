@@ -9,9 +9,9 @@ import (
 	"github.com/fatih/color"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
-	monitor2 "github.com/vikpe/streambot/internal/monitor"
+	"github.com/vikpe/streambot/internal/monitor"
 	"github.com/vikpe/streambot/internal/util/calc"
-	ezquake2 "github.com/vikpe/streambot/pkg/ezquake"
+	"github.com/vikpe/streambot/pkg/ezquake"
 	"github.com/vikpe/streambot/pkg/prettyprint"
 	"github.com/vikpe/streambot/pkg/task"
 	"github.com/vikpe/streambot/pkg/zeromq"
@@ -26,9 +26,9 @@ var pp = prettyprint.New("brain", color.FgHiMagenta)
 
 type Streambot struct {
 	clientPlayerName string
-	pipe             ezquake2.PipeWriter
-	process          ezquake2.Process
-	serverMonitor    monitor2.ServerMonitor
+	pipe             ezquake.PipeWriter
+	process          ezquake.Process
+	serverMonitor    monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
 	twitch           twitch.Client
 	publisher        zeromq.Publisher
@@ -38,8 +38,8 @@ type Streambot struct {
 
 func NewStreambot(
 	clientPlayerName string,
-	process ezquake2.Process,
-	pipe ezquake2.PipeWriter,
+	process ezquake.Process,
+	pipe ezquake.PipeWriter,
 	twitchClient twitch.Client,
 	publisher zeromq.Publisher,
 	subscriber zeromq.Subscriber,
@@ -48,7 +48,7 @@ func NewStreambot(
 		clientPlayerName: clientPlayerName,
 		pipe:             pipe,
 		process:          process,
-		serverMonitor:    monitor2.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
+		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
 		twitch:           twitchClient,
 		publisher:        publisher,
@@ -63,7 +63,7 @@ func (s *Streambot) Start() {
 	zeromq.WaitForConnection()
 
 	// event dispatchers
-	processMonitor := monitor2.NewProcessMonitor(s.process.IsStarted, s.publisher.SendMessage)
+	processMonitor := monitor.NewProcessMonitor(s.process.IsStarted, s.publisher.SendMessage)
 	processMonitor.Start(3 * time.Second)
 	s.serverMonitor.Start(5 * time.Second)
 
