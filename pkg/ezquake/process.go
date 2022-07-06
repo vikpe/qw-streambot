@@ -8,19 +8,19 @@ import (
 	"github.com/vikpe/streambot/pkg/ezquake/shell"
 )
 
-type Process struct {
+type ProcessController struct {
 	Path        string
 	ExecCommand func(command string) string
 }
 
-func NewProcess(path string) Process {
-	return Process{
+func NewProcessController(path string) ProcessController {
+	return ProcessController{
 		Path:        path,
 		ExecCommand: shell.ExecCommand,
 	}
 }
 
-func (p Process) ID() int {
+func (p ProcessController) GetID() int {
 	pregCmd := fmt.Sprintf("pgrep -fo %s", p.Path)
 	prepOutput := p.ExecCommand(pregCmd)
 	id, err := strconv.Atoi(prepOutput)
@@ -31,8 +31,8 @@ func (p Process) ID() int {
 	return id
 }
 
-func (p Process) Stop(signal syscall.Signal) {
-	pid := p.ID()
+func (p ProcessController) Stop(signal syscall.Signal) {
+	pid := p.GetID()
 
 	if 0 == pid {
 		return
@@ -42,10 +42,10 @@ func (p Process) Stop(signal syscall.Signal) {
 	p.ExecCommand(killCmd)
 }
 
-func (p Process) IsStarted() bool {
-	return 0 != p.ID()
+func (p ProcessController) IsStarted() bool {
+	return 0 != p.GetID()
 }
 
-func (p Process) IsStopped() bool {
+func (p ProcessController) IsStopped() bool {
 	return !p.IsStarted()
 }

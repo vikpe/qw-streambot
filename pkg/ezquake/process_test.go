@@ -13,10 +13,10 @@ func TestProcess_GetProcessID(t *testing.T) {
 	t.Run("no process found", func(t *testing.T) {
 		exec := test_helpers.NewExecMock()
 		exec.Output["pgrep"] = ""
-		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
+		process := ezquake.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
 
-		assert.Equal(t, 0, process.ID())
+		assert.Equal(t, 0, process.GetID())
 		assert.False(t, process.IsStarted())
 		assert.True(t, process.IsStopped())
 	})
@@ -24,10 +24,10 @@ func TestProcess_GetProcessID(t *testing.T) {
 	t.Run("process found", func(t *testing.T) {
 		exec := test_helpers.NewExecMock()
 		exec.Output["pgrep"] = "1818481"
-		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
+		process := ezquake.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
 
-		assert.Equal(t, 1818481, process.ID())
+		assert.Equal(t, 1818481, process.GetID())
 		assert.True(t, process.IsStarted())
 		assert.False(t, process.IsStopped())
 	})
@@ -37,7 +37,7 @@ func TestProcess_Stop(t *testing.T) {
 	t.Run("not started", func(t *testing.T) {
 		exec := test_helpers.NewExecMock()
 		exec.Output["pgrep"] = ""
-		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
+		process := ezquake.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
 
 		process.Stop(syscall.SIGTERM)
@@ -49,7 +49,7 @@ func TestProcess_Stop(t *testing.T) {
 	t.Run("started", func(t *testing.T) {
 		exec := test_helpers.NewExecMock()
 		exec.Output["pgrep"] = "1818481"
-		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
+		process := ezquake.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
 
 		process.Stop(syscall.SIGTERM)
