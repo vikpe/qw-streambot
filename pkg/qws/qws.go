@@ -10,22 +10,20 @@ import (
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 )
 
-type ServerList []mvdsv.Mvdsv
-
-func GetMvdsvServers() ServerList {
+func GetMvdsvServers() []mvdsv.Mvdsv {
 	return GetMvdsvServersByQueryParams(nil)
 }
 
-func GetMvdsvServersByQueryParams(queryParams map[string]string) ServerList {
+func GetMvdsvServersByQueryParams(queryParams map[string]string) []mvdsv.Mvdsv {
 	serversUrl := "https://metaqtv.quake.se/v2/servers/mvdsv"
-	resp, err := resty.New().R().SetResult(ServerList{}).SetQueryParams(queryParams).Get(serversUrl)
+	resp, err := resty.New().R().SetResult([]mvdsv.Mvdsv{}).SetQueryParams(queryParams).Get(serversUrl)
 
 	if err != nil {
 		fmt.Println("server fetch error", err.Error())
-		return make(ServerList, 0)
+		return make([]mvdsv.Mvdsv, 0)
 	}
 
-	servers := resp.Result().(*ServerList)
+	servers := resp.Result().(*[]mvdsv.Mvdsv)
 	return *servers
 }
 
