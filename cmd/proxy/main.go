@@ -11,7 +11,11 @@ import (
 )
 
 func main() {
-	godotenv.Load("../../.env")
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("unable to load environment variables", err)
+		return
+	}
 
 	proxy := zeromq.NewProxy(
 		os.Getenv("ZMQ_PROXY_FRONTEND_ADDRESS"),
