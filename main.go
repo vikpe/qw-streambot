@@ -5,6 +5,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/vikpe/streambot/pkg/ezquake"
+	"github.com/vikpe/streambot/pkg/proc"
 	"github.com/vikpe/streambot/pkg/zeromq"
 	"github.com/vikpe/streambot/third_party/twitch"
 )
@@ -13,7 +14,7 @@ func main() {
 	godotenv.Load()
 
 	playerName := os.Getenv("EZQUAKE_PLAYER_NAME")
-	process := ezquake.NewProcessController(os.Getenv("EZQUAKE_BIN_PATH"))
+	process := proc.NewProcessController(os.Getenv("EZQUAKE_BIN_PATH"))
 	pipe := ezquake.NewPipeWriter(os.Getenv("EZQUAKE_PROCESS_USERNAME"))
 	twitchClient := twitch.NewClient(
 		os.Getenv("TWITCH_BOT_CLIENT_ID"),

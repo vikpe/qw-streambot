@@ -1,19 +1,19 @@
-package ezquake_test
+package proc_test
 
 import (
 	"syscall"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/pkg/ezquake"
-	"github.com/vikpe/streambot/pkg/ezquake/shell/test_helpers"
+	"github.com/vikpe/streambot/pkg/proc"
+	"github.com/vikpe/streambot/pkg/proc/shell/mock"
 )
 
 func TestProcess_GetProcessID(t *testing.T) {
 	t.Run("no process found", func(t *testing.T) {
-		exec := test_helpers.NewExecMock()
+		exec := mock.NewExecMock()
 		exec.Output["pgrep"] = ""
-		process := ezquake.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
+		process := proc.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
 
 		assert.Equal(t, 0, process.GetID())
@@ -22,9 +22,9 @@ func TestProcess_GetProcessID(t *testing.T) {
 	})
 
 	t.Run("process found", func(t *testing.T) {
-		exec := test_helpers.NewExecMock()
+		exec := mock.NewExecMock()
 		exec.Output["pgrep"] = "1818481"
-		process := ezquake.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
+		process := proc.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
 
 		assert.Equal(t, 1818481, process.GetID())
@@ -35,9 +35,9 @@ func TestProcess_GetProcessID(t *testing.T) {
 
 func TestProcess_Stop(t *testing.T) {
 	t.Run("not started", func(t *testing.T) {
-		exec := test_helpers.NewExecMock()
+		exec := mock.NewExecMock()
 		exec.Output["pgrep"] = ""
-		process := ezquake.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
+		process := proc.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
 
 		process.Stop(syscall.SIGTERM)
@@ -47,9 +47,9 @@ func TestProcess_Stop(t *testing.T) {
 	})
 
 	t.Run("started", func(t *testing.T) {
-		exec := test_helpers.NewExecMock()
+		exec := mock.NewExecMock()
 		exec.Output["pgrep"] = "1818481"
-		process := ezquake.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
+		process := proc.NewProcessController("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
 
 		process.Stop(syscall.SIGTERM)

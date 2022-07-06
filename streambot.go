@@ -14,6 +14,7 @@ import (
 	"github.com/vikpe/streambot/internal/util/task"
 	"github.com/vikpe/streambot/pkg/ezquake"
 	"github.com/vikpe/streambot/pkg/prettyprint"
+	"github.com/vikpe/streambot/pkg/proc"
 	"github.com/vikpe/streambot/pkg/zeromq"
 	"github.com/vikpe/streambot/pkg/zeromq/message"
 	"github.com/vikpe/streambot/third_party/qws"
@@ -27,7 +28,7 @@ var pp = prettyprint.New("brain", color.FgHiMagenta)
 type Streambot struct {
 	clientPlayerName string
 	pipe             ezquake.PipeWriter
-	process          ezquake.ProcessController
+	process          proc.ProcessController
 	serverMonitor    monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
 	twitch           twitch.Client
@@ -38,7 +39,7 @@ type Streambot struct {
 
 func NewStreambot(
 	clientPlayerName string,
-	process ezquake.ProcessController,
+	process proc.ProcessController,
 	pipe ezquake.PipeWriter,
 	twitchClient twitch.Client,
 	publisher zeromq.Publisher,

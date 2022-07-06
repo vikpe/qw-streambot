@@ -1,11 +1,11 @@
-package ezquake
+package proc
 
 import (
 	"fmt"
 	"strconv"
 	"syscall"
 
-	"github.com/vikpe/streambot/pkg/ezquake/shell"
+	"github.com/vikpe/streambot/pkg/proc/shell"
 )
 
 type ProcessController struct {
