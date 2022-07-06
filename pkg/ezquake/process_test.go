@@ -1,44 +1,17 @@
 package ezquake_test
 
 import (
-	"strings"
 	"syscall"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/vikpe/streambot/pkg/ezquake"
-	"golang.org/x/exp/slices"
+	"github.com/vikpe/streambot/pkg/ezquake/shell/test_helpers"
 )
-
-type ExecMock struct {
-	Calls  []string
-	Output map[string]string
-}
-
-func NewExecMock() ExecMock {
-	return ExecMock{
-		Calls:  make([]string, 0),
-		Output: make(map[string]string, 0),
-	}
-}
-
-func (m *ExecMock) Command(command string) string {
-	m.Calls = append(m.Calls, command)
-	args := strings.Split(command, " ")
-
-	if response, ok := m.Output[args[0]]; ok {
-		return response
-	}
-	return ""
-}
-
-func (m ExecMock) HasCommandCall(command string) bool {
-	return slices.Contains(m.Calls, command)
-}
 
 func TestProcess_GetProcessID(t *testing.T) {
 	t.Run("no process found", func(t *testing.T) {
-		exec := NewExecMock()
+		exec := test_helpers.NewExecMock()
 		exec.Output["pgrep"] = ""
 		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
@@ -49,7 +22,7 @@ func TestProcess_GetProcessID(t *testing.T) {
 	})
 
 	t.Run("process found", func(t *testing.T) {
-		exec := NewExecMock()
+		exec := test_helpers.NewExecMock()
 		exec.Output["pgrep"] = "1818481"
 		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
@@ -62,7 +35,7 @@ func TestProcess_GetProcessID(t *testing.T) {
 
 func TestProcess_Stop(t *testing.T) {
 	t.Run("not started", func(t *testing.T) {
-		exec := NewExecMock()
+		exec := test_helpers.NewExecMock()
 		exec.Output["pgrep"] = ""
 		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
@@ -74,7 +47,7 @@ func TestProcess_Stop(t *testing.T) {
 	})
 
 	t.Run("started", func(t *testing.T) {
-		exec := NewExecMock()
+		exec := test_helpers.NewExecMock()
 		exec.Output["pgrep"] = "1818481"
 		process := ezquake.NewProcess("/home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64")
 		process.ExecCommand = exec.Command
