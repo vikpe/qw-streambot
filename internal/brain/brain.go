@@ -143,15 +143,12 @@ func (s *Brain) ValidateCurrentServer() {
 }
 
 func (s *Brain) OnStreambotEvaluate(msg message.Message) {
-	// check process
 	if !s.process.IsStarted() {
 		return
 	}
 
-	// validate current server
 	s.ValidateCurrentServer()
 
-	// validate based on auto mode
 	if s.AutoMode {
 		s.evaluateAutoModeEnabled()
 	} else {
@@ -199,8 +196,6 @@ func (s *Brain) evaluateAutoModeDisabled() {
 		return
 	}
 
-	fmt.Println("server is shit: enable auto")
-
 	s.commander.EnableAuto()
 }
 
@@ -234,8 +229,6 @@ func (s *Brain) connectToServer(server mvdsv.Mvdsv) {
 }
 
 func (s *Brain) OnEzquakeCommand(msg message.Message) {
-	pfmt.Println("OnEzquakeCommand", msg.Content.ToString())
-
 	if !s.process.IsStarted() {
 		return
 	}
@@ -259,7 +252,6 @@ func (s *Brain) OnEzquakeScript(msg message.Message) {
 func (s *Brain) OnEzquakeStarted(msg message.Message) {
 	pfmt.Println("OnEzquakeStarted")
 	s.evaluateTask.Start(10 * time.Second)
-
 	time.AfterFunc(5*time.Second, func() { s.commander.Command("toggleconsole") })
 }
 
