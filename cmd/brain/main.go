@@ -7,7 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/vikpe/streambot/internal/brain"
 	"github.com/vikpe/streambot/pkg/ezquake"
-	"github.com/vikpe/streambot/pkg/proc"
+	"github.com/vikpe/streambot/pkg/ezquake/proc"
 	"github.com/vikpe/streambot/pkg/zeromq"
 	"github.com/vikpe/streambot/third_party/twitch"
 )

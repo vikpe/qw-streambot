@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/internal/util/task"
+	"github.com/vikpe/streambot/internal/brain/util/task"
 )
 
 func TestPeriodicalTask(t *testing.T) {
