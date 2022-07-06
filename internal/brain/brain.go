@@ -87,7 +87,6 @@ func (s *Brain) OnMessage(msg message.Message) {
 		topic.EzquakeCommand:           s.OnEzquakeCommand,
 		topic.EzquakeScript:            s.OnEzquakeScript,
 		topic.StopEzquake:              s.OnStopEzquake,
-		topic.StreambotSystemUpdate:    s.OnStreambotSystemUpdate,
 		topic.StreambotEvaluate:        s.OnStreambotEvaluate,
 
 		// ezquake events
@@ -284,10 +283,6 @@ func (s *Brain) OnEzquakeStopped(msg message.Message) {
 	pfmt.Println("OnEzquakeStopped")
 	s.serverMonitor.SetAddress("")
 	s.evaluateTask.Stop()
-}
-
-func (s *Brain) OnStreambotSystemUpdate(msg message.Message) {
-	pfmt.Println("OnStreambotSystemUpdate")
 }
 
 func (s *Brain) OnServerTitleChanged(msg message.Message) {

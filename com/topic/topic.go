@@ -26,5 +26,4 @@ const (
 	StreambotEnableAuto      = "streambot.enable_auto"
 	StreambotDisableAuto     = "streambot.disable_auto"
 	StreambotEvaluate        = "streambot.evaluate"
-	StreambotSystemUpdate    = "streambot.system_update"
 )
