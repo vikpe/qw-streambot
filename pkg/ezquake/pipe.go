@@ -4,21 +4,22 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 )
 
 type PipeWriter struct {
 	username string
-	queue    []string
+	mux      sync.Mutex
 }
 
 func NewPipeWriter(username string) PipeWriter {
 	return PipeWriter{
 		username: username,
-		queue:    make([]string, 0),
+		mux:      sync.Mutex{},
 	}
 }
 
-func (w PipeWriter) Write(value string) error {
+func (w *PipeWriter) Write(value string) error {
 	strippedValue := strings.TrimSpace(value)
 
 	if 0 == len(strippedValue) {
@@ -26,34 +27,13 @@ func (w PipeWriter) Write(value string) error {
 	}
 
 	terminatedValue := strings.TrimRight(strippedValue, ";") + ";"
-	w.queue = append(w.queue, terminatedValue)
-	return w.processQueue()
+	return w.writeToPipe(terminatedValue)
 }
 
-func (w PipeWriter) processQueue() error {
-	for {
-		if 0 == len(w.queue) {
-			break
-		}
+func (w *PipeWriter) writeToPipe(value string) error {
+	w.mux.Lock()
+	defer w.mux.Unlock()
 
-		value := w.queue[0]
-		err := w.writeToPipe(value)
-
-		if err != nil {
-			return err
-		}
-
-		if 1 == len(w.queue) {
-			break
-		}
-
-		w.queue = w.queue[1:]
-	}
-
-	return nil
-}
-
-func (w PipeWriter) writeToPipe(value string) error {
 	file, errOpen := os.OpenFile(w.path(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	if errOpen != nil {
@@ -67,6 +47,6 @@ func (w PipeWriter) writeToPipe(value string) error {
 	return errWrite
 }
 
-func (w PipeWriter) path() string {
+func (w *PipeWriter) path() string {
 	return fmt.Sprintf("/tmp/ezquake_fifo_%s", w.username)
 }

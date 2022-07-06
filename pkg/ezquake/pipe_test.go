@@ -25,14 +25,14 @@ func TestPipeWriter_Write(t *testing.T) {
 	username := "test"
 	resetPipe(username)
 
-	w := ezquake.NewPipeWriter(username)
+	pipeWriter := ezquake.NewPipeWriter(username)
 
-	w.Write("console;;")
+	pipeWriter.Write("console;;")
 	assert.Equal(t, "console;", readPipe(username))
 
-	w.Write(" ")
+	pipeWriter.Write(" ")
 	assert.Equal(t, "console;", readPipe(username))
 
-	w.Write("lastscores")
+	pipeWriter.Write("lastscores")
 	assert.Equal(t, "console;lastscores;", readPipe(username))
 }
