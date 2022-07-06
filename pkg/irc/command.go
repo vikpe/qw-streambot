@@ -24,7 +24,7 @@ func NewCommand(name string, args ...string) Command {
 
 func NewCommandFromText(prefix rune, text string) (Command, error) {
 	if !IsCommand(prefix, text) {
-		return Command{}, errors.New("unable to parse irccommand call")
+		return Command{}, errors.New("unable to parse command call")
 	}
 	txt := strings.TrimLeft(text, " ")
 	txt = strings.ToLower(txt[1:])

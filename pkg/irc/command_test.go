@@ -51,13 +51,13 @@ func TestNewCommandFromText(t *testing.T) {
 	t.Run("invalid prefix", func(t *testing.T) {
 		cmd, err := irc.NewCommandFromText('!', "#bar")
 		assert.Equal(t, cmd, irc.Command{})
-		assert.EqualError(t, err, "unable to parse irccommand call")
+		assert.EqualError(t, err, "unable to parse command call")
 	})
 
-	t.Run("invalid irccommand", func(t *testing.T) {
+	t.Run("invalid command", func(t *testing.T) {
 		cmd, err := irc.NewCommandFromText('#', "##")
 		assert.Equal(t, cmd, irc.Command{})
-		assert.EqualError(t, err, "unable to parse irccommand call")
+		assert.EqualError(t, err, "unable to parse command call")
 	})
 
 	t.Run("valid", func(t *testing.T) {

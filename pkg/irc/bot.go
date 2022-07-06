@@ -47,7 +47,7 @@ func NewBot(username string, oauth string, channel string, commandPrefix rune) *
 		if cmdHandler, ok := bot.commandHandlers[cmd.Name]; ok {
 			cmdHandler(cmd, msg)
 		} else {
-			bot.Reply(msg, fmt.Sprintf(`unknown irccommand "%s".`, cmd.Name))
+			bot.Reply(msg, fmt.Sprintf(`unknown command "%s".`, cmd.Name))
 		}
 	})
 

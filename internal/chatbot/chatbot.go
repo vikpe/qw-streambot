@@ -51,7 +51,7 @@ func New(username string, accessToken string, channel string, publisherAddress s
 
 	chatbot.AddCommand("cmd", func(cmd irc.Command, msg twitch.PrivateMessage) {
 		if !irc.IsBroadcaster(msg.User) {
-			chatbot.Reply(msg, "cmd is a mod-only irccommand.")
+			chatbot.Reply(msg, "cmd is a mod-only command.")
 			return
 		}
 
