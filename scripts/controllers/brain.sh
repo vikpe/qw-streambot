@@ -1,3 +1,3 @@
-source ./scripts/functions.sh
+source ./scripts/controllers/functions.sh
 
 run_forever ${COLOR_MAGENTA} brain_controller ./cmd/brain/brain 3
