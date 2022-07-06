@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/vikpe/serverstat/qserver/geo"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/streambot/third_party/qws"
+	"github.com/vikpe/streambot/pkg/qws"
 )
 
 func TestIsRelevantServer(t *testing.T) {
