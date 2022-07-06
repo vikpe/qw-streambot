@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/vikpe/streambot/internal/brain"
 	"github.com/vikpe/streambot/pkg/ezquake"
 	"github.com/vikpe/streambot/pkg/proc"
 	"github.com/vikpe/streambot/pkg/zeromq"
@@ -11,7 +13,11 @@ import (
 )
 
 func main() {
-	godotenv.Load()
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("unable to load environment variables", err)
+		return
+	}
 
 	playerName := os.Getenv("EZQUAKE_PLAYER_NAME")
 	process := proc.NewProcessController(os.Getenv("EZQUAKE_BIN_PATH"))
@@ -24,7 +30,7 @@ func main() {
 	publisher := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
 	subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), zeromq.TopicsAll)
 
-	bot := NewStreambot(
+	brn := brain.NewBrain(
 		playerName,
 		process,
 		pipe,
@@ -32,5 +38,5 @@ func main() {
 		publisher,
 		subscriber,
 	)
-	bot.Start()
+	brn.Start()
 }

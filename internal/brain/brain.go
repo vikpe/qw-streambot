@@ -1,4 +1,4 @@
-package main
+package brain
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ import (
 
 var pfmt = prettyfmt.New("brain", color.FgHiMagenta)
 
-type Streambot struct {
+type Brain struct {
 	clientPlayerName string
 	pipe             ezquake.PipeWriter
 	process          proc.ProcessController
@@ -37,15 +37,15 @@ type Streambot struct {
 	AutoMode         bool
 }
 
-func NewStreambot(
+func NewBrain(
 	clientPlayerName string,
 	process proc.ProcessController,
 	pipe ezquake.PipeWriter,
 	twitchClient twitch.Client,
 	publisher zeromq.Publisher,
 	subscriber zeromq.Subscriber,
-) Streambot {
-	return Streambot{
+) Brain {
+	return Brain{
 		clientPlayerName: clientPlayerName,
 		pipe:             pipe,
 		process:          process,
@@ -58,7 +58,7 @@ func NewStreambot(
 	}
 }
 
-func (s *Streambot) Start() {
+func (s *Brain) Start() {
 	// event listeners
 	s.subscriber.Start(s.OnMessage)
 	zeromq.WaitForConnection()
@@ -77,7 +77,7 @@ func (s *Streambot) Start() {
 	wg.Wait()
 }
 
-func (s *Streambot) OnMessage(msg message.Message) {
+func (s *Brain) OnMessage(msg message.Message) {
 	handlers := map[string]message.Handler{
 		// commands
 		topic.StreambotEnableAuto:      s.OnStreambotEnableAuto,
@@ -106,16 +106,16 @@ func (s *Streambot) OnMessage(msg message.Message) {
 	}
 }
 
-func (s *Streambot) OnStreambotEnableAuto(msg message.Message) {
+func (s *Brain) OnStreambotEnableAuto(msg message.Message) {
 	s.AutoMode = true
 	s.publisher.SendMessage(topic.StreambotEvaluate)
 }
 
-func (s *Streambot) OnStreambotDisableAuto(msg message.Message) {
+func (s *Brain) OnStreambotDisableAuto(msg message.Message) {
 	s.AutoMode = false
 }
 
-func (s *Streambot) ValidateCurrentServer() {
+func (s *Brain) ValidateCurrentServer() {
 	if "" == s.serverMonitor.GetAddress() {
 		return
 	}
@@ -141,7 +141,7 @@ func (s *Streambot) ValidateCurrentServer() {
 	s.serverMonitor.SetAddress("")
 }
 
-func (s *Streambot) OnStreambotEvaluate(msg message.Message) {
+func (s *Brain) OnStreambotEvaluate(msg message.Message) {
 	// check process
 	if !s.process.IsStarted() {
 		return
@@ -158,7 +158,7 @@ func (s *Streambot) OnStreambotEvaluate(msg message.Message) {
 	}
 }
 
-func (s *Streambot) evaluateAutoModeEnabled() {
+func (s *Brain) evaluateAutoModeEnabled() {
 	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
 	shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
 
@@ -181,7 +181,7 @@ func (s *Streambot) evaluateAutoModeEnabled() {
 	s.publisher.SendMessage(topic.StreambotConnectToServer, bestServer)
 }
 
-func (s *Streambot) evaluateAutoModeDisabled() {
+func (s *Brain) evaluateAutoModeDisabled() {
 	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
 	const MinScore = 30
 	isOkServer := currentServer.Score >= MinScore
@@ -203,7 +203,7 @@ func (s *Streambot) evaluateAutoModeDisabled() {
 	s.publisher.SendMessage(topic.StreambotEnableAuto)
 }
 
-func (s *Streambot) OnStreambotSuggestServer(msg message.Message) {
+func (s *Brain) OnStreambotSuggestServer(msg message.Message) {
 	var server mvdsv.Mvdsv
 	msg.Content.To(&server)
 
@@ -211,7 +211,7 @@ func (s *Streambot) OnStreambotSuggestServer(msg message.Message) {
 	s.publisher.SendMessage(topic.StreambotConnectToServer, server)
 }
 
-func (s *Streambot) OnStreambotConnectToServer(msg message.Message) {
+func (s *Brain) OnStreambotConnectToServer(msg message.Message) {
 	var server mvdsv.Mvdsv
 	msg.Content.To(&server)
 
@@ -235,11 +235,11 @@ func (s *Streambot) OnStreambotConnectToServer(msg message.Message) {
 	s.serverMonitor.SetAddress(server.Address)
 }
 
-func (s *Streambot) ClientCommand(command string) {
+func (s *Brain) ClientCommand(command string) {
 	s.publisher.SendMessage(topic.EzquakeCommand, command)
 }
 
-func (s *Streambot) OnEzquakeCommand(msg message.Message) {
+func (s *Brain) OnEzquakeCommand(msg message.Message) {
 	pfmt.Println("OnEzquakeCommand", msg.Content.ToString())
 
 	if !s.process.IsStarted() {
@@ -249,7 +249,7 @@ func (s *Streambot) OnEzquakeCommand(msg message.Message) {
 	s.pipe.Write(msg.Content.ToString())
 }
 
-func (s *Streambot) OnEzquakeScript(msg message.Message) {
+func (s *Brain) OnEzquakeScript(msg message.Message) {
 	script := msg.Content.ToString()
 
 	switch script {
@@ -262,14 +262,14 @@ func (s *Streambot) OnEzquakeScript(msg message.Message) {
 	}
 }
 
-func (s *Streambot) OnEzquakeStarted(msg message.Message) {
+func (s *Brain) OnEzquakeStarted(msg message.Message) {
 	pfmt.Println("OnEzquakeStarted")
 	s.evaluateTask.Start(10 * time.Second)
 
 	time.AfterFunc(5*time.Second, func() { s.ClientCommand("toggleconsole") })
 }
 
-func (s *Streambot) OnStopEzquake(msg message.Message) {
+func (s *Brain) OnStopEzquake(msg message.Message) {
 	pfmt.Println("OnStopEzquake")
 	s.process.Stop(syscall.SIGTERM)
 
@@ -280,22 +280,22 @@ func (s *Streambot) OnStopEzquake(msg message.Message) {
 	})
 }
 
-func (s *Streambot) OnEzquakeStopped(msg message.Message) {
+func (s *Brain) OnEzquakeStopped(msg message.Message) {
 	pfmt.Println("OnEzquakeStopped")
 	s.serverMonitor.SetAddress("")
 	s.evaluateTask.Stop()
 }
 
-func (s *Streambot) OnStreambotSystemUpdate(msg message.Message) {
+func (s *Brain) OnStreambotSystemUpdate(msg message.Message) {
 	pfmt.Println("OnStreambotSystemUpdate")
 }
 
-func (s *Streambot) OnServerTitleChanged(msg message.Message) {
+func (s *Brain) OnServerTitleChanged(msg message.Message) {
 	pfmt.Println("OnServerTitleChanged", msg.Content.ToString())
 	s.twitch.SetTitle(msg.Content.ToString())
 }
 
-func (s *Streambot) OnServerMatchtagChanged(msg message.Message) {
+func (s *Brain) OnServerMatchtagChanged(msg message.Message) {
 	matchtag := msg.Content.ToString()
 	textScale := calc.StaticTextScale(matchtag)
 	s.ClientCommand(fmt.Sprintf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag))
