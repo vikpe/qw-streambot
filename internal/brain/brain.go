@@ -27,9 +27,9 @@ var pfmt = prettyfmt.New("brain", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
 type Brain struct {
 	clientPlayerName string
-	pipe             ezquake.PipeWriter
+	pipe             *ezquake.PipeWriter
 	process          proc.ProcessController
-	serverMonitor    monitor.ServerMonitor
+	serverMonitor    *monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
 	twitch           twitch.Client
 	publisher        zeromq.Publisher
@@ -40,7 +40,7 @@ type Brain struct {
 func NewBrain(
 	clientPlayerName string,
 	process proc.ProcessController,
-	pipe ezquake.PipeWriter,
+	pipe *ezquake.PipeWriter,
 	twitchClient twitch.Client,
 	publisher zeromq.Publisher,
 	subscriber zeromq.Subscriber,
