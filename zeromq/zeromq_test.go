@@ -12,7 +12,7 @@ import (
 func TestEndToEnd(t *testing.T) {
 	wg := sync.WaitGroup{}
 
-	topicsToSend := []string{"alpha", "beta", "gamma"}
+	topicsToSend := []string{"domain.topic1", "domain.topic2", "domain.topic3"}
 
 	// proxy
 	go func() {
