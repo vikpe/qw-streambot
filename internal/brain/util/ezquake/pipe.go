@@ -12,8 +12,8 @@ type PipeWriter struct {
 	mux      sync.Mutex
 }
 
-func NewPipeWriter(username string) PipeWriter {
-	return PipeWriter{
+func NewPipeWriter(username string) *PipeWriter {
+	return &PipeWriter{
 		username: username,
 		mux:      sync.Mutex{},
 	}
