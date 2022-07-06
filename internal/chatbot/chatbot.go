@@ -8,8 +8,8 @@ import (
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/streambot/com/commander"
 	"github.com/vikpe/streambot/pkg/irc"
-	"github.com/vikpe/streambot/pkg/qws"
 	"github.com/vikpe/streambot/pkg/zeromq"
+	"github.com/vikpe/streambot/third_party/qws"
 	"golang.org/x/exp/slices"
 )
 
