@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -8,7 +9,11 @@ import (
 )
 
 func main() {
-	godotenv.Load("../../.env")
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("unable to load environment variables", err)
+		return
+	}
 
 	bot := chatbot.New(
 		os.Getenv("TWITCH_BOT_USERNAME"),
