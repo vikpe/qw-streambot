@@ -12,7 +12,7 @@ import (
 )
 
 func TestServerMonitor(t *testing.T) {
-	var serverMonitor monitor.ServerMonitor
+	var serverMonitor *monitor.ServerMonitor
 
 	// return mocked values and stop after x calls
 	mockedResponses := []mvdsv.Mvdsv{

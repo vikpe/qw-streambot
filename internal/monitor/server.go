@@ -19,8 +19,8 @@ type ServerMonitor struct {
 	prevState        serverState
 }
 
-func NewServerMonitor(getInfo MvdsvProvider, onEvent zeromq.EventHandler) ServerMonitor {
-	return ServerMonitor{
+func NewServerMonitor(getInfo MvdsvProvider, onEvent zeromq.EventHandler) *ServerMonitor {
+	return &ServerMonitor{
 		isDone:    false,
 		getInfo:   getInfo,
 		onEvent:   onEvent,
