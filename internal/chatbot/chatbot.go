@@ -8,14 +8,14 @@ import (
 	"github.com/gempir/go-twitch-irc/v3"
 	"github.com/vikpe/streambot/internal/commander"
 	"github.com/vikpe/streambot/pkg/irc"
-	"github.com/vikpe/streambot/pkg/prettyprint"
+	"github.com/vikpe/streambot/pkg/prettyfmt"
 	"github.com/vikpe/streambot/pkg/qws"
 	"github.com/vikpe/streambot/pkg/zeromq"
 	"golang.org/x/exp/slices"
 )
 
 func New(username string, accessToken string, channel string, publisherAddress string) *irc.Bot {
-	pp := prettyprint.New("chatbot", color.FgHiBlue)
+	pp := prettyfmt.New("chatbot", color.FgHiBlue)
 	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
 	chatbot := irc.NewBot(username, accessToken, channel, '!')

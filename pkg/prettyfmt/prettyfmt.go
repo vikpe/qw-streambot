@@ -1,4 +1,4 @@
-package prettyprint
+package prettyfmt
 
 import (
 	"fmt"
@@ -11,35 +11,35 @@ const DELIMITER = "  "
 
 var white = color.New(color.FgWhite).SprintFunc()
 
-type PrettyPrinter struct {
+type PrettyFmt struct {
 	prefix string
 }
 
-func New(prefix string, colorCode color.Attribute) PrettyPrinter {
-	return PrettyPrinter{
+func New(prefix string, colorCode color.Attribute) PrettyFmt {
+	return PrettyFmt{
 		prefix: color.New(colorCode).Sprint(prefix),
 	}
 }
 
-func (pp PrettyPrinter) Println(args ...any) {
+func (pp PrettyFmt) Println(args ...any) {
 	pp.printTimestampAndPrefix()
 	fmt.Println(args...)
 }
 
-func (pp PrettyPrinter) Printfln(format string, args ...any) {
+func (pp PrettyFmt) Printfln(format string, args ...any) {
 	pp.Println(fmt.Sprintf(format, args...))
 }
 
-func (pp PrettyPrinter) Print(args ...any) {
+func (pp PrettyFmt) Print(args ...any) {
 	pp.printTimestampAndPrefix()
 	fmt.Print(args...)
 }
 
-func (pp PrettyPrinter) Printf(format string, args ...any) {
+func (pp PrettyFmt) Printf(format string, args ...any) {
 	pp.Print(fmt.Sprintf(format, args...))
 }
 
-func (pp PrettyPrinter) printTimestampAndPrefix() {
+func (pp PrettyFmt) printTimestampAndPrefix() {
 	fmt.Print(timestamp(), DELIMITER, pp.prefix, DELIMITER)
 }
 

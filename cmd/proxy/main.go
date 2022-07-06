@@ -6,7 +6,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/pkg/prettyprint"
+	"github.com/vikpe/streambot/pkg/prettyfmt"
 	"github.com/vikpe/streambot/pkg/zeromq"
 )
 
@@ -21,9 +21,9 @@ func main() {
 		os.Getenv("ZMQ_PROXY_FRONTEND_ADDRESS"),
 		os.Getenv("ZMQ_PROXY_BACKEND_ADDRESS"),
 	)
-	pp := prettyprint.New("proxy", color.FgHiGreen)
-	proxy.OnStart = func() { pp.Println("start") }
-	proxy.OnStop = func(sig os.Signal) { pp.Println(fmt.Sprintf("stop (%s)", sig)) }
-	proxy.OnError = func(err error) { pp.Println("error", err) }
+	pfmt := prettyfmt.New("proxy", color.FgHiGreen)
+	proxy.OnStart = func() { pfmt.Println("start") }
+	proxy.OnStop = func(sig os.Signal) { pfmt.Printfln("stop (%s)", sig) }
+	proxy.OnError = func(err error) { pfmt.Println("error", err) }
 	proxy.Start()
 }

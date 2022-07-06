@@ -13,7 +13,7 @@ import (
 	"github.com/vikpe/streambot/internal/util/calc"
 	"github.com/vikpe/streambot/internal/util/task"
 	"github.com/vikpe/streambot/pkg/ezquake"
-	"github.com/vikpe/streambot/pkg/prettyprint"
+	"github.com/vikpe/streambot/pkg/prettyfmt"
 	"github.com/vikpe/streambot/pkg/proc"
 	"github.com/vikpe/streambot/pkg/qws"
 	"github.com/vikpe/streambot/pkg/zeromq"
@@ -23,7 +23,7 @@ import (
 	"github.com/vikpe/streambot/topic"
 )
 
-var pp = prettyprint.New("brain", color.FgHiMagenta)
+var pfmt = prettyfmt.New("brain", color.FgHiMagenta)
 
 type Streambot struct {
 	clientPlayerName string
@@ -215,7 +215,7 @@ func (s *Streambot) OnStreambotConnectToServer(msg message.Message) {
 	var server mvdsv.Mvdsv
 	msg.Content.To(&server)
 
-	pp.Println("OnStreambotConnectToServer", server.Address, msg.Content)
+	pfmt.Println("OnStreambotConnectToServer", server.Address, msg.Content)
 
 	if s.serverMonitor.GetAddress() == server.Address {
 		fmt.Println(" .. already connected to server")
@@ -240,7 +240,7 @@ func (s *Streambot) ClientCommand(command string) {
 }
 
 func (s *Streambot) OnEzquakeCommand(msg message.Message) {
-	pp.Println("OnEzquakeCommand", msg.Content.ToString())
+	pfmt.Println("OnEzquakeCommand", msg.Content.ToString())
 
 	if !s.process.IsStarted() {
 		return
@@ -263,14 +263,14 @@ func (s *Streambot) OnEzquakeScript(msg message.Message) {
 }
 
 func (s *Streambot) OnEzquakeStarted(msg message.Message) {
-	pp.Println("OnEzquakeStarted")
+	pfmt.Println("OnEzquakeStarted")
 	s.evaluateTask.Start(10 * time.Second)
 
 	time.AfterFunc(5*time.Second, func() { s.ClientCommand("toggleconsole") })
 }
 
 func (s *Streambot) OnStopEzquake(msg message.Message) {
-	pp.Println("OnStopEzquake")
+	pfmt.Println("OnStopEzquake")
 	s.process.Stop(syscall.SIGTERM)
 
 	time.AfterFunc(2*time.Second, func() {
@@ -281,17 +281,17 @@ func (s *Streambot) OnStopEzquake(msg message.Message) {
 }
 
 func (s *Streambot) OnEzquakeStopped(msg message.Message) {
-	pp.Println("OnEzquakeStopped")
+	pfmt.Println("OnEzquakeStopped")
 	s.serverMonitor.SetAddress("")
 	s.evaluateTask.Stop()
 }
 
 func (s *Streambot) OnStreambotSystemUpdate(msg message.Message) {
-	pp.Println("OnStreambotSystemUpdate")
+	pfmt.Println("OnStreambotSystemUpdate")
 }
 
 func (s *Streambot) OnServerTitleChanged(msg message.Message) {
-	pp.Println("OnServerTitleChanged", msg.Content.ToString())
+	pfmt.Println("OnServerTitleChanged", msg.Content.ToString())
 	s.twitch.SetTitle(msg.Content.ToString())
 }
 

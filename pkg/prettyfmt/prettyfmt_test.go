@@ -1,4 +1,4 @@
-package prettyprint_test
+package prettyfmt_test
 
 import (
 	"fmt"
@@ -9,12 +9,12 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/pkg/prettyprint"
+	"github.com/vikpe/streambot/pkg/prettyfmt"
 )
 
 func TestPrettyPrinter_Println(t *testing.T) {
 	testRun := func() {
-		printer := prettyprint.New("alpha", color.FgCyan)
+		printer := prettyfmt.New("alpha", color.FgCyan)
 		printer.Println("hello", 123)
 	}
 
@@ -25,7 +25,7 @@ func TestPrettyPrinter_Println(t *testing.T) {
 
 func TestPrettyPrinter_Print(t *testing.T) {
 	testRun := func() {
-		printer := prettyprint.New("alpha", color.FgCyan)
+		printer := prettyfmt.New("alpha", color.FgCyan)
 		printer.Print("hello", 123)
 	}
 
