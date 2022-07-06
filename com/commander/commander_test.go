@@ -36,6 +36,15 @@ func TestCommander_DisableAuto(t *testing.T) {
 	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
+func TestCommander_Evaluate(t *testing.T) {
+	publisher := test_helpers.NewPublisherMock()
+	cmder := commander.NewCommander(publisher.SendMessage)
+	cmder.Evaluate()
+
+	expectedCalls := [][]any{{"streambot.evaluate"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
+}
+
 func TestCommander_EnableAuto(t *testing.T) {
 	publisher := test_helpers.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)

@@ -21,9 +21,8 @@ const (
 	EzquakeScript  = "ezquake.script"
 	StopEzquake    = "ezquake.stop"
 
-	StreambotConnectToServer = "streambot.connect_to_server"
-	StreambotSuggestServer   = "streambot.suggest_server"
-	StreambotEnableAuto      = "streambot.enable_auto"
-	StreambotDisableAuto     = "streambot.disable_auto"
-	StreambotEvaluate        = "streambot.evaluate"
+	StreambotSuggestServer = "streambot.suggest_server"
+	StreambotEnableAuto    = "streambot.enable_auto"
+	StreambotDisableAuto   = "streambot.disable_auto"
+	StreambotEvaluate      = "streambot.evaluate"
 )

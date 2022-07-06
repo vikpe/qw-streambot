@@ -10,6 +10,7 @@ import (
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
+	"github.com/vikpe/streambot/com/commander"
 	"github.com/vikpe/streambot/com/topic"
 	"github.com/vikpe/streambot/internal/brain/util/calc"
 	"github.com/vikpe/streambot/internal/brain/util/ezquake"
@@ -34,6 +35,7 @@ type Brain struct {
 	twitch           twitch.Client
 	publisher        zeromq.Publisher
 	subscriber       zeromq.Subscriber
+	commander        commander.Commander
 	AutoMode         bool
 }
 
@@ -52,8 +54,8 @@ func NewBrain(
 		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
 		twitch:           twitchClient,
-		publisher:        publisher,
 		subscriber:       subscriber,
+		commander:        commander.NewCommander(publisher.SendMessage),
 		AutoMode:         true,
 	}
 }
@@ -72,6 +74,7 @@ func (s *Brain) Start() {
 		s.evaluateTask.Start(10 * time.Second)
 	}
 
+	// block forever
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	wg.Wait()
@@ -80,22 +83,21 @@ func (s *Brain) Start() {
 func (s *Brain) OnMessage(msg message.Message) {
 	handlers := map[string]message.Handler{
 		// commands
-		topic.StreambotEnableAuto:      s.OnStreambotEnableAuto,
-		topic.StreambotDisableAuto:     s.OnStreambotDisableAuto,
-		topic.StreambotConnectToServer: s.OnStreambotConnectToServer,
-		topic.StreambotSuggestServer:   s.OnStreambotSuggestServer,
-		topic.EzquakeCommand:           s.OnEzquakeCommand,
-		topic.EzquakeScript:            s.OnEzquakeScript,
-		topic.StopEzquake:              s.OnStopEzquake,
-		topic.StreambotEvaluate:        s.OnStreambotEvaluate,
+		topic.StreambotDisableAuto:   s.OnStreambotDisableAuto,
+		topic.StreambotEnableAuto:    s.OnStreambotEnableAuto,
+		topic.StreambotEvaluate:      s.OnStreambotEvaluate,
+		topic.StreambotSuggestServer: s.OnStreambotSuggestServer,
+		topic.EzquakeCommand:         s.OnEzquakeCommand,
+		topic.EzquakeScript:          s.OnEzquakeScript,
+		topic.StopEzquake:            s.OnStopEzquake,
 
 		// ezquake events
 		topic.EzquakeStarted: s.OnEzquakeStarted,
 		topic.EzquakeStopped: s.OnEzquakeStopped,
 
 		// server events
-		topic.ServerTitleChanged:    s.OnServerTitleChanged,
 		topic.ServerMatchtagChanged: s.OnServerMatchtagChanged,
+		topic.ServerTitleChanged:    s.OnServerTitleChanged,
 	}
 
 	if handler, ok := handlers[msg.Topic]; ok {
@@ -107,7 +109,7 @@ func (s *Brain) OnMessage(msg message.Message) {
 
 func (s *Brain) OnStreambotEnableAuto(msg message.Message) {
 	s.AutoMode = true
-	s.publisher.SendMessage(topic.StreambotEvaluate)
+	s.commander.Evaluate()
 }
 
 func (s *Brain) OnStreambotDisableAuto(msg message.Message) {
@@ -132,7 +134,7 @@ func (s *Brain) ValidateCurrentServer() {
 
 	altName := fmt.Sprintf("%s(1)", s.clientPlayerName)
 	if analyze.HasSpectator(currentServer, altName) {
-		s.ClientCommand(fmt.Sprintf("name %s", s.clientPlayerName))
+		s.commander.Command(fmt.Sprintf("name %s", s.clientPlayerName))
 		return
 	}
 
@@ -177,7 +179,7 @@ func (s *Brain) evaluateAutoModeEnabled() {
 		return
 	}
 
-	s.publisher.SendMessage(topic.StreambotConnectToServer, bestServer)
+	s.connectToServer(bestServer)
 }
 
 func (s *Brain) evaluateAutoModeDisabled() {
@@ -199,22 +201,19 @@ func (s *Brain) evaluateAutoModeDisabled() {
 
 	fmt.Println("server is shit: enable auto")
 
-	s.publisher.SendMessage(topic.StreambotEnableAuto)
+	s.commander.EnableAuto()
 }
 
 func (s *Brain) OnStreambotSuggestServer(msg message.Message) {
 	var server mvdsv.Mvdsv
 	msg.Content.To(&server)
 
-	s.publisher.SendMessage(topic.StreambotDisableAuto)
-	s.publisher.SendMessage(topic.StreambotConnectToServer, server)
+	s.commander.DisableAuto()
+	s.connectToServer(server)
 }
 
-func (s *Brain) OnStreambotConnectToServer(msg message.Message) {
-	var server mvdsv.Mvdsv
-	msg.Content.To(&server)
-
-	pfmt.Println("OnStreambotConnectToServer", server.Address, msg.Content)
+func (s *Brain) connectToServer(server mvdsv.Mvdsv) {
+	pfmt.Println("connectToServer", server.Address, server.Title)
 
 	if s.serverMonitor.GetAddress() == server.Address {
 		fmt.Println(" .. already connected to server")
@@ -222,20 +221,16 @@ func (s *Brain) OnStreambotConnectToServer(msg message.Message) {
 	}
 
 	if len(server.QtvStream.Url) > 0 {
-		s.ClientCommand(fmt.Sprintf("qtvplay %s", server.QtvStream.Url))
+		s.commander.Command(fmt.Sprintf("qtvplay %s", server.QtvStream.Url))
 	} else {
-		s.ClientCommand(fmt.Sprintf("connect %s", server.Address))
+		s.commander.Command(fmt.Sprintf("connect %s", server.Address))
 	}
 
 	time.AfterFunc(4*time.Second, func() {
-		s.ClientCommand("bot_track")
+		s.commander.Autotrack()
 	})
 
 	s.serverMonitor.SetAddress(server.Address)
-}
-
-func (s *Brain) ClientCommand(command string) {
-	s.publisher.SendMessage(topic.EzquakeCommand, command)
 }
 
 func (s *Brain) OnEzquakeCommand(msg message.Message) {
@@ -253,11 +248,11 @@ func (s *Brain) OnEzquakeScript(msg message.Message) {
 
 	switch script {
 	case "lastscores":
-		s.ClientCommand("toggleconsole;lastscores")
-		time.AfterFunc(8*time.Second, func() { s.ClientCommand("toggleconsole") })
+		s.commander.Command("toggleconsole;lastscores")
+		time.AfterFunc(8*time.Second, func() { s.commander.Command("toggleconsole") })
 	case "showscores":
-		s.ClientCommand("+showscores")
-		time.AfterFunc(8*time.Second, func() { s.ClientCommand("-showscores") })
+		s.commander.Command("+showscores")
+		time.AfterFunc(8*time.Second, func() { s.commander.Command("-showscores") })
 	}
 }
 
@@ -265,7 +260,7 @@ func (s *Brain) OnEzquakeStarted(msg message.Message) {
 	pfmt.Println("OnEzquakeStarted")
 	s.evaluateTask.Start(10 * time.Second)
 
-	time.AfterFunc(5*time.Second, func() { s.ClientCommand("toggleconsole") })
+	time.AfterFunc(5*time.Second, func() { s.commander.Command("toggleconsole") })
 }
 
 func (s *Brain) OnStopEzquake(msg message.Message) {
@@ -293,5 +288,5 @@ func (s *Brain) OnServerTitleChanged(msg message.Message) {
 func (s *Brain) OnServerMatchtagChanged(msg message.Message) {
 	matchtag := msg.Content.ToString()
 	textScale := calc.StaticTextScale(matchtag)
-	s.ClientCommand(fmt.Sprintf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag))
+	s.commander.Command(fmt.Sprintf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag))
 }

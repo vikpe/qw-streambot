@@ -31,6 +31,10 @@ func (c Commander) EnableAuto() {
 	c.sendMessage(topic.StreambotEnableAuto)
 }
 
+func (c Commander) Evaluate() {
+	c.sendMessage(topic.StreambotEvaluate)
+}
+
 func (c Commander) DisableAuto() {
 	c.sendMessage(topic.StreambotDisableAuto)
 }
