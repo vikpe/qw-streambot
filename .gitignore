@@ -3,5 +3,4 @@ cmd/brain/brain
 cmd/chatbot/chatbot
 cmd/proxy/proxy
 coverage.out
-streambot
 .env
