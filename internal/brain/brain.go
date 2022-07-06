@@ -7,13 +7,13 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 	"github.com/vikpe/streambot/internal/monitor"
 	"github.com/vikpe/streambot/internal/util/calc"
 	"github.com/vikpe/streambot/internal/util/task"
 	"github.com/vikpe/streambot/pkg/ezquake"
-	"github.com/vikpe/streambot/pkg/prettyfmt"
 	"github.com/vikpe/streambot/pkg/proc"
 	"github.com/vikpe/streambot/pkg/qws"
 	"github.com/vikpe/streambot/pkg/zeromq"
@@ -23,7 +23,7 @@ import (
 	"github.com/vikpe/streambot/topic"
 )
 
-var pfmt = prettyfmt.New("brain", color.FgHiMagenta)
+var pfmt = prettyfmt.New("brain", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
 type Brain struct {
 	clientPlayerName string

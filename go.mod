@@ -10,7 +10,8 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/nicklaw5/helix/v2 v2.5.0
 	github.com/pebbe/zmq4 v1.2.9
-	github.com/stretchr/testify v1.7.4
+	github.com/stretchr/testify v1.8.0
+	github.com/vikpe/prettyfmt v0.0.0-20220706133232-1ac459254ba0
 	github.com/vikpe/serverstat v0.1.83
 	golang.org/x/exp v0.0.0-20220613132600-b0d781184e0d
 )

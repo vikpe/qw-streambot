@@ -1,35 +1,34 @@
 package chatbot
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/fatih/color"
 	"github.com/gempir/go-twitch-irc/v3"
+	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/streambot/internal/commander"
 	"github.com/vikpe/streambot/pkg/irc"
-	"github.com/vikpe/streambot/pkg/prettyfmt"
 	"github.com/vikpe/streambot/pkg/qws"
 	"github.com/vikpe/streambot/pkg/zeromq"
 	"golang.org/x/exp/slices"
 )
 
 func New(username string, accessToken string, channel string, publisherAddress string) *irc.Bot {
-	pp := prettyfmt.New("chatbot", color.FgHiBlue)
+	var pfmt = prettyfmt.New("chatbot", color.FgHiBlue, "15:04:05", color.FgWhite)
 	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
 	chatbot := irc.NewBot(username, accessToken, channel, '!')
 
 	chatbot.OnConnected = func() {
-		pp.Println("connected as", username)
+		pfmt.Println("connected as", username)
 	}
 
 	chatbot.OnStarted = func() {
-		pp.Println("start")
+		pfmt.Println("start")
 	}
 
 	chatbot.OnStopped = func(sig os.Signal) {
-		pp.Println(fmt.Sprintf("stop (%s)", sig))
+		pfmt.Printfln("stop (%s)", sig)
 	}
 
 	chatbot.AddCommand("auto", func(cmd irc.Command, msg twitch.PrivateMessage) {
