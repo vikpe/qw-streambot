@@ -1,6 +1,7 @@
 .idea/
 cmd/brain/brain
 cmd/chatbot/chatbot
+cmd/chanman/chanman
 cmd/proxy/proxy
 coverage.out
 .env
