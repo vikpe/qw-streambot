@@ -133,7 +133,7 @@ func (b *Brain) ValidateCurrentServer() {
 		return
 	}
 
-	altName := fmt.Sprintf("%b(1)", b.clientPlayerName)
+	altName := fmt.Sprintf("%s(1)", b.clientPlayerName)
 	if analyze.HasSpectator(currentServer, altName) {
 		b.commander.Command(fmt.Sprintf("name %b", b.clientPlayerName))
 		return
