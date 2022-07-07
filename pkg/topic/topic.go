@@ -17,6 +17,8 @@ const (
 
 // commands
 const (
+	ChatbotSay = "chatbot.say"
+
 	EzquakeCommand = "ezquake.command"
 	EzquakeScript  = "ezquake.script"
 	StopEzquake    = "ezquake.stop"

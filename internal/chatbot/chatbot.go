@@ -8,19 +8,38 @@ import (
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/streambot/internal/pkg/irc"
 	"github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 	"github.com/vikpe/streambot/internal/third_party/qws"
 	"github.com/vikpe/streambot/pkg/commander"
+	"github.com/vikpe/streambot/pkg/topic"
 	"golang.org/x/exp/slices"
 )
 
-func New(username string, accessToken string, channel string, publisherAddress string) *irc.Bot {
+type Chatbot struct {
+	*irc.Bot
+	subscriber zeromq.Subscriber
+}
+
+func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *Chatbot {
 	var pfmt = prettyfmt.New("chatbot", color.FgHiBlue, "15:04:05", color.FgWhite)
-	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
-	chatbot := irc.NewBot(username, accessToken, channel, '!')
+	chatbot := Chatbot{
+		Bot:        irc.NewBot(username, accessToken, channel, '!'),
+		subscriber: zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
+	}
 
+	// zmq messages
+	onZmqMessage := func(message message.Message) {
+		switch message.Topic {
+		case topic.ChatbotSay:
+			chatbot.Say(message.Content.ToString())
+		}
+	}
+
+	// bot events
 	chatbot.OnConnected = func() {
 		pfmt.Println("connected as", username)
+		chatbot.subscriber.Start(onZmqMessage)
 	}
 
 	chatbot.OnStarted = func() {
@@ -30,6 +49,9 @@ func New(username string, accessToken string, channel string, publisherAddress s
 	chatbot.OnStopped = func(sig os.Signal) {
 		pfmt.Printfln("stop (%s)", sig)
 	}
+
+	// channel commands
+	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
 	chatbot.AddCommand("auto", func(cmd irc.Command, msg twitch.PrivateMessage) {
 		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsToString())
@@ -87,5 +109,5 @@ func New(username string, accessToken string, channel string, publisherAddress s
 		cmder.Track(cmd.ArgsToString())
 	})
 
-	return chatbot
+	return &chatbot
 }

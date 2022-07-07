@@ -19,6 +19,7 @@ func main() {
 		os.Getenv("TWITCH_BOT_USERNAME"),
 		os.Getenv("TWITCH_BOT_CHAT_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_USERNAME"),
+		os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"),
 		os.Getenv("ZMQ_PUBLISHER_ADDRESS"),
 	)
 	bot.Start()

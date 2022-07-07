@@ -23,6 +23,10 @@ func (c Commander) Autotrack() {
 	c.sendMessage(topic.EzquakeCommand, "bot_track")
 }
 
+func (c Commander) ChatbotSay(text string) {
+	c.sendMessage(topic.ChatbotSay, text)
+}
+
 func (c Commander) Command(cmd string) {
 	c.sendMessage(topic.EzquakeCommand, cmd)
 }
