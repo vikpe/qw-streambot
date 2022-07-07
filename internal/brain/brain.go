@@ -90,7 +90,7 @@ func (b *Brain) OnMessage(msg message.Message) {
 		topic.StreambotSuggestServer: b.OnStreambotSuggestServer,
 		topic.EzquakeCommand:         b.OnEzquakeCommand,
 		topic.EzquakeScript:          b.OnEzquakeScript,
-		topic.StopEzquake:            b.OnStopEzquake,
+		topic.EzquakeStopProcess:     b.OnStopEzquake,
 
 		// ezquake events
 		topic.EzquakeStarted: b.OnEzquakeStarted,

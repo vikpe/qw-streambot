@@ -56,7 +56,7 @@ func (c Commander) SuggestServer(server mvdsv.Mvdsv) {
 }
 
 func (c Commander) StopEzquake() {
-	c.sendMessage(topic.StopEzquake)
+	c.sendMessage(topic.EzquakeStopProcess)
 }
 
 func (c Commander) Track(target string) {

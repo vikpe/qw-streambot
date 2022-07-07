@@ -19,9 +19,9 @@ const (
 const (
 	ChatbotSay = "chatbot.say"
 
-	EzquakeCommand = "ezquake.command"
-	EzquakeScript  = "ezquake.script"
-	StopEzquake    = "ezquake.stop"
+	EzquakeCommand     = "ezquake.command"
+	EzquakeScript      = "ezquake.script"
+	EzquakeStopProcess = "ezquake.stop"
 
 	StreambotSuggestServer = "streambot.suggest_server"
 	StreambotEnableAuto    = "streambot.enable_auto"
