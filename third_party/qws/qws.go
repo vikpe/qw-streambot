@@ -65,5 +65,9 @@ func IsRelevantServer(server mvdsv.Mvdsv) bool {
 		return false
 	}
 
+	if server.Mode.IsFortress() {
+		return false
+	}
+
 	return analyze.IsSpeccable(server)
 }
