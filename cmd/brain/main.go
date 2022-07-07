@@ -8,7 +8,7 @@ import (
 	"github.com/vikpe/streambot/internal/brain"
 	"github.com/vikpe/streambot/internal/brain/util/proc"
 	"github.com/vikpe/streambot/internal/pkg/ezquake"
-	zeromq2 "github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/third_party/twitch"
 )
 
@@ -27,8 +27,8 @@ func main() {
 		os.Getenv("TWITCH_CHANNEL_TITLE_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_BROADCASTER_ID"),
 	)
-	publisher := zeromq2.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
-	subscriber := zeromq2.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), zeromq2.TopicsAll)
+	publisher := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
+	subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), zeromq.TopicsAll)
 
 	brn := brain.NewBrain(
 		playerName,
