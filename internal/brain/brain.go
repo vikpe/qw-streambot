@@ -60,18 +60,18 @@ func NewBrain(
 	}
 }
 
-func (s *Brain) Start() {
+func (b *Brain) Start() {
 	// event listeners
-	s.subscriber.Start(s.OnMessage)
+	b.subscriber.Start(b.OnMessage)
 	zeromq.WaitForConnection()
 
 	// event dispatchers
-	processMonitor := monitor.NewProcessMonitor(s.process.IsStarted, s.publisher.SendMessage)
+	processMonitor := monitor.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
 	processMonitor.Start(3 * time.Second)
-	s.serverMonitor.Start(5 * time.Second)
+	b.serverMonitor.Start(5 * time.Second)
 
-	if s.process.IsStarted() {
-		s.evaluateTask.Start(10 * time.Second)
+	if b.process.IsStarted() {
+		b.evaluateTask.Start(10 * time.Second)
 	}
 
 	// block forever
@@ -80,24 +80,24 @@ func (s *Brain) Start() {
 	wg.Wait()
 }
 
-func (s *Brain) OnMessage(msg message.Message) {
+func (b *Brain) OnMessage(msg message.Message) {
 	handlers := map[string]message.Handler{
 		// commands
-		topic.StreambotDisableAuto:   s.OnStreambotDisableAuto,
-		topic.StreambotEnableAuto:    s.OnStreambotEnableAuto,
-		topic.StreambotEvaluate:      s.OnStreambotEvaluate,
-		topic.StreambotSuggestServer: s.OnStreambotSuggestServer,
-		topic.EzquakeCommand:         s.OnEzquakeCommand,
-		topic.EzquakeScript:          s.OnEzquakeScript,
-		topic.StopEzquake:            s.OnStopEzquake,
+		topic.StreambotDisableAuto:   b.OnStreambotDisableAuto,
+		topic.StreambotEnableAuto:    b.OnStreambotEnableAuto,
+		topic.StreambotEvaluate:      b.OnStreambotEvaluate,
+		topic.StreambotSuggestServer: b.OnStreambotSuggestServer,
+		topic.EzquakeCommand:         b.OnEzquakeCommand,
+		topic.EzquakeScript:          b.OnEzquakeScript,
+		topic.StopEzquake:            b.OnStopEzquake,
 
 		// ezquake events
-		topic.EzquakeStarted: s.OnEzquakeStarted,
-		topic.EzquakeStopped: s.OnEzquakeStopped,
+		topic.EzquakeStarted: b.OnEzquakeStarted,
+		topic.EzquakeStopped: b.OnEzquakeStopped,
 
 		// server events
-		topic.ServerMatchtagChanged: s.OnServerMatchtagChanged,
-		topic.ServerTitleChanged:    s.OnServerTitleChanged,
+		topic.ServerMatchtagChanged: b.OnServerMatchtagChanged,
+		topic.ServerTitleChanged:    b.OnServerTitleChanged,
 	}
 
 	if handler, ok := handlers[msg.Topic]; ok {
@@ -107,57 +107,57 @@ func (s *Brain) OnMessage(msg message.Message) {
 	}
 }
 
-func (s *Brain) OnStreambotEnableAuto(msg message.Message) {
-	s.AutoMode = true
-	s.commander.Evaluate()
+func (b *Brain) OnStreambotEnableAuto(msg message.Message) {
+	b.AutoMode = true
+	b.commander.Evaluate()
 }
 
-func (s *Brain) OnStreambotDisableAuto(msg message.Message) {
-	s.AutoMode = false
+func (b *Brain) OnStreambotDisableAuto(msg message.Message) {
+	b.AutoMode = false
 }
 
-func (s *Brain) ValidateCurrentServer() {
-	if "" == s.serverMonitor.GetAddress() {
+func (b *Brain) ValidateCurrentServer() {
+	if "" == b.serverMonitor.GetAddress() {
 		return
 	}
 
-	secondsConnected := time.Now().Sub(s.serverMonitor.GetAddressTimestamp()).Seconds()
+	secondsConnected := time.Now().Sub(b.serverMonitor.GetAddressTimestamp()).Seconds()
 	connectionGracePeriod := 10.0
 	if secondsConnected <= connectionGracePeriod {
 		return
 	}
 
-	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
-	if analyze.HasSpectator(currentServer, s.clientPlayerName) {
+	currentServer := sstat.GetMvdsvServer(b.serverMonitor.GetAddress())
+	if analyze.HasSpectator(currentServer, b.clientPlayerName) {
 		return
 	}
 
-	altName := fmt.Sprintf("%s(1)", s.clientPlayerName)
+	altName := fmt.Sprintf("%b(1)", b.clientPlayerName)
 	if analyze.HasSpectator(currentServer, altName) {
-		s.commander.Command(fmt.Sprintf("name %s", s.clientPlayerName))
+		b.commander.Command(fmt.Sprintf("name %b", b.clientPlayerName))
 		return
 	}
 
 	fmt.Println("not connected to current server (reset server address)", currentServer.SpectatorNames, currentServer.QtvStream.SpectatorNames)
-	s.serverMonitor.SetAddress("")
+	b.serverMonitor.SetAddress("")
 }
 
-func (s *Brain) OnStreambotEvaluate(msg message.Message) {
-	if !s.process.IsStarted() {
+func (b *Brain) OnStreambotEvaluate(msg message.Message) {
+	if !b.process.IsStarted() {
 		return
 	}
 
-	s.ValidateCurrentServer()
+	b.ValidateCurrentServer()
 
-	if s.AutoMode {
-		s.evaluateAutoModeEnabled()
+	if b.AutoMode {
+		b.evaluateAutoModeEnabled()
 	} else {
-		s.evaluateAutoModeDisabled()
+		b.evaluateAutoModeDisabled()
 	}
 }
 
-func (s *Brain) evaluateAutoModeEnabled() {
-	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
+func (b *Brain) evaluateAutoModeEnabled() {
+	currentServer := sstat.GetMvdsvServer(b.serverMonitor.GetAddress())
 	shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
 
 	if !shouldConsiderChange {
@@ -176,11 +176,11 @@ func (s *Brain) evaluateAutoModeEnabled() {
 		return
 	}
 
-	s.connectToServer(bestServer)
+	b.connectToServer(bestServer)
 }
 
-func (s *Brain) evaluateAutoModeDisabled() {
-	currentServer := sstat.GetMvdsvServer(s.serverMonitor.GetAddress())
+func (b *Brain) evaluateAutoModeDisabled() {
+	currentServer := sstat.GetMvdsvServer(b.serverMonitor.GetAddress())
 	const MinScore = 30
 	isOkServer := currentServer.Score >= MinScore
 
@@ -189,96 +189,96 @@ func (s *Brain) evaluateAutoModeDisabled() {
 		return
 	}
 
-	secondsConnected := time.Now().Sub(s.serverMonitor.GetAddressTimestamp()).Seconds()
+	secondsConnected := time.Now().Sub(b.serverMonitor.GetAddressTimestamp()).Seconds()
 	gracePeriod := 60.0 * 5 // 5 minutes
 
 	if secondsConnected < gracePeriod {
 		return
 	}
 
-	s.commander.EnableAuto()
+	b.commander.EnableAuto()
 }
 
-func (s *Brain) OnStreambotSuggestServer(msg message.Message) {
+func (b *Brain) OnStreambotSuggestServer(msg message.Message) {
 	var server mvdsv.Mvdsv
 	msg.Content.To(&server)
 
-	s.commander.DisableAuto()
-	s.connectToServer(server)
+	b.commander.DisableAuto()
+	b.connectToServer(server)
 }
 
-func (s *Brain) connectToServer(server mvdsv.Mvdsv) {
+func (b *Brain) connectToServer(server mvdsv.Mvdsv) {
 	pfmt.Println("connectToServer", server.Address, server.Title)
 
-	if s.serverMonitor.GetAddress() == server.Address {
+	if b.serverMonitor.GetAddress() == server.Address {
 		fmt.Println(" .. already connected to server")
 		return
 	}
 
 	if len(server.QtvStream.Url) > 0 {
-		s.commander.Command(fmt.Sprintf("qtvplay %s", server.QtvStream.Url))
+		b.commander.Command(fmt.Sprintf("qtvplay %b", server.QtvStream.Url))
 	} else {
-		s.commander.Command(fmt.Sprintf("connect %s", server.Address))
+		b.commander.Command(fmt.Sprintf("connect %b", server.Address))
 	}
 
 	time.AfterFunc(4*time.Second, func() {
-		s.commander.Autotrack()
+		b.commander.Autotrack()
 	})
 
-	s.serverMonitor.SetAddress(server.Address)
+	b.serverMonitor.SetAddress(server.Address)
 }
 
-func (s *Brain) OnEzquakeCommand(msg message.Message) {
-	if !s.process.IsStarted() {
+func (b *Brain) OnEzquakeCommand(msg message.Message) {
+	if !b.process.IsStarted() {
 		return
 	}
 
-	s.pipe.Write(msg.Content.ToString())
+	b.pipe.Write(msg.Content.ToString())
 }
 
-func (s *Brain) OnEzquakeScript(msg message.Message) {
+func (b *Brain) OnEzquakeScript(msg message.Message) {
 	script := msg.Content.ToString()
 
 	switch script {
 	case "lastscores":
-		s.commander.Command("toggleconsole;lastscores")
-		time.AfterFunc(8*time.Second, func() { s.commander.Command("toggleconsole") })
+		b.commander.Command("toggleconsole;lastscores")
+		time.AfterFunc(8*time.Second, func() { b.commander.Command("toggleconsole") })
 	case "showscores":
-		s.commander.Command("+showscores")
-		time.AfterFunc(8*time.Second, func() { s.commander.Command("-showscores") })
+		b.commander.Command("+showscores")
+		time.AfterFunc(8*time.Second, func() { b.commander.Command("-showscores") })
 	}
 }
 
-func (s *Brain) OnEzquakeStarted(msg message.Message) {
+func (b *Brain) OnEzquakeStarted(msg message.Message) {
 	pfmt.Println("OnEzquakeStarted")
-	s.evaluateTask.Start(10 * time.Second)
-	time.AfterFunc(5*time.Second, func() { s.commander.Command("toggleconsole") })
+	b.evaluateTask.Start(10 * time.Second)
+	time.AfterFunc(5*time.Second, func() { b.commander.Command("toggleconsole") })
 }
 
-func (s *Brain) OnStopEzquake(msg message.Message) {
+func (b *Brain) OnStopEzquake(msg message.Message) {
 	pfmt.Println("OnStopEzquake")
-	s.process.Stop(syscall.SIGTERM)
+	b.process.Stop(syscall.SIGTERM)
 
 	time.AfterFunc(2*time.Second, func() {
-		if s.process.IsStarted() {
-			s.process.Stop(syscall.SIGKILL)
+		if b.process.IsStarted() {
+			b.process.Stop(syscall.SIGKILL)
 		}
 	})
 }
 
-func (s *Brain) OnEzquakeStopped(msg message.Message) {
+func (b *Brain) OnEzquakeStopped(msg message.Message) {
 	pfmt.Println("OnEzquakeStopped")
-	s.serverMonitor.SetAddress("")
-	s.evaluateTask.Stop()
+	b.serverMonitor.SetAddress("")
+	b.evaluateTask.Stop()
 }
 
-func (s *Brain) OnServerTitleChanged(msg message.Message) {
+func (b *Brain) OnServerTitleChanged(msg message.Message) {
 	pfmt.Println("OnServerTitleChanged", msg.Content.ToString())
-	s.twitch.SetTitle(msg.Content.ToString())
+	b.twitch.SetTitle(msg.Content.ToString())
 }
 
-func (s *Brain) OnServerMatchtagChanged(msg message.Message) {
+func (b *Brain) OnServerMatchtagChanged(msg message.Message) {
 	matchtag := msg.Content.ToString()
 	textScale := calc.StaticTextScale(matchtag)
-	s.commander.Command(fmt.Sprintf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag))
+	b.commander.Command(fmt.Sprintf("hud_static_text_scale %f;bot_set_statictext %b", textScale, matchtag))
 }
