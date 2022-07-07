@@ -7,17 +7,11 @@ import (
 )
 
 func GetMvdsvServer(address string) mvdsv.Mvdsv {
-	nullResult := mvdsv.Mvdsv{}
-
-	if "" == address {
-		return nullResult
-	}
-
-	genericServer, err := serverstat.GetInfo(address)
+	server, err := serverstat.GetInfo(address)
 
 	if err != nil {
-		return nullResult
+		return mvdsv.Mvdsv{}
 	}
 
-	return convert.ToMvdsv(genericServer)
+	return convert.ToMvdsv(server)
 }
