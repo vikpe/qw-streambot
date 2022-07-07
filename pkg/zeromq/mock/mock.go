@@ -1,4 +1,4 @@
-package test_helpers
+package mock
 
 type PublisherMock struct {
 	SendMessageCalls [][]any

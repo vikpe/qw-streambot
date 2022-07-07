@@ -6,11 +6,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/streambot/com/commander"
-	"github.com/vikpe/streambot/pkg/zeromq/test_helpers"
+	"github.com/vikpe/streambot/pkg/zeromq/mock"
 )
 
 func TestCommander_Autotrack(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Autotrack()
 
@@ -19,7 +19,7 @@ func TestCommander_Autotrack(t *testing.T) {
 }
 
 func TestCommander_Command(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Command("console")
 
@@ -28,7 +28,7 @@ func TestCommander_Command(t *testing.T) {
 }
 
 func TestCommander_DisableAuto(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.DisableAuto()
 
@@ -37,7 +37,7 @@ func TestCommander_DisableAuto(t *testing.T) {
 }
 
 func TestCommander_Evaluate(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Evaluate()
 
@@ -46,7 +46,7 @@ func TestCommander_Evaluate(t *testing.T) {
 }
 
 func TestCommander_EnableAuto(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.EnableAuto()
 
@@ -55,7 +55,7 @@ func TestCommander_EnableAuto(t *testing.T) {
 }
 
 func TestCommander_Lastscores(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Lastscores()
 
@@ -64,7 +64,7 @@ func TestCommander_Lastscores(t *testing.T) {
 }
 
 func TestCommander_SuggestServer(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	server := mvdsv.Mvdsv{Address: "qw.fopp.dk:27501"}
 	cmder.SuggestServer(server)
@@ -74,7 +74,7 @@ func TestCommander_SuggestServer(t *testing.T) {
 }
 
 func TestCommander_Showscores(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Showscores()
 
@@ -83,7 +83,7 @@ func TestCommander_Showscores(t *testing.T) {
 }
 
 func TestCommander_StopEzquake(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.StopEzquake()
 
@@ -92,7 +92,7 @@ func TestCommander_StopEzquake(t *testing.T) {
 }
 
 func TestCommander_Track(t *testing.T) {
-	publisher := test_helpers.NewPublisherMock()
+	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.Track("xantom")
 

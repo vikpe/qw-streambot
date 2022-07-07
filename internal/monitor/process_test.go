@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/vikpe/streambot/internal/monitor"
-	"github.com/vikpe/streambot/pkg/zeromq/test_helpers"
+	"github.com/vikpe/streambot/pkg/zeromq/mock"
 )
 
 func TestProcessMonitor(t *testing.T) {
@@ -27,7 +27,7 @@ func TestProcessMonitor(t *testing.T) {
 	}
 
 	// run monitor
-	publisherMock := test_helpers.NewPublisherMock()
+	publisherMock := mock.NewPublisherMock()
 	processMonitor = monitor.NewProcessMonitor(getIsStarted, publisherMock.SendMessage)
 	processMonitor.Start(time.Microsecond)
 	time.Sleep(time.Millisecond * 20)

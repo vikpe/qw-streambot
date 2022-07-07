@@ -8,7 +8,7 @@ import (
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/qsettings"
 	"github.com/vikpe/streambot/internal/monitor"
-	"github.com/vikpe/streambot/pkg/zeromq/test_helpers"
+	"github.com/vikpe/streambot/pkg/zeromq/mock"
 )
 
 func TestServerMonitor(t *testing.T) {
@@ -35,7 +35,7 @@ func TestServerMonitor(t *testing.T) {
 
 		return server
 	}
-	publisherMock := test_helpers.NewPublisherMock()
+	publisherMock := mock.NewPublisherMock()
 	serverMonitor = monitor.NewServerMonitor(getInfo, publisherMock.SendMessage)
 	serverMonitor.Start(time.Microsecond)
 	time.Sleep(time.Millisecond * 20)
