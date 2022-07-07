@@ -5,7 +5,7 @@ import (
 
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/streambot/com/topic"
-	"github.com/vikpe/streambot/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/pkg/zeromq"
 )
 
 type MvdsvProvider func(address string) mvdsv.Mvdsv

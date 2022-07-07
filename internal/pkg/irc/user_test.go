@@ -5,7 +5,7 @@ import (
 
 	"github.com/gempir/go-twitch-irc/v3"
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/pkg/irc"
+	"github.com/vikpe/streambot/internal/pkg/irc"
 )
 
 func TestIsBroadcaster(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/pkg/zeromq/message"
+	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 )
 
 func TestSerialization(t *testing.T) {

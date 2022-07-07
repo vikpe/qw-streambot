@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/pkg/irc"
+	"github.com/vikpe/streambot/internal/pkg/irc"
 )
 
 func TestIsCommand(t *testing.T) {

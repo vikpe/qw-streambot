@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	zeromq2 "github.com/vikpe/streambot/pkg/zeromq"
-	"github.com/vikpe/streambot/pkg/zeromq/message"
+	"github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 )
 
 func TestEndToEnd(t *testing.T) {
@@ -16,16 +16,16 @@ func TestEndToEnd(t *testing.T) {
 
 	// proxy
 	go func() {
-		proxy := zeromq2.NewProxy("tcp://*:5555", "tcp://*:5556")
+		proxy := zeromq.NewProxy("tcp://*:5555", "tcp://*:5556")
 		proxy.Start()
 	}()
-	zeromq2.WaitForConnection()
+	zeromq.WaitForConnection()
 
 	// subscriber
 	topicsReceived := make([]string, 0)
 
 	go func() {
-		subscriber := zeromq2.NewSubscriber("tcp://localhost:5556", zeromq2.TopicsAll)
+		subscriber := zeromq.NewSubscriber("tcp://localhost:5556", zeromq.TopicsAll)
 		subscriber.Start(func(message message.Message) {
 			topicsReceived = append(topicsReceived, message.Topic)
 
@@ -34,11 +34,11 @@ func TestEndToEnd(t *testing.T) {
 			}
 		})
 	}()
-	zeromq2.WaitForConnection()
+	zeromq.WaitForConnection()
 
 	// publisher
 	go func() {
-		publisher := zeromq2.NewPublisher("tcp://localhost:5555")
+		publisher := zeromq.NewPublisher("tcp://localhost:5555")
 
 		for _, topic := range topicsToSend {
 			publisher.SendMessage(topic)

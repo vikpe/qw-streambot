@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	zmq "github.com/pebbe/zmq4"
-	"github.com/vikpe/streambot/pkg/zeromq/message"
+	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 )
 
 type Publisher struct {
