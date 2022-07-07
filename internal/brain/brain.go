@@ -15,12 +15,12 @@ import (
 	"github.com/vikpe/streambot/internal/brain/util/calc"
 	"github.com/vikpe/streambot/internal/brain/util/ezquake"
 	"github.com/vikpe/streambot/internal/brain/util/proc"
+	"github.com/vikpe/streambot/internal/brain/util/sstat"
 	"github.com/vikpe/streambot/internal/brain/util/task"
 	"github.com/vikpe/streambot/internal/monitor"
 	"github.com/vikpe/streambot/pkg/zeromq"
 	"github.com/vikpe/streambot/pkg/zeromq/message"
 	"github.com/vikpe/streambot/third_party/qws"
-	"github.com/vikpe/streambot/third_party/sstat"
 	"github.com/vikpe/streambot/third_party/twitch"
 )
 
