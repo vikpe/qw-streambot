@@ -11,9 +11,9 @@ require (
 	github.com/nicklaw5/helix/v2 v2.5.0
 	github.com/pebbe/zmq4 v1.2.9
 	github.com/stretchr/testify v1.8.0
-	github.com/vikpe/prettyfmt v0.0.0-20220706133232-1ac459254ba0
-	github.com/vikpe/serverstat v0.1.83
-	golang.org/x/exp v0.0.0-20220613132600-b0d781184e0d
+	github.com/vikpe/prettyfmt v0.0.0-20220706144613-1254fde75b4c
+	github.com/vikpe/serverstat v0.1.85
+	golang.org/x/exp v0.0.0-20220706164943-b4a6d9510983
 )
 
 require (
@@ -30,7 +30,7 @@ require (
 	github.com/valyala/fastjson v1.6.3 // indirect
 	github.com/vikpe/udpclient v0.1.3 // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
-	golang.org/x/net v0.0.0-20220630215102-69896b714898 // indirect
+	golang.org/x/net v0.0.0-20220706163947-c90051bbdb60 // indirect
 	golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
