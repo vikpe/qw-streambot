@@ -135,7 +135,7 @@ func (b *Brain) ValidateCurrentServer() {
 
 	altName := fmt.Sprintf("%s(1)", b.clientPlayerName)
 	if analyze.HasSpectator(currentServer, altName) {
-		b.commander.Command(fmt.Sprintf("name %b", b.clientPlayerName))
+		b.commander.Command(fmt.Sprintf("name %s", b.clientPlayerName))
 		return
 	}
 
@@ -281,5 +281,5 @@ func (b *Brain) OnServerTitleChanged(msg message.Message) {
 func (b *Brain) OnServerMatchtagChanged(msg message.Message) {
 	matchtag := msg.Content.ToString()
 	textScale := calc.StaticTextScale(matchtag)
-	b.commander.Command(fmt.Sprintf("hud_static_text_scale %f;bot_set_statictext %b", textScale, matchtag))
+	b.commander.Command(fmt.Sprintf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag))
 }
