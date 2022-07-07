@@ -20,13 +20,13 @@ func NewPipeWriter(username string) *PipeWriter {
 }
 
 func (w *PipeWriter) Write(value string) error {
-	strippedValue := strings.TrimSpace(value)
+	trimmedValue := strings.TrimSpace(value)
 
-	if 0 == len(strippedValue) {
+	if 0 == len(trimmedValue) {
 		return nil
 	}
 
-	terminatedValue := strings.TrimRight(strippedValue, ";") + ";"
+	terminatedValue := strings.TrimRight(trimmedValue, ";") + ";"
 	return w.writeToPipe(terminatedValue)
 }
 
