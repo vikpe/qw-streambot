@@ -10,8 +10,6 @@ import (
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
-	"github.com/vikpe/streambot/com/commander"
-	"github.com/vikpe/streambot/com/topic"
 	"github.com/vikpe/streambot/internal/brain/util/calc"
 	"github.com/vikpe/streambot/internal/brain/util/proc"
 	"github.com/vikpe/streambot/internal/brain/util/task"
@@ -22,6 +20,8 @@ import (
 	"github.com/vikpe/streambot/internal/third_party/qws"
 	"github.com/vikpe/streambot/internal/third_party/sstat"
 	"github.com/vikpe/streambot/internal/third_party/twitch"
+	"github.com/vikpe/streambot/pkg/commander"
+	"github.com/vikpe/streambot/pkg/topic"
 )
 
 var pfmt = prettyfmt.New("brain", color.FgHiMagenta, "15:04:05", color.FgWhite)

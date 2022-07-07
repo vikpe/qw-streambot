@@ -6,10 +6,10 @@ import (
 	"github.com/fatih/color"
 	"github.com/gempir/go-twitch-irc/v3"
 	"github.com/vikpe/prettyfmt"
-	"github.com/vikpe/streambot/com/commander"
 	irc2 "github.com/vikpe/streambot/internal/pkg/irc"
 	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/third_party/qws"
+	"github.com/vikpe/streambot/pkg/commander"
 	"golang.org/x/exp/slices"
 )
 
