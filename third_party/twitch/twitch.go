@@ -13,18 +13,18 @@ type Client struct {
 	broadcasterId string
 }
 
-func NewClient(clientID string, accessToken string, broadcasterID string) Client {
+func NewClient(clientID string, accessToken string, broadcasterID string) *Client {
 	client, _ := helix.NewClient(&helix.Options{ClientID: clientID, AppAccessToken: accessToken})
 
-	return Client{
+	return &Client{
 		client:        client,
 		broadcasterId: broadcasterID,
 	}
 }
 
-func (a Client) SetTitle(title string) {
-	_, err := a.client.EditChannelInformation(&helix.EditChannelInformationParams{
-		BroadcasterID: a.broadcasterId,
+func (c *Client) SetTitle(title string) {
+	_, err := c.client.EditChannelInformation(&helix.EditChannelInformationParams{
+		BroadcasterID: c.broadcasterId,
 		Title:         title,
 		GameID:        quakeGameId,
 	})

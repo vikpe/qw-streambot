@@ -32,7 +32,7 @@ type Brain struct {
 	process          proc.ProcessController
 	serverMonitor    *monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
-	twitch           twitch.Client
+	twitch           *twitch.Client
 	publisher        zeromq.Publisher
 	subscriber       zeromq.Subscriber
 	commander        commander.Commander
@@ -43,7 +43,7 @@ func NewBrain(
 	clientPlayerName string,
 	process proc.ProcessController,
 	pipe *ezquake.PipeWriter,
-	twitchClient twitch.Client,
+	twitchClient *twitch.Client,
 	publisher zeromq.Publisher,
 	subscriber zeromq.Subscriber,
 ) *Brain {
