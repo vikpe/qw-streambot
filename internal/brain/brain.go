@@ -15,7 +15,7 @@ import (
 	"github.com/vikpe/streambot/internal/brain/util/task"
 	"github.com/vikpe/streambot/internal/monitor"
 	"github.com/vikpe/streambot/internal/pkg/ezquake"
-	zeromq2 "github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 	"github.com/vikpe/streambot/internal/third_party/qws"
 	"github.com/vikpe/streambot/internal/third_party/sstat"
@@ -33,8 +33,8 @@ type Brain struct {
 	serverMonitor    *monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
 	twitch           *twitch.Client
-	publisher        zeromq2.Publisher
-	subscriber       zeromq2.Subscriber
+	publisher        zeromq.Publisher
+	subscriber       zeromq.Subscriber
 	commander        commander.Commander
 	AutoMode         bool
 }
@@ -44,8 +44,8 @@ func NewBrain(
 	process proc.ProcessController,
 	pipe *ezquake.PipeWriter,
 	twitchClient *twitch.Client,
-	publisher zeromq2.Publisher,
-	subscriber zeromq2.Subscriber,
+	publisher zeromq.Publisher,
+	subscriber zeromq.Subscriber,
 ) *Brain {
 	return &Brain{
 		clientPlayerName: clientPlayerName,
@@ -64,7 +64,7 @@ func NewBrain(
 func (b *Brain) Start() {
 	// event listeners
 	b.subscriber.Start(b.OnMessage)
-	zeromq2.WaitForConnection()
+	zeromq.WaitForConnection()
 
 	// event dispatchers
 	processMonitor := monitor.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
