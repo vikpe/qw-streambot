@@ -55,6 +55,7 @@ func NewBrain(
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
 		twitch:           twitchClient,
 		subscriber:       subscriber,
+		publisher:        publisher,
 		commander:        commander.NewCommander(publisher.SendMessage),
 		AutoMode:         true,
 	}
@@ -216,9 +217,9 @@ func (b *Brain) connectToServer(server mvdsv.Mvdsv) {
 	}
 
 	if len(server.QtvStream.Url) > 0 {
-		b.commander.Command(fmt.Sprintf("qtvplay %b", server.QtvStream.Url))
+		b.commander.Command(fmt.Sprintf("qtvplay %s", server.QtvStream.Url))
 	} else {
-		b.commander.Command(fmt.Sprintf("connect %b", server.Address))
+		b.commander.Command(fmt.Sprintf("connect %s", server.Address))
 	}
 
 	time.AfterFunc(4*time.Second, func() {
