@@ -21,7 +21,7 @@ func main() {
 		os.Getenv("ZMQ_PROXY_FRONTEND_ADDRESS"),
 		os.Getenv("ZMQ_PROXY_BACKEND_ADDRESS"),
 	)
-	pfmt := prettyfmt.New("proxy", color.FgHiGreen, "15:04:05", color.FgWhite)
+	pfmt := prettyfmt.New("proxy", color.FgCyan, "15:04:05", color.FgWhite)
 	proxy.OnStart = func() { pfmt.Println("start") }
 	proxy.OnStop = func(sig os.Signal) { pfmt.Printfln("stop (%s)", sig) }
 	proxy.OnError = func(err error) { pfmt.Println("error", err) }
