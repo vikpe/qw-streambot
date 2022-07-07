@@ -8,7 +8,7 @@ import (
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/qmode"
 	"github.com/vikpe/serverstat/qserver/qclient/slots"
-	"github.com/vikpe/streambot/third_party/qws"
+	"github.com/vikpe/streambot/internal/third_party/qws"
 )
 
 func TestIsRelevantServer(t *testing.T) {

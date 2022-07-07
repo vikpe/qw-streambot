@@ -19,9 +19,9 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/ezquake"
 	zeromq2 "github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
-	"github.com/vikpe/streambot/third_party/qws"
-	"github.com/vikpe/streambot/third_party/sstat"
-	"github.com/vikpe/streambot/third_party/twitch"
+	"github.com/vikpe/streambot/internal/third_party/qws"
+	"github.com/vikpe/streambot/internal/third_party/sstat"
+	"github.com/vikpe/streambot/internal/third_party/twitch"
 )
 
 var pfmt = prettyfmt.New("brain", color.FgHiMagenta, "15:04:05", color.FgWhite)

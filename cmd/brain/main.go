@@ -9,7 +9,7 @@ import (
 	"github.com/vikpe/streambot/internal/brain/util/proc"
 	"github.com/vikpe/streambot/internal/pkg/ezquake"
 	zeromq2 "github.com/vikpe/streambot/internal/pkg/zeromq"
-	"github.com/vikpe/streambot/third_party/twitch"
+	"github.com/vikpe/streambot/internal/third_party/twitch"
 )
 
 func main() {

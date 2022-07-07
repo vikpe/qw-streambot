@@ -9,7 +9,7 @@ import (
 	"github.com/vikpe/streambot/com/commander"
 	irc2 "github.com/vikpe/streambot/internal/pkg/irc"
 	"github.com/vikpe/streambot/internal/pkg/zeromq"
-	"github.com/vikpe/streambot/third_party/qws"
+	"github.com/vikpe/streambot/internal/third_party/qws"
 	"golang.org/x/exp/slices"
 )
 
