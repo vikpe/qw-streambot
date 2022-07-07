@@ -10,11 +10,7 @@ import (
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 )
 
-func GetMvdsvServers() []mvdsv.Mvdsv {
-	return GetMvdsvServersByQueryParams(nil)
-}
-
-func GetMvdsvServersByQueryParams(queryParams map[string]string) []mvdsv.Mvdsv {
+func GetMvdsvServers(queryParams map[string]string) []mvdsv.Mvdsv {
 	serversUrl := "https://metaqtv.quake.se/v2/servers/mvdsv"
 	resp, err := resty.New().R().SetResult([]mvdsv.Mvdsv{}).SetQueryParams(queryParams).Get(serversUrl)
 
@@ -34,8 +30,7 @@ func FindPlayer(name string) (mvdsv.Mvdsv, error) {
 		return mvdsv.Mvdsv{}, errors.New(fmt.Sprintf(`provide at least %d characters.`, minFindLength))
 	}
 
-	queryParams := map[string]string{"has_player": name}
-	servers := GetMvdsvServersByQueryParams(queryParams)
+	servers := GetMvdsvServers(map[string]string{"has_player": name})
 
 	if 0 == len(servers) {
 		return mvdsv.Mvdsv{}, errors.New(fmt.Sprintf(`player "%s" not found.`, name))
@@ -45,7 +40,7 @@ func FindPlayer(name string) (mvdsv.Mvdsv, error) {
 }
 
 func GetBestServer() (mvdsv.Mvdsv, error) {
-	servers := GetMvdsvServers()
+	servers := GetMvdsvServers(nil)
 
 	sort.Slice(servers, func(i, j int) bool {
 		return servers[i].Score > servers[j].Score
