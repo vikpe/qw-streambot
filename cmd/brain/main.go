@@ -8,8 +8,8 @@ import (
 	"github.com/vikpe/streambot/internal/brain"
 	"github.com/vikpe/streambot/internal/brain/util/ezquake"
 	"github.com/vikpe/streambot/internal/brain/util/proc"
+	"github.com/vikpe/streambot/internal/brain/util/twitch"
 	"github.com/vikpe/streambot/pkg/zeromq"
-	"github.com/vikpe/streambot/third_party/twitch"
 )
 
 func main() {
