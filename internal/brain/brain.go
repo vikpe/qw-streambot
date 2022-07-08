@@ -98,8 +98,6 @@ func (b *Brain) OnMessage(msg message.Message) {
 
 	if handler, ok := handlers[msg.Topic]; ok {
 		handler(msg)
-	} else {
-		fmt.Println("no handler defined for", msg.Topic, fmt.Sprintf("%T", msg.Topic), msg.Content)
 	}
 }
 
