@@ -27,10 +27,10 @@ func NewMessage(topic string, content any) Message {
 	}
 }
 
-type SerializedValue string
+type SerializedValue []byte
 
 func NewSerializedValue(value any) SerializedValue {
-	return SerializedValue(Serialize(value))
+	return Serialize(value)
 }
 
 func (d SerializedValue) ToString() string {
@@ -46,7 +46,7 @@ func (d SerializedValue) ToInt() int {
 }
 
 func (d SerializedValue) To(target interface{}) {
-	Unserialize([]byte(d), target)
+	Unserialize(d, target)
 }
 
 func NewMessageFromFrames(frames []string) (Message, error) {

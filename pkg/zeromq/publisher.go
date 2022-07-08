@@ -38,7 +38,7 @@ func PubSendMessage(address string, msg message.Message) {
 	}
 	WaitForConnection()
 
-	_, err = pubSocket.SendMessage(msg.Topic, msg.ContentType, msg.Content)
+	_, err = pubSocket.SendMessage(msg.Topic, msg.ContentType, string(msg.Content))
 	if err != nil {
 		fmt.Println("PubSendMessage: error sending message", err)
 		return
