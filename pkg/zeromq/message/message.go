@@ -32,7 +32,8 @@ func NewMessageFromFrames(frames []string) (Message, error) {
 	const expectedFrameCount = 3 // topic, content type, content
 
 	if frameCount != expectedFrameCount {
-		return Message{}, errors.New(fmt.Sprintf("expected %d message frames, got %d", expectedFrameCount, frameCount))
+		err := errors.New(fmt.Sprintf("expected %d message frames, got %d", expectedFrameCount, frameCount))
+		return Message{}, err
 	}
 
 	msg := Message{
