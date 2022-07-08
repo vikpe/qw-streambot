@@ -1,6 +1,7 @@
 package zeromq
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -43,7 +44,7 @@ func (p *Proxy) Start() {
 		err = frontend.Bind(p.frontendAddress)
 
 		if err != nil {
-			fmt.Println("unable to connect to frontend", err.Error())
+			err = errors.New(fmt.Sprintf("unable to bind to frontend (%s)", err.Error()))
 			return
 		}
 
@@ -53,7 +54,7 @@ func (p *Proxy) Start() {
 		err = backend.Bind(p.backendAddress)
 
 		if err != nil {
-			fmt.Println("unable to bind to backend", err.Error())
+			err = errors.New(fmt.Sprintf("unable to bind to backend (%s)", err.Error()))
 			return
 		}
 
@@ -62,7 +63,8 @@ func (p *Proxy) Start() {
 		err = zmq.Proxy(frontend, backend, nil)
 
 		if err != nil {
-			fmt.Println("proxy interrupted:", err.Error())
+			err = errors.New(fmt.Sprintf("proxy interrupted: (%s)", err.Error()))
+			return
 		}
 	}()
 	sig := <-p.stopChan
