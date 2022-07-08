@@ -1,11 +1,10 @@
-COLOR_GRAY="0;90"
-COLOR_WHITE="0;97"
-COLOR_RED="0;31"
-COLOR_GREEN="0;32"
-COLOR_YELLOW="1;33"
-COLOR_BLUE="0;34"
-COLOR_MAGENTA="0;35"
-COLOR_CYAN="0;36"
+COLOR_GRAY="0;90"    # timestamp
+COLOR_GREEN="0;32"   # proxy
+COLOR_YELLOW="1;33"  # ezquake
+COLOR_MAGENTA="0;35" # chatbot
+COLOR_RED="0;31"     # channel manager
+COLOR_CYAN="0;36"    # brain
+#COLOR_BLUE="0;34"   # discord
 SEQ_RESET="\e[0m"
 
 function text_in_color() {

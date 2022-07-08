@@ -23,7 +23,7 @@ import (
 	"github.com/vikpe/streambot/pkg/topic"
 )
 
-var pfmt = prettyfmt.New("brain", color.FgHiMagenta, "15:04:05", color.FgWhite)
+var pfmt = prettyfmt.New("brain", color.FgHiCyan, "15:04:05", color.FgWhite)
 
 type Brain struct {
 	clientPlayerName string

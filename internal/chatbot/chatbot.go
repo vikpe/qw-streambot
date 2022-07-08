@@ -21,7 +21,7 @@ type Chatbot struct {
 }
 
 func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *Chatbot {
-	var pfmt = prettyfmt.New("chatbot", color.FgHiBlue, "15:04:05", color.FgWhite)
+	var pfmt = prettyfmt.New("chatbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
 	chatbot := Chatbot{
 		Bot:        irc.NewBot(username, accessToken, channel, '!'),
