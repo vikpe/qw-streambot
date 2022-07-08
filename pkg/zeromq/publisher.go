@@ -11,11 +11,11 @@ type Publisher struct {
 	address string
 }
 
-func NewPublisher(address string) Publisher {
-	return Publisher{address: address}
+func NewPublisher(address string) *Publisher {
+	return &Publisher{address: address}
 }
 
-func (p Publisher) SendMessage(topic string, content ...any) {
+func (p *Publisher) SendMessage(topic string, content ...any) {
 	var msgContent any
 
 	if len(content) > 0 {

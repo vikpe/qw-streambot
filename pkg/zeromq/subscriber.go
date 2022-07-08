@@ -13,8 +13,8 @@ type Subscriber struct {
 	onMessage message.Handler
 }
 
-func NewSubscriber(address string, topics string) Subscriber {
-	return Subscriber{
+func NewSubscriber(address string, topics string) *Subscriber {
+	return &Subscriber{
 		address: address,
 		topics:  topics,
 	}

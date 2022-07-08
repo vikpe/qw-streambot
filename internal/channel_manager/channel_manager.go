@@ -16,7 +16,7 @@ import (
 type ChannelManager struct {
 	apiClient     *helix.Client
 	broadcasterID string
-	subscriber    zeromq.Subscriber
+	subscriber    *zeromq.Subscriber
 	stopChan      chan os.Signal
 	OnStarted     func()
 	OnStopped     func(os.Signal)

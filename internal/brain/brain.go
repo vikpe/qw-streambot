@@ -32,8 +32,8 @@ type Brain struct {
 	process          proc.ProcessController
 	serverMonitor    *monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
-	publisher        zeromq.Publisher
-	subscriber       zeromq.Subscriber
+	publisher        *zeromq.Publisher
+	subscriber       *zeromq.Subscriber
 	commander        commander.Commander
 	stopChan         chan os.Signal
 	AutoMode         bool

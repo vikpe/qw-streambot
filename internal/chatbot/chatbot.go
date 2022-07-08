@@ -17,7 +17,7 @@ import (
 
 type Chatbot struct {
 	*irc.Bot
-	subscriber zeromq.Subscriber
+	subscriber *zeromq.Subscriber
 }
 
 func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *Chatbot {
