@@ -5,6 +5,7 @@ echo "Starting all components"
     bash scripts/controllers/proxy.sh &
     sleep 0.2 # wait for proxy
 
+    bash scripts/controllers/channel_manager.sh &
     bash scripts/controllers/chatbot.sh &
     bash scripts/controllers/brain.sh &
 
