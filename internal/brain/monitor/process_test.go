@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/internal/monitor"
+	"github.com/vikpe/streambot/internal/brain/monitor"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/mock"
 )
 

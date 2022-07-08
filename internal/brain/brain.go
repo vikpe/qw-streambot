@@ -10,10 +10,10 @@ import (
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
+	monitor2 "github.com/vikpe/streambot/internal/brain/monitor"
 	"github.com/vikpe/streambot/internal/brain/util/calc"
 	"github.com/vikpe/streambot/internal/brain/util/proc"
 	"github.com/vikpe/streambot/internal/brain/util/task"
-	"github.com/vikpe/streambot/internal/monitor"
 	"github.com/vikpe/streambot/internal/pkg/ezquake"
 	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
@@ -29,7 +29,7 @@ type Brain struct {
 	clientPlayerName string
 	pipe             *ezquake.PipeWriter
 	process          proc.ProcessController
-	serverMonitor    *monitor.ServerMonitor
+	serverMonitor    *monitor2.ServerMonitor
 	evaluateTask     task.PeriodicalTask
 	publisher        zeromq.Publisher
 	subscriber       zeromq.Subscriber
@@ -48,7 +48,7 @@ func NewBrain(
 		clientPlayerName: clientPlayerName,
 		pipe:             pipe,
 		process:          process,
-		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
+		serverMonitor:    monitor2.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
 		subscriber:       subscriber,
 		publisher:        publisher,
@@ -63,7 +63,7 @@ func (b *Brain) Start() {
 	zeromq.WaitForConnection()
 
 	// event dispatchers
-	processMonitor := monitor.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
+	processMonitor := monitor2.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
 	processMonitor.Start(3 * time.Second)
 	b.serverMonitor.Start(5 * time.Second)
 
