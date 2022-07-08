@@ -3,6 +3,7 @@ package channel_manager
 import (
 	"fmt"
 	"os"
+	"os/signal"
 	"syscall"
 	"time"
 
@@ -43,12 +44,23 @@ func NewChannelManager(clientID, accessToken, broadcasterID, subscriberAddress s
 func (m *ChannelManager) Start() {
 	m.OnStarted()
 
+	m.stopChan = make(chan os.Signal, 1)
+	signal.Notify(m.stopChan, syscall.SIGTERM, syscall.SIGINT)
+
 	go func() {
 		m.subscriber.Start(m.OnMessage)
 	}()
-
 	sig := <-m.stopChan
+
 	m.OnStopped(sig)
+}
+
+func (m *ChannelManager) Stop() {
+	if m.stopChan == nil {
+		return
+	}
+	m.stopChan <- syscall.SIGINT
+	time.Sleep(50 * time.Millisecond)
 }
 
 func (m *ChannelManager) OnMessage(msg message.Message) {
@@ -74,12 +86,4 @@ func (m *ChannelManager) SetTitle(title string) error {
 	})
 
 	return err
-}
-
-func (m *ChannelManager) Stop() {
-	if m.stopChan == nil {
-		return
-	}
-	m.stopChan <- syscall.SIGINT
-	time.Sleep(50 * time.Millisecond)
 }
