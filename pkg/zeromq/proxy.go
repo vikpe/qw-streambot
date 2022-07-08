@@ -63,7 +63,7 @@ func (p *Proxy) Start() {
 		err = zmq.Proxy(frontend, backend, nil)
 
 		if err != nil {
-			err = errors.New(fmt.Sprintf("proxy interrupted: (%s)", err.Error()))
+			err = errors.New(fmt.Sprintf("proxy interrupted (%s)", err.Error()))
 			return
 		}
 	}()
