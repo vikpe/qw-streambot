@@ -2,7 +2,8 @@ package brain
 
 import (
 	"fmt"
-	"sync"
+	"os"
+	"os/signal"
 	"syscall"
 	"time"
 
@@ -34,6 +35,7 @@ type Brain struct {
 	publisher        zeromq.Publisher
 	subscriber       zeromq.Subscriber
 	commander        commander.Commander
+	stopChan         chan os.Signal
 	AutoMode         bool
 }
 
@@ -58,23 +60,32 @@ func NewBrain(
 }
 
 func (b *Brain) Start() {
-	// event listeners
-	b.subscriber.Start(b.OnMessage)
-	zeromq.WaitForConnection()
+	b.stopChan = make(chan os.Signal, 1)
+	signal.Notify(b.stopChan, syscall.SIGTERM, syscall.SIGINT)
 
-	// event dispatchers
-	processMonitor := monitor.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
-	processMonitor.Start(3 * time.Second)
-	b.serverMonitor.Start(5 * time.Second)
+	go func() {
+		// event listeners
+		b.subscriber.Start(b.OnMessage)
+		zeromq.WaitForConnection()
 
-	if b.process.IsStarted() {
-		b.evaluateTask.Start(10 * time.Second)
+		// event dispatchers
+		processMonitor := monitor.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
+		processMonitor.Start(3 * time.Second)
+		b.serverMonitor.Start(5 * time.Second)
+
+		if b.process.IsStarted() {
+			b.evaluateTask.Start(10 * time.Second)
+		}
+	}()
+	<-b.stopChan
+}
+
+func (b *Brain) Stop() {
+	if b.stopChan == nil {
+		return
 	}
-
-	// block forever
-	wg := sync.WaitGroup{}
-	wg.Add(1)
-	wg.Wait()
+	b.stopChan <- syscall.SIGINT
+	time.Sleep(50 * time.Millisecond)
 }
 
 func (b *Brain) OnMessage(msg message.Message) {
