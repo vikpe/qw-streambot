@@ -12,8 +12,6 @@ import (
 	"github.com/vikpe/streambot/pkg/topic"
 )
 
-const quakeGameId = "7348"
-
 type ChannelManager struct {
 	apiClient     *helix.Client
 	broadcasterID string
@@ -46,24 +44,29 @@ func (m *ChannelManager) Start() {
 	m.OnStarted()
 
 	go func() {
-		m.subscriber.Start(func(msg message.Message) {
-			var err error
-			switch msg.Topic {
-			case topic.ServerTitleChanged:
-				err = m.SetTitle(msg.Content.ToString())
-			}
-
-			if err != nil {
-				m.OnError(err)
-			}
-		})
+		m.subscriber.Start(m.OnMessage)
 	}()
 
 	sig := <-m.stopChan
 	m.OnStopped(sig)
 }
 
+func (m *ChannelManager) OnMessage(msg message.Message) {
+	var err error
+
+	switch msg.Topic {
+	case topic.ServerTitleChanged:
+		err = m.SetTitle(msg.Content.ToString())
+	}
+
+	if err != nil {
+		m.OnError(err)
+	}
+}
+
 func (m *ChannelManager) SetTitle(title string) error {
+	const quakeGameId = "7348"
+
 	_, err := m.apiClient.EditChannelInformation(&helix.EditChannelInformationParams{
 		BroadcasterID: m.broadcasterID,
 		Title:         title,
