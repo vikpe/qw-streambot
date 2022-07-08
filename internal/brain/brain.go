@@ -9,6 +9,8 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/vikpe/prettyfmt"
+	"github.com/vikpe/serverstat"
+	"github.com/vikpe/serverstat/qserver/convert"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 	"github.com/vikpe/streambot/internal/brain/monitor"
@@ -16,10 +18,9 @@ import (
 	"github.com/vikpe/streambot/internal/brain/util/proc"
 	"github.com/vikpe/streambot/internal/brain/util/task"
 	"github.com/vikpe/streambot/internal/pkg/ezquake"
+	"github.com/vikpe/streambot/internal/pkg/qws"
 	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
-	"github.com/vikpe/streambot/internal/third_party/qws"
-	"github.com/vikpe/streambot/internal/third_party/sstat"
 	"github.com/vikpe/streambot/pkg/commander"
 	"github.com/vikpe/streambot/pkg/topic"
 )
@@ -50,7 +51,7 @@ func NewBrain(
 		clientPlayerName: clientPlayerName,
 		pipe:             pipe,
 		process:          process,
-		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
+		serverMonitor:    monitor.NewServerMonitor(getMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
 		subscriber:       subscriber,
 		publisher:        publisher,
@@ -132,7 +133,7 @@ func (b *Brain) ValidateCurrentServer() {
 		return
 	}
 
-	currentServer := sstat.GetMvdsvServer(b.serverMonitor.GetAddress())
+	currentServer := getMvdsvServer(b.serverMonitor.GetAddress())
 	if analyze.HasSpectator(currentServer, b.clientPlayerName) {
 		return
 	}
@@ -162,7 +163,7 @@ func (b *Brain) OnStreambotEvaluate(msg message.Message) {
 }
 
 func (b *Brain) evaluateAutoModeEnabled() {
-	currentServer := sstat.GetMvdsvServer(b.serverMonitor.GetAddress())
+	currentServer := getMvdsvServer(b.serverMonitor.GetAddress())
 	shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
 
 	if !shouldConsiderChange {
@@ -185,7 +186,7 @@ func (b *Brain) evaluateAutoModeEnabled() {
 }
 
 func (b *Brain) evaluateAutoModeDisabled() {
-	currentServer := sstat.GetMvdsvServer(b.serverMonitor.GetAddress())
+	currentServer := getMvdsvServer(b.serverMonitor.GetAddress())
 	const MinScore = 30
 	isOkServer := currentServer.Score >= MinScore
 
@@ -278,4 +279,14 @@ func (b *Brain) OnServerMatchtagChanged(msg message.Message) {
 	matchtag := msg.Content.ToString()
 	textScale := calc.StaticTextScale(matchtag)
 	b.commander.Commandf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag)
+}
+
+func getMvdsvServer(address string) mvdsv.Mvdsv {
+	server, err := serverstat.GetInfo(address)
+
+	if err != nil {
+		return mvdsv.Mvdsv{}
+	}
+
+	return convert.ToMvdsv(server)
 }
