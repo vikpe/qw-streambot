@@ -6,9 +6,6 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/vikpe/streambot/internal/brain"
-	"github.com/vikpe/streambot/internal/brain/ezquake"
-	"github.com/vikpe/streambot/internal/brain/util/proc"
-	"github.com/vikpe/streambot/pkg/zeromq"
 )
 
 func main() {
@@ -18,18 +15,12 @@ func main() {
 		return
 	}
 
-	playerName := os.Getenv("EZQUAKE_PLAYER_NAME")
-	process := proc.NewProcessController(os.Getenv("EZQUAKE_BIN_PATH"))
-	pipe := ezquake.NewPipeWriter(os.Getenv("EZQUAKE_PROCESS_USERNAME"))
-	publisher := zeromq.NewPublisher(os.Getenv("ZMQ_PUBLISHER_ADDRESS"))
-	subscriber := zeromq.NewSubscriber(os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"), zeromq.TopicsAll)
-
 	brn := brain.NewBrain(
-		playerName,
-		process,
-		pipe,
-		publisher,
-		subscriber,
+		os.Getenv("EZQUAKE_PLAYER_NAME"),
+		os.Getenv("EZQUAKE_BIN_PATH"),
+		os.Getenv("EZQUAKE_PROCESS_USERNAME"),
+		os.Getenv("ZMQ_PUBLISHER_ADDRESS"),
+		os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"),
 	)
 	brn.Start()
 }

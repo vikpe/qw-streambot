@@ -41,18 +41,20 @@ type Brain struct {
 
 func NewBrain(
 	clientPlayerName string,
-	process proc.ProcessController,
-	pipe *ezquake.PipeWriter,
-	publisher zeromq.Publisher,
-	subscriber zeromq.Subscriber,
+	ezquakeBinPath string,
+	ezquakeProcessUsername string,
+	publisherAddress string,
+	subscriberAddress string,
 ) *Brain {
+	publisher := zeromq.NewPublisher(publisherAddress)
+
 	return &Brain{
 		clientPlayerName: clientPlayerName,
-		pipe:             pipe,
-		process:          process,
+		pipe:             ezquake.NewPipeWriter(ezquakeProcessUsername),
+		process:          proc.NewProcessController(ezquakeBinPath),
 		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
-		subscriber:       subscriber,
+		subscriber:       zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
 		publisher:        publisher,
 		commander:        commander.NewCommander(publisher.SendMessage),
 		AutoMode:         true,
