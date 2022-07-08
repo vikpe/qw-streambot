@@ -30,15 +30,8 @@ func main() {
 	}
 
 	var pfmt = prettyfmt.New("channel_manager", color.FgHiRed, "15:04:05", color.FgWhite)
-	manager.OnStarted = func() {
-		pfmt.Println("started")
-	}
-	manager.OnStopped = func(signal os.Signal) {
-		pfmt.Println("stopped", signal)
-	}
-	manager.OnError = func(err error) {
-		pfmt.Println("error", err)
-	}
-
+	manager.OnStarted = func() { pfmt.Println("started") }
+	manager.OnStopped = func(signal os.Signal) { pfmt.Println("stopped", signal) }
+	manager.OnError = func(err error) { pfmt.Println("error", err) }
 	manager.Start()
 }
