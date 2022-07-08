@@ -15,21 +15,21 @@ type Handler func(Message)
 
 type Message struct {
 	Topic       string
-	Content     SerializedValue
 	ContentType string
+	Content     SerializedValue
 }
 
 func NewMessage(topic string, content any) Message {
 	return Message{
 		Topic:       topic,
-		Content:     Serialize(content),
 		ContentType: fmt.Sprintf("%T", content),
+		Content:     Serialize(content),
 	}
 }
 
 func NewMessageFromFrames(frames []string) (Message, error) {
 	frameCount := len(frames)
-	const expectedFrameCount = 3 // topic, data type, data
+	const expectedFrameCount = 3 // topic, content type, content
 
 	if frameCount != expectedFrameCount {
 		return Message{}, errors.New(fmt.Sprintf("expected %d message frames, got %d", expectedFrameCount, frameCount))
@@ -37,8 +37,8 @@ func NewMessageFromFrames(frames []string) (Message, error) {
 
 	msg := Message{
 		Topic:       frames[IndexTopic],
-		Content:     SerializedValue(frames[IndexContent]),
 		ContentType: frames[IndexContentType],
+		Content:     SerializedValue(frames[IndexContent]),
 	}
 
 	return msg, nil
