@@ -44,6 +44,16 @@ func (m *ChannelManager) Start() {
 	m.OnStopped(sig)
 }
 
+func (m *ChannelManager) SetTitle(title string) error {
+	_, err := m.apiClient.EditChannelInformation(&helix.EditChannelInformationParams{
+		BroadcasterID: m.broadcasterID,
+		Title:         title,
+		GameID:        quakeGameId,
+	})
+
+	return err
+}
+
 func (m *ChannelManager) Stop() {
 	if m.stopChan == nil {
 		return
