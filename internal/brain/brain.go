@@ -19,7 +19,6 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 	"github.com/vikpe/streambot/internal/third_party/qws"
 	"github.com/vikpe/streambot/internal/third_party/sstat"
-	"github.com/vikpe/streambot/internal/third_party/twitch"
 	"github.com/vikpe/streambot/pkg/commander"
 	"github.com/vikpe/streambot/pkg/topic"
 )
@@ -32,7 +31,6 @@ type Brain struct {
 	process          proc.ProcessController
 	serverMonitor    *monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
-	twitch           *twitch.Client
 	publisher        zeromq.Publisher
 	subscriber       zeromq.Subscriber
 	commander        commander.Commander
@@ -43,7 +41,6 @@ func NewBrain(
 	clientPlayerName string,
 	process proc.ProcessController,
 	pipe *ezquake.PipeWriter,
-	twitchClient *twitch.Client,
 	publisher zeromq.Publisher,
 	subscriber zeromq.Subscriber,
 ) *Brain {
@@ -53,7 +50,6 @@ func NewBrain(
 		process:          process,
 		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
-		twitch:           twitchClient,
 		subscriber:       subscriber,
 		publisher:        publisher,
 		commander:        commander.NewCommander(publisher.SendMessage),
@@ -98,7 +94,6 @@ func (b *Brain) OnMessage(msg message.Message) {
 
 		// server events
 		topic.ServerMatchtagChanged: b.OnServerMatchtagChanged,
-		topic.ServerTitleChanged:    b.OnServerTitleChanged,
 	}
 
 	if handler, ok := handlers[msg.Topic]; ok {
@@ -268,11 +263,6 @@ func (b *Brain) OnEzquakeStopped(msg message.Message) {
 	pfmt.Println("OnEzquakeStopped")
 	b.serverMonitor.SetAddress("")
 	b.evaluateTask.Stop()
-}
-
-func (b *Brain) OnServerTitleChanged(msg message.Message) {
-	pfmt.Println("OnServerTitleChanged", msg.Content.ToString())
-	b.twitch.SetTitle(msg.Content.ToString())
 }
 
 func (b *Brain) OnServerMatchtagChanged(msg message.Message) {
