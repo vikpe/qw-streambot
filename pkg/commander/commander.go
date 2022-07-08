@@ -31,6 +31,10 @@ func (c Commander) Command(cmd string) {
 	c.sendMessage(topic.EzquakeCommand, cmd)
 }
 
+func (c Commander) Commandf(format string, args ...any) {
+	c.Command(fmt.Sprintf(format, args...))
+}
+
 func (c Commander) EnableAuto() {
 	c.sendMessage(topic.StreambotEnableAuto)
 }
