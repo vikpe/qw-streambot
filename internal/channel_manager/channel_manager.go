@@ -24,15 +24,15 @@ type ChannelManager struct {
 	OnError       func(error)
 }
 
-func NewChannelManager(clientID, accessToken, broadcasterID, subscriberAddress string) (ChannelManager, error) {
+func NewChannelManager(clientID, accessToken, broadcasterID, subscriberAddress string) (*ChannelManager, error) {
 	apiClient, err := helix.NewClient(&helix.Options{ClientID: clientID, AppAccessToken: accessToken})
 
 	if err != nil {
 		fmt.Println("twitch api client error", err)
-		return ChannelManager{}, err
+		return &ChannelManager{}, err
 	}
 
-	return ChannelManager{
+	return &ChannelManager{
 		apiClient:     apiClient,
 		broadcasterID: broadcasterID,
 		subscriber:    zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
