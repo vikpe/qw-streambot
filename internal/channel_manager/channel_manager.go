@@ -1,4 +1,4 @@
-package chanman
+package channel_manager
 
 import (
 	"sync"

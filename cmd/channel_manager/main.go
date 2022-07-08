@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/internal/chanman"
+	"github.com/vikpe/streambot/internal/channel_manager"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 		return
 	}
 
-	manager := chanman.NewChannelManager(
+	manager := channel_manager.NewChannelManager(
 		os.Getenv("TWITCH_BOT_CLIENT_ID"),
 		os.Getenv("TWITCH_CHANNEL_TITLE_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_BROADCASTER_ID"),
