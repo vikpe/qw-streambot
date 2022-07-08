@@ -209,10 +209,7 @@ func (b *Brain) OnStreambotSuggestServer(msg message.Message) {
 }
 
 func (b *Brain) connectToServer(server mvdsv.Mvdsv) {
-	pfmt.Println("connectToServer", server.Address, server.Title)
-
 	if b.serverMonitor.GetAddress() == server.Address {
-		fmt.Println(" .. already connected to server")
 		return
 	}
 
