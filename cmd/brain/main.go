@@ -6,8 +6,8 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/vikpe/streambot/internal/brain"
+	"github.com/vikpe/streambot/internal/brain/ezquake"
 	"github.com/vikpe/streambot/internal/brain/util/proc"
-	"github.com/vikpe/streambot/internal/pkg/ezquake"
 	"github.com/vikpe/streambot/internal/pkg/zeromq"
 )
 
