@@ -81,3 +81,12 @@ func TestNewMessageFromParts(t *testing.T) {
 		assert.EqualError(t, err, "expected 3 message frames, got 4")
 	})
 }
+
+func TestNewMessage(t *testing.T) {
+	expect := message.Message{
+		Topic:       "foo",
+		ContentType: "string",
+		Content:     message.Serialize("bar"),
+	}
+	assert.Equal(t, expect, message.NewMessage("foo", "bar"))
+}
