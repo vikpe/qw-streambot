@@ -43,11 +43,11 @@ func New(username, accessToken, channel, subscriberAddress, publisherAddress str
 	}
 
 	chatbot.OnStarted = func() {
-		pfmt.Println("start")
+		pfmt.Println("started")
 	}
 
 	chatbot.OnStopped = func(sig os.Signal) {
-		pfmt.Printfln("stop (%s)", sig)
+		pfmt.Printfln("stopped (%s)", sig)
 	}
 
 	// channel commands
