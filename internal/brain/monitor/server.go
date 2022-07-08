@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/pkg/topic"
+	"github.com/vikpe/streambot/pkg/zeromq"
 )
 
 type MvdsvProvider func(address string) mvdsv.Mvdsv

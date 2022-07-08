@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/vikpe/streambot/internal/brain/monitor"
-	"github.com/vikpe/streambot/internal/pkg/zeromq/mock"
+	"github.com/vikpe/streambot/pkg/zeromq/mock"
 )
 
 func TestProcessMonitor(t *testing.T) {

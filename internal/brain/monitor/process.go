@@ -3,8 +3,8 @@ package monitor
 import (
 	"time"
 
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/pkg/topic"
+	"github.com/vikpe/streambot/pkg/zeromq"
 )
 
 type ProcessMonitor struct {

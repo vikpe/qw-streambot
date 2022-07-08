@@ -18,10 +18,10 @@ import (
 	"github.com/vikpe/streambot/internal/brain/util/qws"
 	"github.com/vikpe/streambot/internal/brain/util/sstat"
 	"github.com/vikpe/streambot/internal/brain/util/task"
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
-	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 	"github.com/vikpe/streambot/pkg/commander"
 	"github.com/vikpe/streambot/pkg/topic"
+	"github.com/vikpe/streambot/pkg/zeromq"
+	"github.com/vikpe/streambot/pkg/zeromq/message"
 )
 
 var pfmt = prettyfmt.New("brain", color.FgHiCyan, "15:04:05", color.FgWhite)

@@ -8,10 +8,10 @@ import (
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/streambot/internal/brain/util/qws"
 	"github.com/vikpe/streambot/internal/chatbot/irc"
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
-	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 	"github.com/vikpe/streambot/pkg/commander"
 	"github.com/vikpe/streambot/pkg/topic"
+	"github.com/vikpe/streambot/pkg/zeromq"
+	"github.com/vikpe/streambot/pkg/zeromq/message"
 	"golang.org/x/exp/slices"
 )
 

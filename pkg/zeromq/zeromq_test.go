@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
-	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
+	"github.com/vikpe/streambot/pkg/zeromq"
+	"github.com/vikpe/streambot/pkg/zeromq/message"
 )
 
 func TestEndToEnd(t *testing.T) {

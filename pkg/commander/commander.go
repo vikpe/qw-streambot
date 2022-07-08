@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/pkg/topic"
+	"github.com/vikpe/streambot/pkg/zeromq"
 )
 
 type Commander struct {

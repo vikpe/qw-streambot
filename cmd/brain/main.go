@@ -8,7 +8,7 @@ import (
 	"github.com/vikpe/streambot/internal/brain"
 	"github.com/vikpe/streambot/internal/brain/ezquake"
 	"github.com/vikpe/streambot/internal/brain/util/proc"
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/pkg/zeromq"
 )
 
 func main() {

@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/streambot/internal/pkg/zeromq/mock"
 	"github.com/vikpe/streambot/pkg/commander"
+	"github.com/vikpe/streambot/pkg/zeromq/mock"
 )
 
 func TestCommander_Autotrack(t *testing.T) {

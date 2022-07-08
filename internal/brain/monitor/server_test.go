@@ -8,7 +8,7 @@ import (
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/qsettings"
 	"github.com/vikpe/streambot/internal/brain/monitor"
-	"github.com/vikpe/streambot/internal/pkg/zeromq/mock"
+	"github.com/vikpe/streambot/pkg/zeromq/mock"
 )
 
 func TestServerMonitor(t *testing.T) {
