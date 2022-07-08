@@ -6,7 +6,9 @@ import (
 	"github.com/goccy/go-json"
 )
 
-func Serialize(data any) []byte {
+type SerializedValue []byte
+
+func Serialize(data any) SerializedValue {
 	dataAsJson, err := json.Marshal(data)
 
 	if err != nil {
@@ -21,4 +23,20 @@ func Unserialize(data []byte, target interface{}) {
 	if err != nil {
 		fmt.Println("Unserialize error", data, err)
 	}
+}
+
+func (d SerializedValue) ToString() string {
+	var target string
+	d.To(&target)
+	return target
+}
+
+func (d SerializedValue) ToInt() int {
+	var target int
+	d.To(&target)
+	return target
+}
+
+func (d SerializedValue) To(target interface{}) {
+	Unserialize(d, target)
 }

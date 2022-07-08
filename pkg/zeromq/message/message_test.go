@@ -78,18 +78,3 @@ func TestNewMessageFromParts(t *testing.T) {
 		assert.EqualError(t, err, "expected 3 message frames, got 4")
 	})
 }
-
-func TestSerializedValue_ToString(t *testing.T) {
-	assert.Equal(t, "abc", message.NewSerializedValue("abc").ToString())
-}
-
-func TestSerializedValue_ToInt(t *testing.T) {
-	assert.Equal(t, 123, message.NewSerializedValue(123).ToInt())
-}
-
-func TestSerializedValue_To(t *testing.T) {
-	valueBefore := []string{"a", "b", "c"}
-	var valueAfter []string
-	message.NewSerializedValue(valueBefore).To(&valueAfter)
-	assert.Equal(t, valueBefore, valueAfter)
-}

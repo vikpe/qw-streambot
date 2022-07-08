@@ -127,3 +127,18 @@ func BenchmarkSerialize(b *testing.B) {
 		}
 	})
 }
+
+func TestSerializedValue_ToString(t *testing.T) {
+	assert.Equal(t, "abc", message.Serialize("abc").ToString())
+}
+
+func TestSerializedValue_ToInt(t *testing.T) {
+	assert.Equal(t, 123, message.Serialize(123).ToInt())
+}
+
+func TestSerializedValue_To(t *testing.T) {
+	valueBefore := []string{"a", "b", "c"}
+	var valueAfter []string
+	message.Serialize(valueBefore).To(&valueAfter)
+	assert.Equal(t, valueBefore, valueAfter)
+}

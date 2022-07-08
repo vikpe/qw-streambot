@@ -22,31 +22,9 @@ type Message struct {
 func NewMessage(topic string, content any) Message {
 	return Message{
 		Topic:       topic,
-		Content:     NewSerializedValue(content),
+		Content:     Serialize(content),
 		ContentType: fmt.Sprintf("%T", content),
 	}
-}
-
-type SerializedValue []byte
-
-func NewSerializedValue(value any) SerializedValue {
-	return Serialize(value)
-}
-
-func (d SerializedValue) ToString() string {
-	var target string
-	d.To(&target)
-	return target
-}
-
-func (d SerializedValue) ToInt() int {
-	var target int
-	d.To(&target)
-	return target
-}
-
-func (d SerializedValue) To(target interface{}) {
-	Unserialize(d, target)
 }
 
 func NewMessageFromFrames(frames []string) (Message, error) {
