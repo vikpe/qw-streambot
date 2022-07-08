@@ -51,7 +51,7 @@ func (d SerializedValue) To(target interface{}) {
 
 func NewMessageFromFrames(frames []string) (Message, error) {
 	frameCount := len(frames)
-	const expectedFrameCount = 3
+	const expectedFrameCount = 3 // topic, data type, data
 
 	if frameCount != expectedFrameCount {
 		return Message{}, errors.New(fmt.Sprintf("expected %d message frames, got %d", expectedFrameCount, frameCount))
