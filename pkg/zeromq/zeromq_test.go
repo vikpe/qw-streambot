@@ -1,6 +1,7 @@
 package zeromq_test
 
 import (
+	"os"
 	"sync"
 	"testing"
 
@@ -22,8 +23,13 @@ func TestEndToEnd(t *testing.T) {
 	}
 
 	// proxy
+	proxy := zeromq.NewProxy("tcp://*:5555", "tcp://*:5556")
+	var proxyStarted bool
+	var proxyStopped bool
+
 	go func() {
-		proxy := zeromq.NewProxy("tcp://*:5555", "tcp://*:5556")
+		proxy.OnStart = func() { proxyStarted = true }
+		proxy.OnStop = func(sig os.Signal) { proxyStopped = true }
 		proxy.Start()
 	}()
 	zeromq.WaitForConnection()
@@ -38,6 +44,7 @@ func TestEndToEnd(t *testing.T) {
 			messagesRecieved = append(messagesRecieved, msg)
 
 			if len(messagesRecieved) == len(messagesToSend) {
+				proxy.Stop()
 				wg.Done()
 			}
 		})
@@ -57,6 +64,9 @@ func TestEndToEnd(t *testing.T) {
 	wg.Wait()
 
 	// assertions
+	assert.True(t, proxyStarted)
+	assert.True(t, proxyStopped)
+
 	// message 1
 	assert.Equal(t, messagesToSend[0].Topic, messagesRecieved[0].Topic)
 	assert.Equal(t, messagesToSend[0].Content, messagesRecieved[0].Content.ToString())
