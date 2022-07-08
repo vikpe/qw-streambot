@@ -135,7 +135,7 @@ func (b *Brain) ValidateCurrentServer() {
 
 	altName := fmt.Sprintf("%s(1)", b.clientPlayerName)
 	if analyze.HasSpectator(currentServer, altName) {
-		b.commander.Command(fmt.Sprintf("name %s", b.clientPlayerName))
+		b.commander.Commandf("name %s", b.clientPlayerName)
 		return
 	}
 
@@ -214,9 +214,9 @@ func (b *Brain) connectToServer(server mvdsv.Mvdsv) {
 	}
 
 	if len(server.QtvStream.Url) > 0 {
-		b.commander.Command(fmt.Sprintf("qtvplay %s", server.QtvStream.Url))
+		b.commander.Commandf("qtvplay %s", server.QtvStream.Url)
 	} else {
-		b.commander.Command(fmt.Sprintf("connect %s", server.Address))
+		b.commander.Commandf("connect %s", server.Address)
 	}
 
 	time.AfterFunc(4*time.Second, func() {
@@ -278,5 +278,5 @@ func (b *Brain) OnServerTitleChanged(msg message.Message) {
 func (b *Brain) OnServerMatchtagChanged(msg message.Message) {
 	matchtag := msg.Content.ToString()
 	textScale := calc.StaticTextScale(matchtag)
-	b.commander.Command(fmt.Sprintf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag))
+	b.commander.Commandf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag)
 }
