@@ -8,18 +8,18 @@ import (
 )
 
 type ProcessMonitor struct {
-	isDone       bool
-	getIsStarted func() bool
-	onEvent      zeromq.EventHandler
-	prevState    bool
+	isDone           bool
+	processIsStarted func() bool
+	onEvent          zeromq.EventHandler
+	prevState        bool
 }
 
-func NewProcessMonitor(getIsStarted func() bool, onEvent zeromq.EventHandler) ProcessMonitor {
+func NewProcessMonitor(processIsStarted func() bool, onEvent zeromq.EventHandler) ProcessMonitor {
 	return ProcessMonitor{
-		isDone:       false,
-		getIsStarted: getIsStarted,
-		onEvent:      onEvent,
-		prevState:    false,
+		isDone:           false,
+		processIsStarted: processIsStarted,
+		onEvent:          onEvent,
+		prevState:        false,
 	}
 }
 
@@ -28,7 +28,7 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 
 	go func() {
 		ticker := time.NewTicker(interval)
-		p.prevState = p.getIsStarted()
+		p.prevState = p.processIsStarted()
 
 		for ; true; <-ticker.C {
 			if p.isDone {
@@ -41,7 +41,7 @@ func (p *ProcessMonitor) Start(interval time.Duration) {
 }
 
 func (p *ProcessMonitor) CompareStates() {
-	isStarted := p.getIsStarted()
+	isStarted := p.processIsStarted()
 
 	if isStarted && !p.prevState {
 		p.onEvent(topic.EzquakeStarted)
