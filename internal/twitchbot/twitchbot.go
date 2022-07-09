@@ -21,7 +21,7 @@ type ExtendedTwitchbot struct {
 }
 
 func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *ExtendedTwitchbot {
-	var pfmt = prettyfmt.New("chatbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
+	var pfmt = prettyfmt.New("twitchbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
 	bot := ExtendedTwitchbot{
 		Chatbot:    chatbot.NewChatbot(username, accessToken, channel, '!'),
