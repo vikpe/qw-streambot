@@ -8,7 +8,7 @@ echo "Starting all components"
 
     # controllers
     sleep 0.2 # wait for proxy to start
-    bash scripts/controllers/channel_manager.sh &
+    bash scripts/controllers/twitch_manager.sh &
     bash scripts/controllers/twitchbot.sh &
     bash scripts/controllers/brain.sh &
 

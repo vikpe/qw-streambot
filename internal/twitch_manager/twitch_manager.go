@@ -1,4 +1,4 @@
-package channel_manager
+package twitch_manager
 
 import (
 	"fmt"

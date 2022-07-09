@@ -1,7 +1,7 @@
 .idea/
 cmd/brain/brain
 cmd/twitchbot/twitchbot
-cmd/channel_manager/channel_manager
+cmd/twitch_manager/twitch_manager
 cmd/proxy/proxy
 coverage.out
 .env

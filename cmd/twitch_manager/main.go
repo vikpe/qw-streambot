@@ -7,7 +7,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/joho/godotenv"
 	"github.com/vikpe/prettyfmt"
-	"github.com/vikpe/streambot/internal/channel_manager"
+	"github.com/vikpe/streambot/internal/twitch_manager"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 		return
 	}
 
-	manager, err := channel_manager.NewChannelManager(
+	manager, err := twitch_manager.NewChannelManager(
 		os.Getenv("TWITCH_BOT_CLIENT_ID"),
 		os.Getenv("TWITCH_CHANNEL_TITLE_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_BROADCASTER_ID"),
@@ -29,7 +29,7 @@ func main() {
 		return
 	}
 
-	var pfmt = prettyfmt.New("channel_manager", color.FgHiRed, "15:04:05", color.FgWhite)
+	var pfmt = prettyfmt.New("twitch_manager", color.FgHiRed, "15:04:05", color.FgWhite)
 	manager.OnStarted = func() { pfmt.Println("started") }
 	manager.OnStopped = func(signal os.Signal) { pfmt.Println("stopped", signal) }
 	manager.OnError = func(err error) { pfmt.Println("error", err) }
