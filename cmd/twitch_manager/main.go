@@ -25,7 +25,7 @@ func main() {
 	)
 
 	if err != nil {
-		fmt.Println("unable to create channel manager:", err)
+		fmt.Println("unable to create twitch manager:", err)
 		return
 	}
 
