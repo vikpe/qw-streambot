@@ -20,11 +20,11 @@ type Twitchbot struct {
 	subscriber *zeromq.Subscriber
 }
 
-func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *Twitchbot {
+func New(chatbotUsername, chatbotAccessToken, channelName, subscriberAddress, publisherAddress string) *Twitchbot {
 	var pfmt = prettyfmt.New("twitchbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
 	bot := Twitchbot{
-		Chatbot:    chatbot.NewChatbot(username, accessToken, channel, '!'),
+		Chatbot:    chatbot.NewChatbot(chatbotUsername, chatbotAccessToken, channelName, '!'),
 		subscriber: zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
 	}
 
@@ -38,7 +38,7 @@ func New(username, accessToken, channel, subscriberAddress, publisherAddress str
 
 	// bot events
 	bot.OnConnected = func() {
-		pfmt.Println("connected as", username)
+		pfmt.Println("connected as", chatbotUsername)
 		bot.subscriber.Start(onZmqMessage)
 	}
 
