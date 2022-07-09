@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/internal/brain"
+	"github.com/vikpe/streambot/internal/quakebot"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 		return
 	}
 
-	brn := brain.NewBrain(
+	brn := quakebot.New(
 		os.Getenv("EZQUAKE_PLAYER_NAME"),
 		os.Getenv("EZQUAKE_BIN_PATH"),
 		os.Getenv("EZQUAKE_PROCESS_USERNAME"),

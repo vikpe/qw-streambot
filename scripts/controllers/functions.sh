@@ -3,7 +3,7 @@ COLOR_GREEN="0;32"   # proxy
 COLOR_YELLOW="1;33"  # ezquake
 COLOR_MAGENTA="0;35" # chatbot
 COLOR_RED="0;31"     # channel manager
-COLOR_CYAN="0;36"    # brain
+COLOR_CYAN="0;36"    # quakebot
 #COLOR_BLUE="0;34"   # discord
 SEQ_RESET="\e[0m"
 

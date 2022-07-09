@@ -1,5 +1,5 @@
 .idea/
-cmd/brain/brain
+cmd/quakebot/quakebot
 cmd/twitchbot/twitchbot
 cmd/twitch_manager/twitch_manager
 cmd/proxy/proxy

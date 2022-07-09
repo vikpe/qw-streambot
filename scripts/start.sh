@@ -10,7 +10,7 @@ echo "Starting all components"
     sleep 0.2 # wait for proxy to start
     bash scripts/controllers/twitch_manager.sh &
     bash scripts/controllers/twitchbot.sh &
-    bash scripts/controllers/brain.sh &
+    bash scripts/controllers/quakebot.sh &
 
     sleep 1 # wait for controllers to start
     bash scripts/controllers/ezquake.sh

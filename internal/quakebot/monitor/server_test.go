@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/qsettings"
-	"github.com/vikpe/streambot/internal/brain/monitor"
+	"github.com/vikpe/streambot/internal/quakebot/monitor"
 	"github.com/vikpe/streambot/pkg/zeromq/mock"
 )
 
