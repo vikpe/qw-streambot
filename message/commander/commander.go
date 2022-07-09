@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/streambot/pkg/topic"
+	"github.com/vikpe/streambot/message/topic"
 	"github.com/vikpe/streambot/pkg/zeromq"
 )
 

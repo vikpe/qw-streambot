@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/nicklaw5/helix/v2"
-	"github.com/vikpe/streambot/pkg/topic"
+	"github.com/vikpe/streambot/message/topic"
 	"github.com/vikpe/streambot/pkg/zeromq"
 	"github.com/vikpe/streambot/pkg/zeromq/message"
 )

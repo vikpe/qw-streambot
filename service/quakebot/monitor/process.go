@@ -3,7 +3,7 @@ package monitor
 import (
 	"time"
 
-	"github.com/vikpe/streambot/pkg/topic"
+	"github.com/vikpe/streambot/message/topic"
 	"github.com/vikpe/streambot/pkg/zeromq"
 )
 
