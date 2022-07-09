@@ -7,7 +7,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/joho/godotenv"
 	"github.com/vikpe/prettyfmt"
-	"github.com/vikpe/streambot/internal/twitch_manager"
+	"github.com/vikpe/streambot/service/twitch_manager"
 )
 
 func main() {

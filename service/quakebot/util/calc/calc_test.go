@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/internal/quakebot/util/calc"
+	"github.com/vikpe/streambot/service/quakebot/util/calc"
 )
 
 func TestClampFloat64(t *testing.T) {

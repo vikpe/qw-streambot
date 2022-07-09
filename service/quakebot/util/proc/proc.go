@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/vikpe/streambot/internal/quakebot/util/proc/shell"
+	"github.com/vikpe/streambot/service/quakebot/util/proc/shell"
 )
 
 type ProcessController struct {

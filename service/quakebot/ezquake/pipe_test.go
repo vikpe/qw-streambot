@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/internal/quakebot/ezquake"
+	"github.com/vikpe/streambot/service/quakebot/ezquake"
 )
 
 func pipePath(username string) string {

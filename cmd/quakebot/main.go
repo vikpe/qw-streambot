@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/internal/quakebot"
+	"github.com/vikpe/streambot/service/quakebot"
 )
 
 func main() {
