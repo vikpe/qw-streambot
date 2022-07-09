@@ -17,7 +17,7 @@ func main() {
 		return
 	}
 
-	manager, err := twitch_manager.NewChannelManager(
+	manager, err := twitch_manager.New(
 		os.Getenv("TWITCH_BOT_CLIENT_ID"),
 		os.Getenv("TWITCH_CHANNEL_TITLE_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_BROADCASTER_ID"),

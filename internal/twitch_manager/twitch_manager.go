@@ -13,7 +13,7 @@ import (
 	"github.com/vikpe/streambot/pkg/zeromq/message"
 )
 
-type ChannelManager struct {
+type TwitchManager struct {
 	apiClient     *helix.Client
 	broadcasterID string
 	subscriber    *zeromq.Subscriber
@@ -23,15 +23,15 @@ type ChannelManager struct {
 	OnError       func(error)
 }
 
-func NewChannelManager(clientID, accessToken, broadcasterID, subscriberAddress string) (*ChannelManager, error) {
+func New(clientID, accessToken, broadcasterID, subscriberAddress string) (*TwitchManager, error) {
 	apiClient, err := helix.NewClient(&helix.Options{ClientID: clientID, AppAccessToken: accessToken})
 
 	if err != nil {
 		fmt.Println("twitch api client error", err)
-		return &ChannelManager{}, err
+		return &TwitchManager{}, err
 	}
 
-	return &ChannelManager{
+	return &TwitchManager{
 		apiClient:     apiClient,
 		broadcasterID: broadcasterID,
 		subscriber:    zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
@@ -41,7 +41,7 @@ func NewChannelManager(clientID, accessToken, broadcasterID, subscriberAddress s
 	}, nil
 }
 
-func (m *ChannelManager) Start() {
+func (m *TwitchManager) Start() {
 	m.OnStarted()
 
 	m.stopChan = make(chan os.Signal, 1)
@@ -55,7 +55,7 @@ func (m *ChannelManager) Start() {
 	m.OnStopped(sig)
 }
 
-func (m *ChannelManager) Stop() {
+func (m *TwitchManager) Stop() {
 	if m.stopChan == nil {
 		return
 	}
@@ -63,7 +63,7 @@ func (m *ChannelManager) Stop() {
 	time.Sleep(50 * time.Millisecond)
 }
 
-func (m *ChannelManager) OnMessage(msg message.Message) {
+func (m *TwitchManager) OnMessage(msg message.Message) {
 	var err error
 
 	switch msg.Topic {
@@ -76,7 +76,7 @@ func (m *ChannelManager) OnMessage(msg message.Message) {
 	}
 }
 
-func (m *ChannelManager) SetTitle(title string) error {
+func (m *TwitchManager) SetTitle(title string) error {
 	const quakeGameId = "7348"
 
 	_, err := m.apiClient.EditChannelInformation(&helix.EditChannelInformationParams{
