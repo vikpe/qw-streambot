@@ -12,7 +12,7 @@ echo "Starting all components"
     bash scripts/controllers/twitchbot.sh &
     bash scripts/controllers/quakebot.sh &
 
-    sleep 1 # wait for controllers to start
+    sleep 1 # wait for services to start
     bash scripts/controllers/ezquake.sh
 
     wait
