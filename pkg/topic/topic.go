@@ -19,9 +19,9 @@ const (
 const (
 	TwitchbotSay = "twitchbot.say"
 
-	EzquakeCommand     = "ezquake.command"
-	EzquakeScript      = "ezquake.script"
-	EzquakeStopProcess = "ezquake.stop"
+	EzquakeCommand = "ezquake.command"
+	EzquakeScript  = "ezquake.script"
+	EzquakeStop    = "ezquake.stop"
 
 	StreambotSuggestServer = "streambot.suggest_server"
 	StreambotEnableAuto    = "streambot.enable_auto"
