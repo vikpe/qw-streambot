@@ -60,7 +60,7 @@ func (m *TwitchManager) Stop() {
 		return
 	}
 	m.stopChan <- syscall.SIGINT
-	time.Sleep(50 * time.Millisecond)
+	time.Sleep(30 * time.Millisecond)
 }
 
 func (m *TwitchManager) OnMessage(msg message.Message) {

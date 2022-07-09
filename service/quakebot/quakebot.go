@@ -87,7 +87,7 @@ func (b *QuakeBot) Stop() {
 		return
 	}
 	b.stopChan <- syscall.SIGINT
-	time.Sleep(50 * time.Millisecond)
+	time.Sleep(30 * time.Millisecond)
 }
 
 func (b *QuakeBot) OnMessage(msg message.Message) {
