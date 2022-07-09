@@ -18,10 +18,10 @@ func TestCommander_Autotrack(t *testing.T) {
 	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
-func TestCommander_ChatbotSay(t *testing.T) {
+func TestCommander_TwitchbotSay(t *testing.T) {
 	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
-	cmder.ChatbotSay("hello")
+	cmder.TwitchbotSay("hello")
 
 	expectedCalls := [][]any{{"twitchbot.say", "hello"}}
 	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)

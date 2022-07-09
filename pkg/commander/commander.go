@@ -23,7 +23,7 @@ func (c Commander) Autotrack() {
 	c.sendMessage(topic.EzquakeCommand, "bot_track")
 }
 
-func (c Commander) ChatbotSay(text string) {
+func (c Commander) TwitchbotSay(text string) {
 	c.sendMessage(topic.TwitchbotSay, text)
 }
 
