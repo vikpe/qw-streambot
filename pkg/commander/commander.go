@@ -24,7 +24,7 @@ func (c Commander) Autotrack() {
 }
 
 func (c Commander) ChatbotSay(text string) {
-	c.sendMessage(topic.ChatbotSay, text)
+	c.sendMessage(topic.TwitchbotSay, text)
 }
 
 func (c Commander) Command(cmd string) {

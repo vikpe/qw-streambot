@@ -17,7 +17,7 @@ const (
 
 // commands
 const (
-	ChatbotSay = "chatbot.say"
+	TwitchbotSay = "twitchbot.say"
 
 	EzquakeCommand     = "ezquake.command"
 	EzquakeScript      = "ezquake.script"

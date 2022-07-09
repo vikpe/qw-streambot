@@ -31,7 +31,7 @@ func New(username, accessToken, channel, subscriberAddress, publisherAddress str
 	// zmq messages
 	onZmqMessage := func(message message.Message) {
 		switch message.Topic {
-		case topic.ChatbotSay:
+		case topic.TwitchbotSay:
 			bot.Say(message.Content.ToString())
 		}
 	}
