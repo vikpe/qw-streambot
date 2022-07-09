@@ -15,15 +15,15 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type ExtendedTwitchbot struct {
+type Twitchbot struct {
 	*chatbot.Chatbot
 	subscriber *zeromq.Subscriber
 }
 
-func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *ExtendedTwitchbot {
+func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *Twitchbot {
 	var pfmt = prettyfmt.New("twitchbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
-	bot := ExtendedTwitchbot{
+	bot := Twitchbot{
 		Chatbot:    chatbot.NewChatbot(username, accessToken, channel, '!'),
 		subscriber: zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
 	}
