@@ -23,7 +23,7 @@ func TestCommander_ChatbotSay(t *testing.T) {
 	cmder := commander.NewCommander(publisher.SendMessage)
 	cmder.ChatbotSay("hello")
 
-	expectedCalls := [][]any{{"chatbot.say", "hello"}}
+	expectedCalls := [][]any{{"twitchbot.say", "hello"}}
 	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
