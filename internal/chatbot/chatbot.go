@@ -7,24 +7,24 @@ import (
 	"github.com/gempir/go-twitch-irc/v3"
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/streambot/internal/brain/util/qws"
-	"github.com/vikpe/streambot/internal/chatbot/irc"
 	"github.com/vikpe/streambot/pkg/commander"
 	"github.com/vikpe/streambot/pkg/topic"
 	"github.com/vikpe/streambot/pkg/zeromq"
 	"github.com/vikpe/streambot/pkg/zeromq/message"
+	chatbot "github.com/vikpe/twitch-chatbot"
 	"golang.org/x/exp/slices"
 )
 
-type Chatbot struct {
-	*irc.Bot
+type ExtChatbot struct {
+	*chatbot.Chatbot
 	subscriber *zeromq.Subscriber
 }
 
-func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *Chatbot {
+func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *ExtChatbot {
 	var pfmt = prettyfmt.New("chatbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
-	chatbot := Chatbot{
-		Bot:        irc.NewBot(username, accessToken, channel, '!'),
+	bot := ExtChatbot{
+		Chatbot:    chatbot.NewChatbot(username, accessToken, channel, '!'),
 		subscriber: zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
 	}
 
@@ -32,28 +32,28 @@ func New(username, accessToken, channel, subscriberAddress, publisherAddress str
 	onZmqMessage := func(message message.Message) {
 		switch message.Topic {
 		case topic.ChatbotSay:
-			chatbot.Say(message.Content.ToString())
+			bot.Say(message.Content.ToString())
 		}
 	}
 
 	// bot events
-	chatbot.OnConnected = func() {
+	bot.OnConnected = func() {
 		pfmt.Println("connected as", username)
-		chatbot.subscriber.Start(onZmqMessage)
+		bot.subscriber.Start(onZmqMessage)
 	}
 
-	chatbot.OnStarted = func() {
+	bot.OnStarted = func() {
 		pfmt.Println("started")
 	}
 
-	chatbot.OnStopped = func(sig os.Signal) {
+	bot.OnStopped = func(sig os.Signal) {
 		pfmt.Printfln("stopped (%s)", sig)
 	}
 
 	// channel commands
 	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
-	chatbot.AddCommand("auto", func(cmd irc.Command, msg twitch.PrivateMessage) {
+	bot.AddCommand("auto", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsToString())
 
 		if shouldDisable {
@@ -63,51 +63,51 @@ func New(username, accessToken, channel, subscriberAddress, publisherAddress str
 		}
 	})
 
-	chatbot.AddCommand("autotrack", func(cmd irc.Command, msg twitch.PrivateMessage) {
+	bot.AddCommand("autotrack", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.Autotrack()
 	})
 
-	chatbot.AddCommand("cfg_load", func(cmd irc.Command, msg twitch.PrivateMessage) {
+	bot.AddCommand("cfg_load", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.Command("cfg_load")
 	})
 
-	chatbot.AddCommand("cmd", func(cmd irc.Command, msg twitch.PrivateMessage) {
-		if !irc.IsBroadcaster(msg.User) {
-			chatbot.Reply(msg, "cmd is a mod-only command.")
+	bot.AddCommand("cmd", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
+		if !chatbot.IsBroadcaster(msg.User) {
+			bot.Reply(msg, "cmd is a mod-only chatbot.")
 			return
 		}
 
 		cmder.Command(cmd.ArgsToString())
 	})
 
-	chatbot.AddCommand("console", func(cmd irc.Command, msg twitch.PrivateMessage) {
+	bot.AddCommand("console", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.Command("toggleconsole")
 	})
 
-	chatbot.AddCommand("find", func(cmd irc.Command, msg twitch.PrivateMessage) {
+	bot.AddCommand("find", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		server, err := qws.FindPlayer(cmd.ArgsToString())
 		if err != nil {
-			chatbot.Reply(msg, err.Error())
+			bot.Reply(msg, err.Error())
 			return
 		}
 		cmder.SuggestServer(server)
 	})
 
-	chatbot.AddCommand("lastscores", func(cmd irc.Command, msg twitch.PrivateMessage) {
+	bot.AddCommand("lastscores", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.Lastscores()
 	})
 
-	chatbot.AddCommand("restart", func(cmd irc.Command, msg twitch.PrivateMessage) {
+	bot.AddCommand("restart", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.StopEzquake()
 	})
 
-	chatbot.AddCommand("showscores", func(cmd irc.Command, msg twitch.PrivateMessage) {
+	bot.AddCommand("showscores", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.Showscores()
 	})
 
-	chatbot.AddCommand("track", func(cmd irc.Command, msg twitch.PrivateMessage) {
+	bot.AddCommand("track", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.Track(cmd.ArgsToString())
 	})
 
-	return &chatbot
+	return &bot
 }
