@@ -28,8 +28,8 @@ func TestEndToEnd(t *testing.T) {
 	var proxyStopped bool
 
 	go func() {
-		proxy.OnStart = func() { proxyStarted = true }
-		proxy.OnStop = func(sig os.Signal) { proxyStopped = true }
+		proxy.OnStarted = func() { proxyStarted = true }
+		proxy.OnStopped = func(sig os.Signal) { proxyStopped = true }
 		proxy.Start()
 	}()
 	zeromq.WaitForConnection()

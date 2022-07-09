@@ -15,18 +15,18 @@ type Proxy struct {
 	frontendAddress string
 	backendAddress  string
 	stopChan        chan os.Signal
-	OnStart         func()
+	OnStarted       func()
 	OnError         func(error)
-	OnStop          func(os.Signal)
+	OnStopped       func(os.Signal)
 }
 
 func NewProxy(frontend string, backend string) Proxy {
 	return Proxy{
 		frontendAddress: frontend,
 		backendAddress:  backend,
-		OnStart:         func() {},
+		OnStarted:       func() {},
 		OnError:         func(err error) {},
-		OnStop:          func(sig os.Signal) {},
+		OnStopped:       func(sig os.Signal) {},
 	}
 }
 
@@ -59,7 +59,7 @@ func (p *Proxy) Start() {
 		}
 
 		// run until interrupt
-		p.OnStart()
+		p.OnStarted()
 		err = zmq.Proxy(frontend, backend, nil)
 
 		if err != nil {
@@ -73,7 +73,7 @@ func (p *Proxy) Start() {
 		p.OnError(err)
 	}
 
-	p.OnStop(sig)
+	p.OnStopped(sig)
 }
 
 func (p *Proxy) Stop() {
