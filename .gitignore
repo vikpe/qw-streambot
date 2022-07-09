@@ -1,6 +1,6 @@
 .idea/
 cmd/brain/brain
-cmd/chatbot/chatbot
+cmd/twitchbot/twitchbot
 cmd/channel_manager/channel_manager
 cmd/proxy/proxy
 coverage.out

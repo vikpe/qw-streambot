@@ -1,4 +1,4 @@
-package chatbot
+package twitchbot
 
 import (
 	"os"
@@ -15,15 +15,15 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type ExtChatbot struct {
+type ExtendedTwitchbot struct {
 	*chatbot.Chatbot
 	subscriber *zeromq.Subscriber
 }
 
-func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *ExtChatbot {
+func New(username, accessToken, channel, subscriberAddress, publisherAddress string) *ExtendedTwitchbot {
 	var pfmt = prettyfmt.New("chatbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
-	bot := ExtChatbot{
+	bot := ExtendedTwitchbot{
 		Chatbot:    chatbot.NewChatbot(username, accessToken, channel, '!'),
 		subscriber: zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
 	}

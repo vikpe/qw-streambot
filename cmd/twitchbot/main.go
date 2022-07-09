@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/internal/chatbot"
+	"github.com/vikpe/streambot/internal/twitchbot"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 		return
 	}
 
-	bot := chatbot.New(
+	bot := twitchbot.New(
 		os.Getenv("TWITCH_BOT_USERNAME"),
 		os.Getenv("TWITCH_BOT_CHAT_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_USERNAME"),
