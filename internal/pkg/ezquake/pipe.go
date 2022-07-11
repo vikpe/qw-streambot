@@ -35,15 +35,13 @@ func (w *PipeWriter) writeToPipe(value string) error {
 	defer w.mux.Unlock()
 
 	file, errOpen := os.OpenFile(w.path(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	defer file.Close()
 
 	if errOpen != nil {
 		return errOpen
 	}
 
-	defer file.Close()
-
 	_, errWrite := file.WriteString(value)
-
 	return errWrite
 }
 
