@@ -19,8 +19,7 @@ jobs:
         run: go mod tidy
 
       - name: Test
-        run: go test ./... --cover
-        #run: go test ./... -covermode=atomic -coverprofile=coverage.out
+        run: go test ./... -covermode=atomic -coverprofile=coverage.out
 
-      #- name: Upload coverage to Codecov
-       #uses: codecov/codecov-action@v2
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
