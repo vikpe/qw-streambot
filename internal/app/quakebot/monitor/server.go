@@ -78,9 +78,7 @@ func (s *ServerMonitor) Stop() {
 }
 
 type serverState struct {
-	Map      string
 	Matchtag string
-	Score    int
 	Title    string
 }
 
@@ -88,9 +86,7 @@ func newServerState(getInfo MvdsvProvider, address string) serverState {
 	server := getInfo(address)
 
 	return serverState{
-		Map:      server.Settings.Get("map", ""),
 		Matchtag: server.Settings.Get("matchtag", ""),
-		Score:    server.Score,
 		Title:    server.Title,
 	}
 }
