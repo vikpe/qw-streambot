@@ -5,7 +5,7 @@ import (
 )
 
 const TopicsAll = ""
-const ConnectionGraceTimeout = time.Millisecond * 10
+const ConnectionGraceTimeout = time.Millisecond * 20
 
 func WaitForConnection() {
 	time.Sleep(ConnectionGraceTimeout)
