@@ -145,7 +145,7 @@ func (b *QuakeBot) ValidateCurrentServer() {
 		return
 	}
 
-	fmt.Println("not connected to current server (reset server address)", currentServer.SpectatorNames, currentServer.QtvStream.SpectatorNames)
+	pfmt.Println("not connected to current server (reset server address)", currentServer.SpectatorNames, currentServer.QtvStream.SpectatorNames)
 	b.serverMonitor.SetAddress("")
 }
 
