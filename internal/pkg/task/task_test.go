@@ -15,6 +15,7 @@ func TestPeriodicalTask(t *testing.T) {
 	countTask.Start(interval)
 	time.Sleep(4 * interval)
 	countTask.Stop()
+	time.Sleep(interval)
 
 	assert.Equal(t, 5, count)
 }
