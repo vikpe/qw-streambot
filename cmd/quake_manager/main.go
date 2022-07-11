@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/internal/app/quakebot"
+	"github.com/vikpe/streambot/internal/app/quake_manager"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 		return
 	}
 
-	brn := quakebot.New(
+	brn := quake_manager.New(
 		os.Getenv("EZQUAKE_PLAYER_NAME"),
 		os.Getenv("EZQUAKE_BIN_PATH"),
 		os.Getenv("EZQUAKE_PROCESS_USERNAME"),

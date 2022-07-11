@@ -1,4 +1,4 @@
-package quakebot
+package quake_manager
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
-	"github.com/vikpe/streambot/internal/app/quakebot/monitor"
+	"github.com/vikpe/streambot/internal/app/quake_manager/monitor"
 	"github.com/vikpe/streambot/internal/comms/commander"
 	"github.com/vikpe/streambot/internal/comms/topic"
 	"github.com/vikpe/streambot/internal/pkg/calc"
@@ -24,9 +24,9 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 )
 
-var pfmt = prettyfmt.New("quakebot", color.FgHiCyan, "15:04:05", color.FgWhite)
+var pfmt = prettyfmt.New("quakemanager", color.FgHiCyan, "15:04:05", color.FgWhite)
 
-type QuakeBot struct {
+type QuakeManager struct {
 	clientPlayerName string
 	pipe             *ezquake.PipeWriter
 	process          *proc.ProcessController
@@ -45,10 +45,10 @@ func New(
 	ezquakeProcessUsername string,
 	publisherAddress string,
 	subscriberAddress string,
-) *QuakeBot {
+) *QuakeManager {
 	publisher := zeromq.NewPublisher(publisherAddress)
 
-	return &QuakeBot{
+	return &QuakeManager{
 		clientPlayerName: clientPlayerName,
 		pipe:             ezquake.NewPipeWriter(ezquakeProcessUsername),
 		process:          proc.NewProcessController(ezquakeBinPath),
@@ -61,7 +61,7 @@ func New(
 	}
 }
 
-func (b *QuakeBot) Start() {
+func (b *QuakeManager) Start() {
 	b.stopChan = make(chan os.Signal, 1)
 	signal.Notify(b.stopChan, syscall.SIGTERM, syscall.SIGINT)
 
@@ -82,7 +82,7 @@ func (b *QuakeBot) Start() {
 	<-b.stopChan
 }
 
-func (b *QuakeBot) Stop() {
+func (b *QuakeManager) Stop() {
 	if b.stopChan == nil {
 		return
 	}
@@ -90,7 +90,7 @@ func (b *QuakeBot) Stop() {
 	time.Sleep(30 * time.Millisecond)
 }
 
-func (b *QuakeBot) OnMessage(msg message.Message) {
+func (b *QuakeManager) OnMessage(msg message.Message) {
 	handlers := map[string]message.Handler{
 		// commands
 		topic.StreambotDisableAuto:   b.OnStreambotDisableAuto,
@@ -114,16 +114,16 @@ func (b *QuakeBot) OnMessage(msg message.Message) {
 	}
 }
 
-func (b *QuakeBot) OnStreambotEnableAuto(msg message.Message) {
+func (b *QuakeManager) OnStreambotEnableAuto(msg message.Message) {
 	b.AutoMode = true
 	b.commander.Evaluate()
 }
 
-func (b *QuakeBot) OnStreambotDisableAuto(msg message.Message) {
+func (b *QuakeManager) OnStreambotDisableAuto(msg message.Message) {
 	b.AutoMode = false
 }
 
-func (b *QuakeBot) ValidateCurrentServer() {
+func (b *QuakeManager) ValidateCurrentServer() {
 	if "" == b.serverMonitor.GetAddress() {
 		return
 	}
@@ -149,7 +149,7 @@ func (b *QuakeBot) ValidateCurrentServer() {
 	b.serverMonitor.SetAddress("")
 }
 
-func (b *QuakeBot) OnStreambotEvaluate(msg message.Message) {
+func (b *QuakeManager) OnStreambotEvaluate(msg message.Message) {
 	if !b.process.IsStarted() {
 		return
 	}
@@ -163,7 +163,7 @@ func (b *QuakeBot) OnStreambotEvaluate(msg message.Message) {
 	}
 }
 
-func (b *QuakeBot) evaluateAutoModeEnabled() {
+func (b *QuakeManager) evaluateAutoModeEnabled() {
 	currentServer := sstat.GetMvdsvServer(b.serverMonitor.GetAddress())
 	shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
 
@@ -186,7 +186,7 @@ func (b *QuakeBot) evaluateAutoModeEnabled() {
 	b.connectToServer(bestServer)
 }
 
-func (b *QuakeBot) evaluateAutoModeDisabled() {
+func (b *QuakeManager) evaluateAutoModeDisabled() {
 	currentServer := sstat.GetMvdsvServer(b.serverMonitor.GetAddress())
 	const MinScore = 25
 	isOkServer := currentServer.Score >= MinScore
@@ -205,7 +205,7 @@ func (b *QuakeBot) evaluateAutoModeDisabled() {
 	b.commander.EnableAuto()
 }
 
-func (b *QuakeBot) OnStreambotSuggestServer(msg message.Message) {
+func (b *QuakeManager) OnStreambotSuggestServer(msg message.Message) {
 	var server mvdsv.Mvdsv
 	msg.Content.To(&server)
 
@@ -213,7 +213,7 @@ func (b *QuakeBot) OnStreambotSuggestServer(msg message.Message) {
 	b.connectToServer(server)
 }
 
-func (b *QuakeBot) connectToServer(server mvdsv.Mvdsv) {
+func (b *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 	if b.serverMonitor.GetAddress() == server.Address {
 		return
 	}
@@ -231,7 +231,7 @@ func (b *QuakeBot) connectToServer(server mvdsv.Mvdsv) {
 	b.serverMonitor.SetAddress(server.Address)
 }
 
-func (b *QuakeBot) OnEzquakeCommand(msg message.Message) {
+func (b *QuakeManager) OnEzquakeCommand(msg message.Message) {
 	if !b.process.IsStarted() {
 		return
 	}
@@ -239,7 +239,7 @@ func (b *QuakeBot) OnEzquakeCommand(msg message.Message) {
 	b.pipe.Write(msg.Content.ToString())
 }
 
-func (b *QuakeBot) OnEzquakeScript(msg message.Message) {
+func (b *QuakeManager) OnEzquakeScript(msg message.Message) {
 	script := msg.Content.ToString()
 
 	switch script {
@@ -252,13 +252,13 @@ func (b *QuakeBot) OnEzquakeScript(msg message.Message) {
 	}
 }
 
-func (b *QuakeBot) OnEzquakeStarted(msg message.Message) {
+func (b *QuakeManager) OnEzquakeStarted(msg message.Message) {
 	pfmt.Println("OnEzquakeStarted")
 	b.evaluateTask.Start(10 * time.Second)
 	time.AfterFunc(5*time.Second, func() { b.commander.Command("toggleconsole") })
 }
 
-func (b *QuakeBot) OnStopEzquake(msg message.Message) {
+func (b *QuakeManager) OnStopEzquake(msg message.Message) {
 	pfmt.Println("OnStopEzquake")
 	b.process.Stop(syscall.SIGTERM)
 
@@ -269,13 +269,13 @@ func (b *QuakeBot) OnStopEzquake(msg message.Message) {
 	})
 }
 
-func (b *QuakeBot) OnEzquakeStopped(msg message.Message) {
+func (b *QuakeManager) OnEzquakeStopped(msg message.Message) {
 	pfmt.Println("OnEzquakeStopped")
 	b.serverMonitor.SetAddress("")
 	b.evaluateTask.Stop()
 }
 
-func (b *QuakeBot) OnServerMatchtagChanged(msg message.Message) {
+func (b *QuakeManager) OnServerMatchtagChanged(msg message.Message) {
 	matchtag := msg.Content.ToString()
 	textScale := calc.StaticTextScale(matchtag)
 	b.commander.Commandf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag)

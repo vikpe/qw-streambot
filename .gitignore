@@ -1,7 +1,7 @@
 .idea/
-cmd/quakebot/quakebot
+cmd/proxy/proxy
+cmd/quake_manager/quake_manager
 cmd/twitchbot/twitchbot
 cmd/twitch_manager/twitch_manager
-cmd/proxy/proxy
 coverage.out
 .env
