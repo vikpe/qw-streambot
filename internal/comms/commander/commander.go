@@ -1,19 +1,18 @@
-// Package commander sends commands over zeromq
+// Package commander sends command messages
 package commander
 
 import (
 	"fmt"
 
 	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/streambot/internal/com/topic"
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/comms/topic"
 )
 
 type Commander struct {
-	sendMessage zeromq.EventHandler
+	sendMessage func(string, ...any)
 }
 
-func NewCommander(sendMessage zeromq.EventHandler) Commander {
+func NewCommander(sendMessage func(topic string, data ...any)) Commander {
 	return Commander{
 		sendMessage: sendMessage,
 	}

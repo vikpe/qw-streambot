@@ -1,11 +1,5 @@
 package topic
 
-// Examples — for events raised before/after state change:
-//
-// FileDownloading / FileDownloaded
-// TemperatureChanging / TemperatureChanged
-// MailArriving / MailArrived
-
 // events
 const (
 	EzquakeStarted = "ezquake.started"

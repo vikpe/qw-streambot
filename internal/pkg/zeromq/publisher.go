@@ -25,10 +25,10 @@ func (p *Publisher) SendMessage(topic string, content ...any) {
 	}
 
 	msg := message.NewMessage(topic, msgContent)
-	pubSendMessage(p.address, msg)
+	pubSendMessage(p.address, msg.Topic, msg.ContentType, string(msg.Content))
 }
 
-func pubSendMessage(address string, msg message.Message) {
+func pubSendMessage(address string, parts ...any) {
 	pubSocket, _ := zmq.NewSocket(zmq.PUB)
 	defer pubSocket.Close()
 	err := pubSocket.Connect(address)
@@ -38,7 +38,7 @@ func pubSendMessage(address string, msg message.Message) {
 	}
 	WaitForConnection()
 
-	_, err = pubSocket.SendMessage(msg.Topic, msg.ContentType, string(msg.Content))
+	_, err = pubSocket.SendMessage(parts...)
 	if err != nil {
 		fmt.Println("pubSendMessage: error sending message", err)
 		return

@@ -5,9 +5,8 @@ import (
 )
 
 const TopicsAll = ""
-
-type EventHandler = func(topic string, data ...any)
+const ConnectionGraceTimeout = time.Millisecond * 10
 
 func WaitForConnection() {
-	time.Sleep(time.Millisecond * 10)
+	time.Sleep(ConnectionGraceTimeout)
 }

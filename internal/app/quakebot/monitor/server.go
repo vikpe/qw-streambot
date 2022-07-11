@@ -4,22 +4,21 @@ import (
 	"time"
 
 	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/streambot/internal/com/topic"
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/comms/topic"
 )
 
 type MvdsvProvider func(address string) mvdsv.Mvdsv
 
 type ServerMonitor struct {
 	isDone           bool
-	onEvent          zeromq.EventHandler
+	onEvent          func(string, ...any)
 	getInfo          MvdsvProvider
 	address          string
 	addressTimestamp time.Time
 	prevState        serverState
 }
 
-func NewServerMonitor(getInfo MvdsvProvider, onEvent zeromq.EventHandler) *ServerMonitor {
+func NewServerMonitor(getInfo MvdsvProvider, onEvent func(topic string, data ...any)) *ServerMonitor {
 	return &ServerMonitor{
 		isDone:    false,
 		getInfo:   getInfo,

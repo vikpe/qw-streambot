@@ -3,18 +3,17 @@ package monitor
 import (
 	"time"
 
-	"github.com/vikpe/streambot/internal/com/topic"
-	"github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/comms/topic"
 )
 
 type ProcessMonitor struct {
 	isDone           bool
 	processIsStarted func() bool
-	onEvent          zeromq.EventHandler
+	onEvent          func(string, ...any)
 	prevState        bool
 }
 
-func NewProcessMonitor(processIsStarted func() bool, onEvent zeromq.EventHandler) ProcessMonitor {
+func NewProcessMonitor(processIsStarted func() bool, onEvent func(topic string, data ...any)) ProcessMonitor {
 	return ProcessMonitor{
 		isDone:           false,
 		processIsStarted: processIsStarted,

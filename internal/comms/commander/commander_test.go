@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
-	"github.com/vikpe/streambot/internal/com/commander"
+	"github.com/vikpe/streambot/internal/comms/commander"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/mock"
 )
 
