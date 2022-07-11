@@ -9,7 +9,7 @@ import (
 	"github.com/vikpe/streambot/internal/comms/commander"
 	"github.com/vikpe/streambot/internal/comms/topic"
 	"github.com/vikpe/streambot/internal/pkg/qws"
-	zeromq2 "github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 	chatbot "github.com/vikpe/twitch-chatbot"
 	"golang.org/x/exp/slices"
@@ -17,7 +17,7 @@ import (
 
 type Twitchbot struct {
 	*chatbot.Chatbot
-	subscriber *zeromq2.Subscriber
+	subscriber *zeromq.Subscriber
 }
 
 func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherAddress string) *Twitchbot {
@@ -25,7 +25,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 
 	bot := Twitchbot{
 		Chatbot:    chatbot.NewChatbot(botUsername, botAccessToken, channelName, '!'),
-		subscriber: zeromq2.NewSubscriber(subscriberAddress, zeromq2.TopicsAll),
+		subscriber: zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
 	}
 
 	// zmq messages
@@ -51,7 +51,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	}
 
 	// channel commands
-	cmder := commander.NewCommander(zeromq2.NewPublisher(publisherAddress).SendMessage)
+	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
 	bot.AddCommand("auto", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsToString())

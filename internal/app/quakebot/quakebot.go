@@ -11,7 +11,7 @@ import (
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
-	monitor2 "github.com/vikpe/streambot/internal/app/quakebot/monitor"
+	"github.com/vikpe/streambot/internal/app/quakebot/monitor"
 	"github.com/vikpe/streambot/internal/comms/commander"
 	"github.com/vikpe/streambot/internal/comms/topic"
 	"github.com/vikpe/streambot/internal/pkg/calc"
@@ -20,7 +20,7 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/qws"
 	"github.com/vikpe/streambot/internal/pkg/sstat"
 	"github.com/vikpe/streambot/internal/pkg/task"
-	zeromq2 "github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 )
 
@@ -30,10 +30,10 @@ type QuakeBot struct {
 	clientPlayerName string
 	pipe             *ezquake.PipeWriter
 	process          proc.ProcessController
-	serverMonitor    *monitor2.ServerMonitor
+	serverMonitor    *monitor.ServerMonitor
 	evaluateTask     task.PeriodicalTask
-	publisher        *zeromq2.Publisher
-	subscriber       *zeromq2.Subscriber
+	publisher        *zeromq.Publisher
+	subscriber       *zeromq.Subscriber
 	commander        commander.Commander
 	stopChan         chan os.Signal
 	AutoMode         bool
@@ -46,15 +46,15 @@ func New(
 	publisherAddress string,
 	subscriberAddress string,
 ) *QuakeBot {
-	publisher := zeromq2.NewPublisher(publisherAddress)
+	publisher := zeromq.NewPublisher(publisherAddress)
 
 	return &QuakeBot{
 		clientPlayerName: clientPlayerName,
 		pipe:             ezquake.NewPipeWriter(ezquakeProcessUsername),
 		process:          proc.NewProcessController(ezquakeBinPath),
-		serverMonitor:    monitor2.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
+		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
-		subscriber:       zeromq2.NewSubscriber(subscriberAddress, zeromq2.TopicsAll),
+		subscriber:       zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
 		publisher:        publisher,
 		commander:        commander.NewCommander(publisher.SendMessage),
 		AutoMode:         true,
@@ -68,10 +68,10 @@ func (b *QuakeBot) Start() {
 	go func() {
 		// event listeners
 		b.subscriber.Start(b.OnMessage)
-		zeromq2.WaitForConnection()
+		zeromq.WaitForConnection()
 
 		// event dispatchers
-		processMonitor := monitor2.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
+		processMonitor := monitor.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
 		processMonitor.Start(3 * time.Second)
 		b.serverMonitor.Start(5 * time.Second)
 

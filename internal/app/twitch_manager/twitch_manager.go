@@ -9,14 +9,14 @@ import (
 
 	"github.com/nicklaw5/helix/v2"
 	"github.com/vikpe/streambot/internal/comms/topic"
-	zeromq2 "github.com/vikpe/streambot/internal/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 )
 
 type TwitchManager struct {
 	apiClient     *helix.Client
 	broadcasterID string
-	subscriber    *zeromq2.Subscriber
+	subscriber    *zeromq.Subscriber
 	stopChan      chan os.Signal
 	OnStarted     func()
 	OnStopped     func(os.Signal)
@@ -34,7 +34,7 @@ func New(clientID, accessToken, broadcasterID, subscriberAddress string) (*Twitc
 	return &TwitchManager{
 		apiClient:     apiClient,
 		broadcasterID: broadcasterID,
-		subscriber:    zeromq2.NewSubscriber(subscriberAddress, zeromq2.TopicsAll),
+		subscriber:    zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
 		OnStarted:     func() {},
 		OnStopped:     func(os.Signal) {},
 		OnError:       func(error) {},
