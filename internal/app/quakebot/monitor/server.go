@@ -47,6 +47,7 @@ func (s *ServerMonitor) Start(interval time.Duration) {
 
 	go func() {
 		ticker := time.NewTicker(interval)
+		defer ticker.Stop()
 
 		for ; true; <-ticker.C {
 			if s.isDone {
@@ -55,8 +56,6 @@ func (s *ServerMonitor) Start(interval time.Duration) {
 
 			s.CompareStates()
 		}
-
-		defer ticker.Stop()
 	}()
 }
 
