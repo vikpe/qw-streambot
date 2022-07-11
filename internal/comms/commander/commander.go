@@ -1,4 +1,4 @@
-// Package commander sends command messages
+// Package commander sends commands
 package commander
 
 import (
