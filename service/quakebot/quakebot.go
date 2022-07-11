@@ -192,7 +192,6 @@ func (b *QuakeBot) evaluateAutoModeDisabled() {
 	isOkServer := currentServer.Score >= MinScore
 
 	if !isOkServer {
-		fmt.Println("server is ok: do nothing")
 		return
 	}
 
