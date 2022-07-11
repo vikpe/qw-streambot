@@ -1,11 +1,11 @@
-package shell
+package exc
 
 import (
 	"os/exec"
 	"strings"
 )
 
-func ExecCommand(command string) string {
+func GetOutput(command string) string {
 	args := strings.Split(command, " ")
 	cmd := exec.Command(args[0], args[1:]...)
 	out, err := cmd.CombinedOutput()

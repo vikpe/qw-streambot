@@ -1,4 +1,4 @@
-package shell_test
+package exc_test
 
 import (
 	"os/exec"
@@ -6,17 +6,17 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/internal/pkg/proc/shell"
+	"github.com/vikpe/streambot/internal/pkg/exc"
 )
 
 func TestExecCommand(t *testing.T) {
 	t.Run("invalid cmd", func(t *testing.T) {
-		assert.Equal(t, "", shell.ExecCommand("__invalid_cmd__"))
+		assert.Equal(t, "", exc.GetOutput("__invalid_cmd__"))
 	})
 
 	t.Run("valid cmd", func(t *testing.T) {
 		nativeOutput, _ := exec.Command("ls").CombinedOutput()
 		expect := strings.TrimSpace(string(nativeOutput))
-		assert.Equal(t, expect, shell.ExecCommand("ls"))
+		assert.Equal(t, expect, exc.GetOutput("ls"))
 	})
 }

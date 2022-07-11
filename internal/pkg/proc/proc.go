@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/vikpe/streambot/internal/pkg/proc/shell"
+	"github.com/vikpe/streambot/internal/pkg/exc"
 )
 
 type ProcessController struct {
@@ -16,7 +16,7 @@ type ProcessController struct {
 func NewProcessController(path string) ProcessController {
 	return ProcessController{
 		Path:        path,
-		ExecCommand: shell.ExecCommand,
+		ExecCommand: exc.GetOutput,
 	}
 }
 
