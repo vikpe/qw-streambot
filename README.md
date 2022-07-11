@@ -23,6 +23,15 @@
 * Communication/messages are sent using [ZeroMQ](https://zeromq.org/) sockets. One proxy, multiple
   subscribers/publishers.
 
+
+## Evaluation loop
+* Run every 10 seconds
+* Join "best server" available. Servers are ranked using a custom scoring algorithm.
+* Only change server in between matches or if current server has enabled a custom game mode (e.g. race).
+
+![image](https://user-images.githubusercontent.com/1616817/178297376-f4f79a29-94c6-4dce-bb50-95183ef8dfb6.png)
+
+
 ## Requirements
 
 * **[ezQuake](https://github.com/ezQuake/ezquake-source/releases)**
