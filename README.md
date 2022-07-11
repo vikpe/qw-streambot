@@ -12,8 +12,13 @@ apt-get install libzmq3-dev
 * [General access token](https://twitchtokengenerator.com/)
 
 ## Build
+
+```shell
+./scripts/build.sh
+```
+
 ### Options
-Prevent interrupted system calls [see docs](https://pkg.go.dev/github.com/pebbe/zmq4#section-documentation).
+(zeromq) Prevent interrupted system calls [see docs](https://pkg.go.dev/github.com/pebbe/zmq4#section-documentation).
 ```
 GODEBUG=asyncpreemptoff=1
 ```
