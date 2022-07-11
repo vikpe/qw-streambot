@@ -20,7 +20,7 @@
 ### Stack
 
 * Written in Go (Golang)
-* Communication/messages are sent using [ZeroMQ](https://zeromq.org/) sockets. One proxy, multiple
+* Communication/messages are over [ZeroMQ](https://zeromq.org/) sockets. Single proxy, multiple
   subscribers/publishers.
 
 
