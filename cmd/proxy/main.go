@@ -7,7 +7,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/joho/godotenv"
 	"github.com/vikpe/prettyfmt"
-	"github.com/vikpe/streambot/pkg/zeromq"
+	"github.com/vikpe/streambot/internal/pkg/zeromq"
 )
 
 func main() {

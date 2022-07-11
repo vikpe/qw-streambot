@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/vikpe/streambot/service/twitchbot"
+	"github.com/vikpe/streambot/internal/app/twitchbot"
 )
 
 func main() {
