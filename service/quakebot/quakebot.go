@@ -13,15 +13,15 @@ import (
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 	"github.com/vikpe/streambot/message/commander"
 	"github.com/vikpe/streambot/message/topic"
+	"github.com/vikpe/streambot/pkg/calc"
+	"github.com/vikpe/streambot/pkg/ezquake"
+	"github.com/vikpe/streambot/pkg/proc"
 	"github.com/vikpe/streambot/pkg/qws"
+	"github.com/vikpe/streambot/pkg/sstat"
+	"github.com/vikpe/streambot/pkg/task"
 	"github.com/vikpe/streambot/pkg/zeromq"
 	"github.com/vikpe/streambot/pkg/zeromq/message"
-	"github.com/vikpe/streambot/service/quakebot/ezquake"
 	"github.com/vikpe/streambot/service/quakebot/monitor"
-	"github.com/vikpe/streambot/service/quakebot/util/calc"
-	"github.com/vikpe/streambot/service/quakebot/util/proc"
-	"github.com/vikpe/streambot/service/quakebot/util/sstat"
-	"github.com/vikpe/streambot/service/quakebot/util/task"
 )
 
 var pfmt = prettyfmt.New("quakebot", color.FgHiCyan, "15:04:05", color.FgWhite)

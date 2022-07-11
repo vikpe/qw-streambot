@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/vikpe/streambot/service/quakebot/util/proc"
-	"github.com/vikpe/streambot/service/quakebot/util/proc/shell/mock"
+	"github.com/vikpe/streambot/pkg/proc"
+	"github.com/vikpe/streambot/pkg/proc/shell/mock"
 )
 
 func TestProcess_GetProcessID(t *testing.T) {
