@@ -14,7 +14,7 @@
     * **Process monitor**: ezQuake events (started, stopped)
 
 * **Twitch Manager**: Interaction with Twitch channel (e.g. set title).
-* **Twitch Bot**: Interaction with chat users.
+* **Twitch Bot**: Interaction with Twitch chat.
 * **Discord Bot**: Interaction with Discord.
 
 ### Stack
