@@ -23,3 +23,6 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
+
+      - name: Build
+        run: ./scripts/build.sh
