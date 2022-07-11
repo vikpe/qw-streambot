@@ -12,8 +12,8 @@ type Commander struct {
 	sendMessage func(string, ...any)
 }
 
-func NewCommander(sendMessage func(topic string, data ...any)) Commander {
-	return Commander{
+func NewCommander(sendMessage func(topic string, data ...any)) *Commander {
+	return &Commander{
 		sendMessage: sendMessage,
 	}
 }

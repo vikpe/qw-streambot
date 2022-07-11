@@ -29,12 +29,12 @@ var pfmt = prettyfmt.New("quakebot", color.FgHiCyan, "15:04:05", color.FgWhite)
 type QuakeBot struct {
 	clientPlayerName string
 	pipe             *ezquake.PipeWriter
-	process          proc.ProcessController
+	process          *proc.ProcessController
 	serverMonitor    *monitor.ServerMonitor
-	evaluateTask     task.PeriodicalTask
+	evaluateTask     *task.PeriodicalTask
 	publisher        *zeromq.Publisher
 	subscriber       *zeromq.Subscriber
-	commander        commander.Commander
+	commander        *commander.Commander
 	stopChan         chan os.Signal
 	AutoMode         bool
 }

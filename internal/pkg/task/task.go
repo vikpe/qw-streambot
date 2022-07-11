@@ -9,8 +9,8 @@ type PeriodicalTask struct {
 	onTick func()
 }
 
-func NewPeriodicalTask(callback func()) PeriodicalTask {
-	return PeriodicalTask{
+func NewPeriodicalTask(callback func()) *PeriodicalTask {
+	return &PeriodicalTask{
 		onTick: callback,
 	}
 }

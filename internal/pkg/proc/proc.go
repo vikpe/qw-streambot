@@ -13,8 +13,8 @@ type ProcessController struct {
 	ExecCommand func(command string) string
 }
 
-func NewProcessController(path string) ProcessController {
-	return ProcessController{
+func NewProcessController(path string) *ProcessController {
+	return &ProcessController{
 		Path:        path,
 		ExecCommand: exc.GetOutput,
 	}
