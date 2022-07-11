@@ -21,7 +21,7 @@
 
 * Written in Go (Golang)
 * Communication/messages are sent using [ZeroMQ](https://zeromq.org/) sockets. One proxy, multiple
-  subscribrs/publishers.
+  subscribers/publishers.
 
 ## Requirements
 
@@ -39,4 +39,10 @@ go test ./... --cover
 
 ```shell
 ./scripts/build.sh
+```
+
+## Start
+
+```shell
+./scripts/start.sh
 ```
