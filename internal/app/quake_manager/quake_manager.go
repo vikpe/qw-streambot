@@ -277,6 +277,8 @@ func (b *QuakeManager) OnEzquakeStopped(msg message.Message) {
 
 func (b *QuakeManager) OnServerMatchtagChanged(msg message.Message) {
 	matchtag := msg.Content.ToString()
+
+	pfmt.Println("OnServerMatchtagChanged", matchtag)
 	textScale := calc.StaticTextScale(matchtag)
 	b.commander.Commandf("hud_static_text_scale %f;bot_set_statictext %s", textScale, matchtag)
 }
