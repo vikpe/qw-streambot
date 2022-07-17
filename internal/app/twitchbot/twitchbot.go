@@ -84,6 +84,14 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 		cmder.Command("toggleconsole")
 	})
 
+	bot.AddCommand("help", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
+		bot.Reply(msg, "see the channel description.")
+	})
+
+	bot.AddCommand("commands", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
+		bot.Reply(msg, "see the channel description.")
+	})
+
 	bot.AddCommand("find", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		server, err := qws.FindPlayer(cmd.ArgsToString())
 		if err != nil {
