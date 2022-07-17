@@ -22,6 +22,7 @@ func TestServerMonitor(t *testing.T) {
 			Title:    "kombat / 1on1: x vs y [dm2]",
 			Settings: qsettings.Settings{"matchtag": "kombat"},
 		},
+		{Title: "kombat / 1on1: x vs y [dm2]"},
 	}
 
 	callCount := 0
@@ -44,6 +45,7 @@ func TestServerMonitor(t *testing.T) {
 		{"server.title_changed", "1on1: x vs y [dm2]"},
 		{"server.matchtag_changed", "kombat"},
 		{"server.title_changed", "kombat / 1on1: x vs y [dm2]"},
+		{"server.matchtag_changed", ""},
 	}
 	assert.Equal(t, expectCalls, publisherMock.SendMessageCalls)
 }
