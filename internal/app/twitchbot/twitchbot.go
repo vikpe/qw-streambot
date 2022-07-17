@@ -85,11 +85,11 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	})
 
 	bot.AddCommand("help", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		bot.Reply(msg, "see the channel description.")
+		bot.Reply(msg, "see the channel description for info/commands.")
 	})
 
 	bot.AddCommand("commands", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		bot.Reply(msg, "see the channel description.")
+		bot.Reply(msg, "see the channel description for info/commands.")
 	})
 
 	bot.AddCommand("find", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
