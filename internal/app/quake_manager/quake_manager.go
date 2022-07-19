@@ -254,7 +254,7 @@ func (b *QuakeManager) OnEzquakeScript(msg message.Message) {
 
 func (b *QuakeManager) OnEzquakeStarted(msg message.Message) {
 	pfmt.Println("OnEzquakeStarted")
-	b.evaluateTask.Start(10 * time.Second)
+	go b.evaluateTask.Start(10 * time.Second)
 	time.AfterFunc(5*time.Second, func() { b.commander.Command("toggleconsole") })
 }
 
