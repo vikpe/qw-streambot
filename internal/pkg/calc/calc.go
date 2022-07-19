@@ -11,11 +11,11 @@ func RoundFloat64(value float64, precision int) float64 {
 	return math.Round(value*n) / n * 1.0
 }
 
-func Clamp[T constraints.Ordered](value, min_, max_ T) T {
-	if value > max_ {
-		return max_
-	} else if value < min_ {
-		return min_
+func Clamp[T constraints.Ordered](value, min, max T) T {
+	if value > max {
+		return max
+	} else if value < min {
+		return min
 	}
 
 	return value
