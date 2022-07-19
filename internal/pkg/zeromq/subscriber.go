@@ -15,7 +15,7 @@ type Subscriber struct {
 	OnMessage message.Handler
 }
 
-func NewSubscriber(address string, topics string) *Subscriber {
+func newSubscriber(address string, topics string) *Subscriber {
 	return &Subscriber{
 		address:   address,
 		topics:    topics,
@@ -53,7 +53,7 @@ type SubscriberService struct {
 }
 
 func NewSubscriberService(address, topics string) *SubscriberService {
-	sub := NewSubscriber(address, topics)
+	sub := newSubscriber(address, topics)
 	subService := service.New()
 	subService.Work = func() error {
 		return sub.Start()

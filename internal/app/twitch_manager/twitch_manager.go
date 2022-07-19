@@ -31,16 +31,16 @@ func New(clientID, accessToken, broadcasterID, subscriberAddress string) (*Twitc
 		return &TwitchManager{}, err
 	}
 
-	subService := zeromq.NewSubscriberService(subscriberAddress, zeromq.TopicsAll)
+	subscriber := zeromq.NewSubscriberService(subscriberAddress, zeromq.TopicsAll)
 	manager := TwitchManager{
 		apiClient:     apiClient,
 		broadcasterID: broadcasterID,
-		subscriber:    subService,
+		subscriber:    subscriber,
 		OnStarted:     func() {},
 		OnStopped:     func(os.Signal) {},
 		OnError:       func(error) {},
 	}
-	subService.OnMessage = manager.OnMessage
+	subscriber.OnMessage = manager.OnMessage
 
 	return &manager, nil
 }
