@@ -28,5 +28,5 @@ func StaticTextScale(text string) float64 {
 	lengthFactor := (float64(len(text)) - lengthMin) / (lengthMax - lengthMin)
 	scale := scaleMax - (lengthFactor * (scaleMax - scaleMin))
 
-	return RoundFloat64(ClampFloat64(scaleMin, scale, scaleMax), 2)
+	return RoundFloat64(ClampFloat64(scale, scaleMin, scaleMax), 2)
 }
