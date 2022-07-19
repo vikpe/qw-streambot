@@ -10,7 +10,7 @@ import (
 )
 
 func TestProcessMonitor(t *testing.T) {
-	var processMonitor monitor.ProcessMonitor
+	var processMonitor *monitor.ProcessMonitor
 
 	// return mocked values and stop after x calls
 	mockedResponses := []bool{false, false, true, false, true}

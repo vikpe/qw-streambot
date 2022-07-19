@@ -13,8 +13,8 @@ type ProcessMonitor struct {
 	prevState        bool
 }
 
-func NewProcessMonitor(processIsStarted func() bool, onEvent func(topic string, data ...any)) ProcessMonitor {
-	return ProcessMonitor{
+func NewProcessMonitor(processIsStarted func() bool, onEvent func(topic string, data ...any)) *ProcessMonitor {
+	return &ProcessMonitor{
 		isDone:           false,
 		processIsStarted: processIsStarted,
 		onEvent:          onEvent,
