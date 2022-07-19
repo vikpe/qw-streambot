@@ -11,7 +11,7 @@ const (
 	IndexContent     = 2
 )
 
-type Handler func(Message)
+type Handler func(msg Message)
 
 type Message struct {
 	Topic       string
