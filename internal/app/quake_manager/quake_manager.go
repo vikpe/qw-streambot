@@ -30,6 +30,7 @@ type QuakeManager struct {
 	clientPlayerName string
 	pipe             *ezquake.PipeWriter
 	process          *proc.ProcessController
+	processMonitor   *monitor.ProcessMonitor
 	serverMonitor    *monitor.ServerMonitor
 	evaluateTask     *task.PeriodicalTask
 	publisher        *zeromq.Publisher
@@ -49,10 +50,12 @@ func New(
 	publisher := zeromq.NewPublisher(publisherAddress)
 	subscriber := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
 
+	process := proc.NewProcessController(ezquakeBinPath)
 	manager := QuakeManager{
 		clientPlayerName: clientPlayerName,
 		pipe:             ezquake.NewPipeWriter(ezquakeProcessUsername),
-		process:          proc.NewProcessController(ezquakeBinPath),
+		process:          process,
+		processMonitor:   monitor.NewProcessMonitor(process.IsStarted, publisher.SendMessage),
 		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
 		subscriber:       subscriber,
@@ -75,8 +78,7 @@ func (b *QuakeManager) Start() {
 		zeromq.WaitForConnection()
 
 		// event dispatchers
-		processMonitor := monitor.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
-		go processMonitor.Start(3 * time.Second)
+		go b.processMonitor.Start(3 * time.Second)
 		go b.serverMonitor.Start(5 * time.Second)
 
 		if b.process.IsStarted() {
