@@ -15,22 +15,14 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type Twitchbot struct {
-	*chatbot.Chatbot
-	subscriber *zeromq.SubscriberService
-}
-
-func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherAddress string) *Twitchbot {
+func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherAddress string) *chatbot.Chatbot {
 	var pfmt = prettyfmt.New("twitchbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
-	subService := zeromq.NewSubscriberService(subscriberAddress, zeromq.TopicsAll)
-	bot := Twitchbot{
-		Chatbot:    chatbot.NewChatbot(botUsername, botAccessToken, channelName, '!'),
-		subscriber: subService,
-	}
+	bot := chatbot.NewChatbot(botUsername, botAccessToken, channelName, '!')
 
 	// zmq messages
-	subService.OnMessage = func(message message.Message) {
+	sub := zeromq.NewSubscriberService(subscriberAddress, zeromq.TopicsAll)
+	sub.OnMessage = func(message message.Message) {
 		switch message.Topic {
 		case topic.TwitchbotSay:
 			bot.Say(message.Content.ToString())
@@ -40,7 +32,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	// bot events
 	bot.OnConnected = func() {
 		pfmt.Println("connected as", botUsername)
-		go bot.subscriber.Service.Start()
+		go sub.Service.Start()
 	}
 
 	bot.OnStarted = func() {
@@ -119,5 +111,5 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 		cmder.Track(cmd.ArgsToString())
 	})
 
-	return &bot
+	return bot
 }
