@@ -9,26 +9,12 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 )
 
-type Subscriber struct {
-	address   string
-	topics    string
-	OnMessage message.Handler
-}
-
-func newSubscriber(address string, topics string) *Subscriber {
-	return &Subscriber{
-		address:   address,
-		topics:    topics,
-		OnMessage: func(msg message.Message) {},
-	}
-}
-
-func (s *Subscriber) Start() error {
+func StartSubscriber(address, topics string, onMessage message.Handler) error {
 	subSocket, _ := zmq.NewSocket(zmq.SUB)
 	defer subSocket.Close()
-	subSocket.Connect(s.address)
+	subSocket.Connect(address)
 	WaitForConnection()
-	subSocket.SetSubscribe(s.topics)
+	subSocket.SetSubscribe(topics)
 
 	for {
 		zmqMsg, err := subSocket.RecvMessage(0)
@@ -43,24 +29,23 @@ func (s *Subscriber) Start() error {
 			return err
 		}
 
-		s.OnMessage(msg)
+		onMessage(msg)
 	}
 }
 
-type SubscriberService struct {
-	*Subscriber
+type Subscriber struct {
 	*service.Service
+	OnMessage message.Handler
 }
 
-func NewSubscriberService(address, topics string) *SubscriberService {
-	sub := newSubscriber(address, topics)
-	subService := service.New()
-	subService.Work = func() error {
-		return sub.Start()
+func NewSubscriber(address, topics string) *Subscriber {
+	sub := Subscriber{
+		Service:   service.New(),
+		OnMessage: func(msg message.Message) {},
+	}
+	sub.Service.Work = func() error {
+		return StartSubscriber(address, topics, sub.OnMessage)
 	}
 
-	return &SubscriberService{
-		Subscriber: sub,
-		Service:    subService,
-	}
+	return &sub
 }

@@ -16,7 +16,7 @@ import (
 type TwitchManager struct {
 	apiClient     *helix.Client
 	broadcasterID string
-	subscriber    *zeromq.SubscriberService
+	subscriber    *zeromq.Subscriber
 	stopChan      chan os.Signal
 	OnStarted     func()
 	OnStopped     func(os.Signal)
@@ -31,7 +31,7 @@ func New(clientID, accessToken, broadcasterID, subscriberAddress string) (*Twitc
 		return &TwitchManager{}, err
 	}
 
-	subscriber := zeromq.NewSubscriberService(subscriberAddress, zeromq.TopicsAll)
+	subscriber := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
 	manager := TwitchManager{
 		apiClient:     apiClient,
 		broadcasterID: broadcasterID,
@@ -50,7 +50,7 @@ func (m *TwitchManager) Start() {
 
 	m.stopChan = make(chan os.Signal, 1)
 	signal.Notify(m.stopChan, syscall.SIGTERM, syscall.SIGINT)
-	go m.subscriber.Service.Start()
+	go m.subscriber.Start()
 	sig := <-m.stopChan
 
 	m.OnStopped(sig)

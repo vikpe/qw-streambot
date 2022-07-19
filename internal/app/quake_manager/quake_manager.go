@@ -33,7 +33,7 @@ type QuakeManager struct {
 	serverMonitor    *monitor.ServerMonitor
 	evaluateTask     *task.PeriodicalTask
 	publisher        *zeromq.Publisher
-	subscriber       *zeromq.SubscriberService
+	subscriber       *zeromq.Subscriber
 	commander        *commander.Commander
 	stopChan         chan os.Signal
 	AutoMode         bool
@@ -47,7 +47,7 @@ func New(
 	subscriberAddress string,
 ) *QuakeManager {
 	publisher := zeromq.NewPublisher(publisherAddress)
-	subscriber := zeromq.NewSubscriberService(subscriberAddress, zeromq.TopicsAll)
+	subscriber := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
 
 	manager := QuakeManager{
 		clientPlayerName: clientPlayerName,
@@ -71,7 +71,7 @@ func (b *QuakeManager) Start() {
 
 	go func() {
 		// event listeners
-		go b.subscriber.Service.Start()
+		go b.subscriber.Start()
 		zeromq.WaitForConnection()
 
 		// event dispatchers

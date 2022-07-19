@@ -21,7 +21,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	bot := chatbot.NewChatbot(botUsername, botAccessToken, channelName, '!')
 
 	// zmq messages
-	subscriber := zeromq.NewSubscriberService(subscriberAddress, zeromq.TopicsAll)
+	subscriber := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
 	subscriber.OnMessage = func(message message.Message) {
 		switch message.Topic {
 		case topic.TwitchbotSay:
@@ -32,7 +32,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	// bot events
 	bot.OnConnected = func() {
 		pfmt.Println("connected as", botUsername)
-		go subscriber.Service.Start()
+		go subscriber.Start()
 	}
 
 	bot.OnStarted = func() {
@@ -40,7 +40,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	}
 
 	bot.OnStopped = func(sig os.Signal) {
-		//bot.subscriber.Stop()
+		subscriber.Stop()
 		pfmt.Printfln("stopped (%s)", sig)
 	}
 
