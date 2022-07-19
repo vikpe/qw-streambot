@@ -33,7 +33,6 @@ type QuakeManager struct {
 	processMonitor   *monitor.ProcessMonitor
 	serverMonitor    *monitor.ServerMonitor
 	evaluateTask     *task.PeriodicalTask
-	publisher        *zeromq.Publisher
 	subscriber       *zeromq.Subscriber
 	commander        *commander.Commander
 	stopChan         chan os.Signal
@@ -47,10 +46,10 @@ func New(
 	publisherAddress string,
 	subscriberAddress string,
 ) *QuakeManager {
+	process := proc.NewProcessController(ezquakeBinPath)
 	publisher := zeromq.NewPublisher(publisherAddress)
 	subscriber := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
 
-	process := proc.NewProcessController(ezquakeBinPath)
 	manager := QuakeManager{
 		clientPlayerName: clientPlayerName,
 		pipe:             ezquake.NewPipeWriter(ezquakeProcessUsername),
@@ -59,7 +58,6 @@ func New(
 		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
 		subscriber:       subscriber,
-		publisher:        publisher,
 		commander:        commander.NewCommander(publisher.SendMessage),
 		AutoMode:         true,
 	}
