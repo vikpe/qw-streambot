@@ -39,7 +39,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	// bot events
 	bot.OnConnected = func() {
 		pfmt.Println("connected as", botUsername)
-		bot.subscriber.Start(onZmqMessage)
+		go bot.subscriber.Start(onZmqMessage)
 	}
 
 	bot.OnStarted = func() {
@@ -47,6 +47,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	}
 
 	bot.OnStopped = func(sig os.Signal) {
+		bot.subscriber.Stop()
 		pfmt.Printfln("stopped (%s)", sig)
 	}
 

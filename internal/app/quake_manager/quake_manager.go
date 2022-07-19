@@ -67,7 +67,7 @@ func (b *QuakeManager) Start() {
 
 	go func() {
 		// event listeners
-		b.subscriber.Start(b.OnMessage)
+		go b.subscriber.Start(b.OnMessage)
 		zeromq.WaitForConnection()
 
 		// event dispatchers
