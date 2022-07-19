@@ -1,11 +1,8 @@
 package twitch_manager
 
 import (
+	"errors"
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 
 	"github.com/nicklaw5/helix/v2"
 	"github.com/vikpe/streambot/internal/comms/topic"
@@ -13,75 +10,40 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 )
 
-type TwitchManager struct {
-	apiClient     *helix.Client
-	broadcasterID string
-	subscriber    *zeromq.Subscriber
-	stopChan      chan os.Signal
-	OnStarted     func()
-	OnStopped     func(os.Signal)
-	OnError       func(error)
-}
-
-func New(clientID, accessToken, broadcasterID, subscriberAddress string) (*TwitchManager, error) {
-	apiClient, err := helix.NewClient(&helix.Options{ClientID: clientID, AppAccessToken: accessToken})
-
-	if err != nil {
-		fmt.Println("twitch api client error", err)
-		return &TwitchManager{}, err
-	}
+func New(clientID, accessToken, broadcasterID, subscriberAddress string) (*zeromq.Subscriber, error) {
+	apiClient, err := helix.NewClient(&helix.Options{
+		ClientID:       clientID,
+		AppAccessToken: accessToken,
+	})
 
 	subscriber := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
-	manager := TwitchManager{
-		apiClient:     apiClient,
-		broadcasterID: broadcasterID,
-		subscriber:    subscriber,
-		OnStarted:     func() {},
-		OnStopped:     func(os.Signal) {},
-		OnError:       func(error) {},
-	}
-	subscriber.OnMessage = manager.OnMessage
-
-	return &manager, nil
-}
-
-func (m *TwitchManager) Start() {
-	m.OnStarted()
-
-	m.stopChan = make(chan os.Signal, 1)
-	signal.Notify(m.stopChan, syscall.SIGTERM, syscall.SIGINT)
-	go m.subscriber.Start()
-	sig := <-m.stopChan
-
-	m.OnStopped(sig)
-}
-
-func (m *TwitchManager) Stop() {
-	if m.stopChan == nil {
-		return
-	}
-	m.stopChan <- syscall.SIGINT
-	time.Sleep(30 * time.Millisecond)
-}
-
-func (m *TwitchManager) OnMessage(msg message.Message) {
-	var err error
-
-	switch msg.Topic {
-	case topic.ServerTitleChanged:
-		err = m.SetTitle(msg.Content.ToString())
-	}
 
 	if err != nil {
-		m.OnError(err)
+		err := errors.New(fmt.Sprintf("twitch api client error: %s", err))
+		return subscriber, err
 	}
+
+	subscriber.OnMessage = func(msg message.Message) {
+		var err error
+
+		switch msg.Topic {
+		case topic.ServerTitleChanged:
+			err = SetTitle(apiClient, broadcasterID, msg.Content.ToString())
+		}
+
+		if err != nil {
+			subscriber.OnError(err)
+		}
+	}
+
+	return subscriber, nil
 }
 
-func (m *TwitchManager) SetTitle(title string) error {
+func SetTitle(apiClient *helix.Client, broadcasterID, title string) error {
 	const quakeGameId = "7348"
 
-	_, err := m.apiClient.EditChannelInformation(&helix.EditChannelInformationParams{
-		BroadcasterID: m.broadcasterID,
+	_, err := apiClient.EditChannelInformation(&helix.EditChannelInformationParams{
+		BroadcasterID: broadcasterID,
 		Title:         title,
 		GameID:        quakeGameId,
 	})
