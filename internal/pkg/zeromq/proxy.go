@@ -37,7 +37,7 @@ func StartProxy(frontendAddress, backendAddress string) error {
 	return nil
 }
 
-func NewProxyService(frontendAddress, backendAddress string) *service.Service {
+func NewProxy(frontendAddress, backendAddress string) *service.Service {
 	proxyService := service.New()
 	proxyService.Work = func() error {
 		return StartProxy(frontendAddress, backendAddress)

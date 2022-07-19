@@ -22,7 +22,7 @@ func TestEndToEnd(t *testing.T) {
 	}
 
 	// proxy
-	proxy := zeromq.NewProxyService("tcp://*:5555", "tcp://*:5556")
+	proxy := zeromq.NewProxy("tcp://*:5555", "tcp://*:5556")
 	go proxy.Start()
 	zeromq.WaitForConnection()
 
