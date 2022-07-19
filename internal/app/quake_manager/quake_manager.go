@@ -47,18 +47,22 @@ func New(
 	subscriberAddress string,
 ) *QuakeManager {
 	publisher := zeromq.NewPublisher(publisherAddress)
+	subscriber := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
 
-	return &QuakeManager{
+	manager := QuakeManager{
 		clientPlayerName: clientPlayerName,
 		pipe:             ezquake.NewPipeWriter(ezquakeProcessUsername),
 		process:          proc.NewProcessController(ezquakeBinPath),
 		serverMonitor:    monitor.NewServerMonitor(sstat.GetMvdsvServer, publisher.SendMessage),
 		evaluateTask:     task.NewPeriodicalTask(func() { publisher.SendMessage(topic.StreambotEvaluate) }),
-		subscriber:       zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
+		subscriber:       subscriber,
 		publisher:        publisher,
 		commander:        commander.NewCommander(publisher.SendMessage),
 		AutoMode:         true,
 	}
+	subscriber.OnMessage = manager.OnMessage
+
+	return &manager
 }
 
 func (b *QuakeManager) Start() {
@@ -67,7 +71,7 @@ func (b *QuakeManager) Start() {
 
 	go func() {
 		// event listeners
-		go b.subscriber.Start(b.OnMessage)
+		go b.subscriber.Start()
 		zeromq.WaitForConnection()
 
 		// event dispatchers

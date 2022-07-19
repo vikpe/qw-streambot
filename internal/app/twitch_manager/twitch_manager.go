@@ -31,14 +31,18 @@ func New(clientID, accessToken, broadcasterID, subscriberAddress string) (*Twitc
 		return &TwitchManager{}, err
 	}
 
-	return &TwitchManager{
+	subService := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
+	manager := TwitchManager{
 		apiClient:     apiClient,
 		broadcasterID: broadcasterID,
-		subscriber:    zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
+		subscriber:    subService,
 		OnStarted:     func() {},
 		OnStopped:     func(os.Signal) {},
 		OnError:       func(error) {},
-	}, nil
+	}
+	subService.OnMessage = manager.OnMessage
+
+	return &manager, nil
 }
 
 func (m *TwitchManager) Start() {
@@ -46,10 +50,7 @@ func (m *TwitchManager) Start() {
 
 	m.stopChan = make(chan os.Signal, 1)
 	signal.Notify(m.stopChan, syscall.SIGTERM, syscall.SIGINT)
-
-	go func() {
-		m.subscriber.Start(m.OnMessage)
-	}()
+	go m.subscriber.Start()
 	sig := <-m.stopChan
 
 	m.OnStopped(sig)

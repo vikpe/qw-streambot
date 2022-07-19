@@ -23,13 +23,14 @@ type Twitchbot struct {
 func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherAddress string) *Twitchbot {
 	var pfmt = prettyfmt.New("twitchbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
+	subService := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
 	bot := Twitchbot{
 		Chatbot:    chatbot.NewChatbot(botUsername, botAccessToken, channelName, '!'),
-		subscriber: zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll),
+		subscriber: subService,
 	}
 
 	// zmq messages
-	onZmqMessage := func(message message.Message) {
+	subService.OnMessage = func(message message.Message) {
 		switch message.Topic {
 		case topic.TwitchbotSay:
 			bot.Say(message.Content.ToString())
@@ -39,7 +40,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	// bot events
 	bot.OnConnected = func() {
 		pfmt.Println("connected as", botUsername)
-		go bot.subscriber.Start(onZmqMessage)
+		go bot.subscriber.Start()
 	}
 
 	bot.OnStarted = func() {
@@ -47,7 +48,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	}
 
 	bot.OnStopped = func(sig os.Signal) {
-		bot.subscriber.Stop()
+		//bot.subscriber.Stop()
 		pfmt.Printfln("stopped (%s)", sig)
 	}
 
