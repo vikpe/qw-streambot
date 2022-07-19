@@ -2,6 +2,8 @@ package calc
 
 import (
 	"math"
+
+	"golang.org/x/exp/constraints"
 )
 
 func RoundFloat64(value float64, precision int) float64 {
@@ -9,7 +11,7 @@ func RoundFloat64(value float64, precision int) float64 {
 	return math.Round(value*n) / n * 1.0
 }
 
-func ClampFloat64(value float64, min_ float64, max_ float64) float64 {
+func Clamp[T constraints.Ordered](value, min_, max_ T) T {
 	if value > max_ {
 		return max_
 	} else if value < min_ {
@@ -28,5 +30,5 @@ func StaticTextScale(text string) float64 {
 	lengthFactor := (float64(len(text)) - lengthMin) / (lengthMax - lengthMin)
 	scale := scaleMax - (lengthFactor * (scaleMax - scaleMin))
 
-	return RoundFloat64(ClampFloat64(scale, scaleMin, scaleMax), 2)
+	return RoundFloat64(Clamp(scale, scaleMin, scaleMax), 2)
 }

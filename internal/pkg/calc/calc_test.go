@@ -7,17 +7,20 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/calc"
 )
 
-func TestClampFloat64(t *testing.T) {
+func TestClamp(t *testing.T) {
 	t.Run("below min", func(t *testing.T) {
-		assert.Equal(t, 5.0, calc.ClampFloat64(2.5, 5.0, 10.0))
+		assert.Equal(t, 5.0, calc.Clamp(2.5, 5.0, 10.0))
+		assert.Equal(t, 5, calc.Clamp(2, 5, 10))
 	})
 
 	t.Run("between min and max", func(t *testing.T) {
-		assert.Equal(t, 7.5, calc.ClampFloat64(7.5, 5.0, 10.0))
+		assert.Equal(t, 7.5, calc.Clamp(7.5, 5.0, 10.0))
+		assert.Equal(t, 7, calc.Clamp(7, 5, 10))
 	})
 
 	t.Run("above max", func(t *testing.T) {
-		assert.Equal(t, 10.0, calc.ClampFloat64(15, 5.0, 10.0))
+		assert.Equal(t, 10.0, calc.Clamp(15.0, 5.0, 10.0))
+		assert.Equal(t, 10, calc.Clamp(15, 5, 10))
 	})
 }
 
