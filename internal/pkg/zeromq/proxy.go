@@ -8,36 +8,62 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/service"
 )
 
-func NewProxy(frontendAddress string, backendAddress string) *service.Service {
-	proxy := service.New()
-	proxy.Work = func() error {
-		// frontend - endpoint for publishers
-		frontend, _ := zmq.NewSocket(zmq.XSUB)
-		defer frontend.Close()
-		err := frontend.Bind(frontendAddress)
+type Proxy struct {
+	frontendAddress string
+	backendAddress  string
+}
 
-		if err != nil {
-			return errors.New(fmt.Sprintf("unable to bind to frontend (%s)", err.Error()))
-		}
+func NewProxy(frontendAddress, backendAddress string) *Proxy {
+	return &Proxy{
+		frontendAddress: frontendAddress,
+		backendAddress:  backendAddress,
+	}
+}
 
-		// backend - endpoint for subscribers
-		backend, _ := zmq.NewSocket(zmq.XPUB)
-		defer backend.Close()
-		err = backend.Bind(backendAddress)
+func (p *Proxy) Start() error {
+	// frontend - endpoint for publishers
+	frontend, _ := zmq.NewSocket(zmq.XSUB)
+	defer frontend.Close()
+	err := frontend.Bind(p.frontendAddress)
 
-		if err != nil {
-			return errors.New(fmt.Sprintf("unable to bind to backend (%s)", err.Error()))
-		}
-
-		// run until interrupt
-		err = zmq.Proxy(frontend, backend, nil)
-
-		if err != nil {
-			return errors.New(fmt.Sprintf("proxy interrupted (%s)", err.Error()))
-		}
-
-		return nil
+	if err != nil {
+		return errors.New(fmt.Sprintf("unable to bind to frontend (%s)", err.Error()))
 	}
 
-	return proxy
+	// backend - endpoint for subscribers
+	backend, _ := zmq.NewSocket(zmq.XPUB)
+	defer backend.Close()
+	err = backend.Bind(p.backendAddress)
+
+	if err != nil {
+		return errors.New(fmt.Sprintf("unable to bind to backend (%s)", err.Error()))
+	}
+
+	// run until interrupt
+	err = zmq.Proxy(frontend, backend, nil)
+
+	if err != nil {
+		return errors.New(fmt.Sprintf("proxyService interrupted (%s)", err.Error()))
+	}
+
+	return nil
+}
+
+type ProxyService struct {
+	*Proxy
+	*service.Service
+}
+
+func NewProxyService(frontendAddress, backendAddress string) *ProxyService {
+	proxy := NewProxy(frontendAddress, backendAddress)
+
+	proxyService := service.New()
+	proxyService.Work = func() error {
+		return proxy.Start()
+	}
+
+	return &ProxyService{
+		Proxy:   proxy,
+		Service: proxyService,
+	}
 }

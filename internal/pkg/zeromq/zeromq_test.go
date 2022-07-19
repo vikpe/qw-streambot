@@ -22,24 +22,25 @@ func TestEndToEnd(t *testing.T) {
 	}
 
 	// proxy
-	proxy := zeromq.NewProxy("tcp://*:5555", "tcp://*:5556")
-	go proxy.Start()
+	proxy := zeromq.NewProxyService("tcp://*:5555", "tcp://*:5556")
+	go proxy.Service.Start()
 	zeromq.WaitForConnection()
 
 	// subscriber
 	wg := sync.WaitGroup{}
 	messagesRecieved := make([]message.Message, 0)
 	subscriber := zeromq.NewSubscriber("tcp://localhost:5556", zeromq.TopicsAll)
-
-	go subscriber.Start(func(msg message.Message) {
+	subscriber.OnMessage = func(msg message.Message) {
 		messagesRecieved = append(messagesRecieved, msg)
 
 		if len(messagesRecieved) == len(messagesToSend) {
 			proxy.Stop()
-			subscriber.Stop()
+			//subscriber.Stop()
 			wg.Done()
 		}
-	})
+	}
+
+	go subscriber.Start()
 	zeromq.WaitForConnection()
 
 	// publisher

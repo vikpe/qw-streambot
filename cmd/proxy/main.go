@@ -17,7 +17,7 @@ func main() {
 		return
 	}
 
-	proxy := zeromq.NewProxy(
+	proxy := zeromq.NewProxyService(
 		os.Getenv("ZMQ_PROXY_FRONTEND_ADDRESS"),
 		os.Getenv("ZMQ_PROXY_BACKEND_ADDRESS"),
 	)
@@ -25,5 +25,5 @@ func main() {
 	proxy.OnStarted = func() { pfmt.Println("start") }
 	proxy.OnStopped = func(sig os.Signal) { pfmt.Printfln("stop (%s)", sig) }
 	proxy.OnError = func(err error) { pfmt.Println("error", err) }
-	proxy.Start()
+	proxy.Service.Start()
 }
