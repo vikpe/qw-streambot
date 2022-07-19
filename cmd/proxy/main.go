@@ -17,7 +17,7 @@ func main() {
 		return
 	}
 
-	proxy := zeromq.NewProxy(
+	proxy := zeromq.NewProxyService(
 		os.Getenv("ZMQ_PROXY_FRONTEND_ADDRESS"),
 		os.Getenv("ZMQ_PROXY_BACKEND_ADDRESS"),
 	)
