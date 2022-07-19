@@ -18,17 +18,15 @@ func NewPeriodicalTask(callback func()) *PeriodicalTask {
 func (t *PeriodicalTask) Start(interval time.Duration) {
 	t.isDone = false
 
-	go func() {
-		ticker := time.NewTicker(interval)
+	ticker := time.NewTicker(interval)
 
-		for ; true; <-ticker.C {
-			if t.isDone {
-				return
-			}
-
-			t.onTick()
+	for ; true; <-ticker.C {
+		if t.isDone {
+			return
 		}
-	}()
+
+		t.onTick()
+	}
 }
 
 func (t *PeriodicalTask) Stop() {

@@ -12,7 +12,7 @@ func TestPeriodicalTask(t *testing.T) {
 	count := 0
 	countTask := task.NewPeriodicalTask(func() { count++ })
 	interval := time.Millisecond * 20
-	countTask.Start(interval)
+	go countTask.Start(interval)
 	time.Sleep(4 * interval)
 	countTask.Stop()
 	time.Sleep(interval)

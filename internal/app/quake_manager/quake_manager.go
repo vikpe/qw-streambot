@@ -76,7 +76,7 @@ func (b *QuakeManager) Start() {
 		go b.serverMonitor.Start(5 * time.Second)
 
 		if b.process.IsStarted() {
-			b.evaluateTask.Start(10 * time.Second)
+			go b.evaluateTask.Start(10 * time.Second)
 		}
 	}()
 	<-b.stopChan
