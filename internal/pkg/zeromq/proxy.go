@@ -8,23 +8,11 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/service"
 )
 
-type Proxy struct {
-	frontendAddress string
-	backendAddress  string
-}
-
-func NewProxy(frontendAddress, backendAddress string) *Proxy {
-	return &Proxy{
-		frontendAddress: frontendAddress,
-		backendAddress:  backendAddress,
-	}
-}
-
-func (p *Proxy) Start() error {
+func StartProxy(frontendAddress, backendAddress string) error {
 	// frontend - endpoint for publishers
 	frontend, _ := zmq.NewSocket(zmq.XSUB)
 	defer frontend.Close()
-	err := frontend.Bind(p.frontendAddress)
+	err := frontend.Bind(frontendAddress)
 
 	if err != nil {
 		return errors.New(fmt.Sprintf("unable to bind to frontend (%s)", err.Error()))
@@ -33,7 +21,7 @@ func (p *Proxy) Start() error {
 	// backend - endpoint for subscribers
 	backend, _ := zmq.NewSocket(zmq.XPUB)
 	defer backend.Close()
-	err = backend.Bind(p.backendAddress)
+	err = backend.Bind(backendAddress)
 
 	if err != nil {
 		return errors.New(fmt.Sprintf("unable to bind to backend (%s)", err.Error()))
@@ -49,21 +37,10 @@ func (p *Proxy) Start() error {
 	return nil
 }
 
-type ProxyService struct {
-	*Proxy
-	*service.Service
-}
-
-func NewProxyService(frontendAddress, backendAddress string) *ProxyService {
-	proxy := NewProxy(frontendAddress, backendAddress)
-
-	proxyService := service.New()
-	proxyService.Work = func() error {
-		return proxy.Start()
+func NewProxy(frontendAddress, backendAddress string) *service.Service {
+	proxy := service.New()
+	proxy.Work = func() error {
+		return StartProxy(frontendAddress, backendAddress)
 	}
-
-	return &ProxyService{
-		Proxy:   proxy,
-		Service: proxyService,
-	}
+	return proxy
 }

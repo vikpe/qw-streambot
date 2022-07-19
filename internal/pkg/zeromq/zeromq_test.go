@@ -22,8 +22,8 @@ func TestEndToEnd(t *testing.T) {
 	}
 
 	// proxy
-	proxy := zeromq.NewProxyService("tcp://*:5555", "tcp://*:5556")
-	go proxy.Service.Start()
+	proxy := zeromq.NewProxy("tcp://*:5555", "tcp://*:5556")
+	go proxy.Start()
 	zeromq.WaitForConnection()
 
 	// subscriber
@@ -34,7 +34,7 @@ func TestEndToEnd(t *testing.T) {
 		messagesRecieved = append(messagesRecieved, msg)
 
 		if len(messagesRecieved) == len(messagesToSend) {
-			proxy.Service.Stop()
+			proxy.Stop()
 			subscriber.Service.Stop()
 			wg.Done()
 		}
