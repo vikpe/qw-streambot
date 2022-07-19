@@ -72,8 +72,8 @@ func (b *QuakeManager) Start() {
 
 		// event dispatchers
 		processMonitor := monitor.NewProcessMonitor(b.process.IsStarted, b.publisher.SendMessage)
-		processMonitor.Start(3 * time.Second)
-		b.serverMonitor.Start(5 * time.Second)
+		go processMonitor.Start(3 * time.Second)
+		go b.serverMonitor.Start(5 * time.Second)
 
 		if b.process.IsStarted() {
 			b.evaluateTask.Start(10 * time.Second)

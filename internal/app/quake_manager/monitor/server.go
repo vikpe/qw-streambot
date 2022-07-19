@@ -45,18 +45,16 @@ func (s *ServerMonitor) GetAddressTimestamp() time.Time {
 func (s *ServerMonitor) Start(interval time.Duration) {
 	s.isDone = false
 
-	go func() {
-		ticker := time.NewTicker(interval)
-		defer ticker.Stop()
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
 
-		for ; true; <-ticker.C {
-			if s.isDone {
-				return
-			}
-
-			s.CompareStates()
+	for ; true; <-ticker.C {
+		if s.isDone {
+			return
 		}
-	}()
+
+		s.CompareStates()
+	}
 }
 
 func (s *ServerMonitor) CompareStates() {

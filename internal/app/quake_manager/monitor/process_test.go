@@ -29,7 +29,7 @@ func TestProcessMonitor(t *testing.T) {
 	// run monitor
 	publisherMock := mock.NewPublisherMock()
 	processMonitor = monitor.NewProcessMonitor(getIsStarted, publisherMock.SendMessage)
-	processMonitor.Start(time.Microsecond)
+	go processMonitor.Start(time.Microsecond)
 	time.Sleep(time.Millisecond * 20)
 
 	expectCalls := [][]any{

@@ -38,7 +38,7 @@ func TestServerMonitor(t *testing.T) {
 	}
 	publisherMock := mock.NewPublisherMock()
 	serverMonitor = monitor.NewServerMonitor(getInfo, publisherMock.SendMessage)
-	serverMonitor.Start(time.Microsecond)
+	go serverMonitor.Start(time.Microsecond)
 	time.Sleep(time.Millisecond * 20)
 
 	expectCalls := [][]any{

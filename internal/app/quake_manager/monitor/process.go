@@ -25,18 +25,16 @@ func NewProcessMonitor(processIsStarted func() bool, onEvent func(topic string, 
 func (p *ProcessMonitor) Start(interval time.Duration) {
 	p.isDone = false
 
-	go func() {
-		ticker := time.NewTicker(interval)
-		p.prevState = p.processIsStarted()
+	ticker := time.NewTicker(interval)
+	p.prevState = p.processIsStarted()
 
-		for ; true; <-ticker.C {
-			if p.isDone {
-				return
-			}
-
-			p.CompareStates()
+	for ; true; <-ticker.C {
+		if p.isDone {
+			return
 		}
-	}()
+
+		p.CompareStates()
+	}
 }
 
 func (p *ProcessMonitor) CompareStates() {
