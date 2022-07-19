@@ -2,7 +2,6 @@ package calc
 
 import (
 	"math"
-	"sort"
 )
 
 func RoundFloat64(value float64, precision int) float64 {
@@ -11,9 +10,13 @@ func RoundFloat64(value float64, precision int) float64 {
 }
 
 func ClampFloat64(value float64, min_ float64, max_ float64) float64 {
-	valueList := []float64{min_, max_, value}
-	sort.Float64s(valueList)
-	return valueList[1]
+	if value > max_ {
+		return max_
+	} else if value < min_ {
+		return min_
+	}
+
+	return value
 }
 
 func StaticTextScale(text string) float64 {
