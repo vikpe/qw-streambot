@@ -29,18 +29,18 @@ func TestEndToEnd(t *testing.T) {
 	// subscriber
 	wg := sync.WaitGroup{}
 	messagesRecieved := make([]message.Message, 0)
-	subscriber := zeromq.NewSubscriber("tcp://localhost:5556", zeromq.TopicsAll)
+	subscriber := zeromq.NewSubscriberService("tcp://localhost:5556", zeromq.TopicsAll)
 	subscriber.OnMessage = func(msg message.Message) {
 		messagesRecieved = append(messagesRecieved, msg)
 
 		if len(messagesRecieved) == len(messagesToSend) {
-			proxy.Stop()
-			//subscriber.Stop()
+			proxy.Service.Stop()
+			subscriber.Service.Stop()
 			wg.Done()
 		}
 	}
 
-	go subscriber.Start()
+	go subscriber.Service.Start()
 	zeromq.WaitForConnection()
 
 	// publisher

@@ -17,13 +17,13 @@ import (
 
 type Twitchbot struct {
 	*chatbot.Chatbot
-	subscriber *zeromq.Subscriber
+	subscriber *zeromq.SubscriberService
 }
 
 func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherAddress string) *Twitchbot {
 	var pfmt = prettyfmt.New("twitchbot", color.FgHiMagenta, "15:04:05", color.FgWhite)
 
-	subService := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
+	subService := zeromq.NewSubscriberService(subscriberAddress, zeromq.TopicsAll)
 	bot := Twitchbot{
 		Chatbot:    chatbot.NewChatbot(botUsername, botAccessToken, channelName, '!'),
 		subscriber: subService,
@@ -40,7 +40,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	// bot events
 	bot.OnConnected = func() {
 		pfmt.Println("connected as", botUsername)
-		go bot.subscriber.Start()
+		go bot.subscriber.Service.Start()
 	}
 
 	bot.OnStarted = func() {
