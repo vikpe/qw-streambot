@@ -11,8 +11,8 @@ require (
 	github.com/nicklaw5/helix/v2 v2.5.0
 	github.com/pebbe/zmq4 v1.2.9
 	github.com/stretchr/testify v1.8.0
-	github.com/vikpe/prettyfmt v0.0.0-20220706144613-1254fde75b4c
-	github.com/vikpe/serverstat v0.1.85
+	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
+	github.com/vikpe/serverstat v0.1.86
 	github.com/vikpe/twitch-chatbot v0.1.0
 	github.com/vikpe/udphelper v0.1.3
 	golang.org/x/exp v0.0.0-20220713135740-79cabaa25d75
@@ -24,6 +24,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
+	github.com/jpillora/longestcommon v0.0.0-20161227235612-adb9d91ee629 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
@@ -31,6 +32,7 @@ require (
 	github.com/ssoroka/slice v0.0.0-20220402005549-78f0cea3df8b // indirect
 	github.com/valyala/fastjson v1.6.3 // indirect
 	github.com/vikpe/udpclient v0.1.3 // indirect
+	github.com/vikpe/wildcard v0.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	golang.org/x/net v0.0.0-20220708220712-1185a9018129 // indirect
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
