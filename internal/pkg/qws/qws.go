@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
@@ -23,17 +24,21 @@ func GetMvdsvServers(queryParams map[string]string) []mvdsv.Mvdsv {
 	return *servers
 }
 
-func FindPlayer(name string) (mvdsv.Mvdsv, error) {
+func FindPlayer(pattern string) (mvdsv.Mvdsv, error) {
 	const minFindLength = 2
 
-	if len(name) < minFindLength {
+	if len(pattern) < minFindLength {
 		return mvdsv.Mvdsv{}, errors.New(fmt.Sprintf(`provide at least %d characters.`, minFindLength))
 	}
 
-	servers := GetMvdsvServers(map[string]string{"has_player": name})
+	if !strings.Contains(pattern, "*") {
+		pattern = fmt.Sprintf("*%s*", pattern)
+	}
+
+	servers := GetMvdsvServers(map[string]string{"has_player": pattern})
 
 	if 0 == len(servers) {
-		return mvdsv.Mvdsv{}, errors.New(fmt.Sprintf(`player "%s" not found.`, name))
+		return mvdsv.Mvdsv{}, errors.New(fmt.Sprintf(`player "%s" not found.`, pattern))
 	}
 
 	return servers[0], nil
