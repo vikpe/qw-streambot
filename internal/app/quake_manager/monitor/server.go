@@ -30,7 +30,6 @@ func NewServerMonitor(getInfo MvdsvProvider, onEvent func(topic string, data ...
 
 func (s *ServerMonitor) SetAddress(address string) {
 	s.address = address
-	s.prevState = serverState{}
 	s.addressTimestamp = time.Now()
 }
 
