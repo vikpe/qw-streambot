@@ -8,14 +8,14 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goccy/go-json v0.9.10
 	github.com/joho/godotenv v1.4.0
-	github.com/nicklaw5/helix/v2 v2.5.0
+	github.com/nicklaw5/helix/v2 v2.6.0
 	github.com/pebbe/zmq4 v1.2.9
 	github.com/stretchr/testify v1.8.0
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
-	github.com/vikpe/serverstat v0.1.86
-	github.com/vikpe/twitch-chatbot v0.1.0
+	github.com/vikpe/serverstat v0.1.89
+	github.com/vikpe/twitch-chatbot v0.1.1
 	github.com/vikpe/udphelper v0.1.3
-	golang.org/x/exp v0.0.0-20220713135740-79cabaa25d75
+	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
 )
 
 require (
@@ -33,9 +33,9 @@ require (
 	github.com/valyala/fastjson v1.6.3 // indirect
 	github.com/vikpe/udpclient v0.1.3 // indirect
 	github.com/vikpe/wildcard v0.1.0 // indirect
-	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
-	golang.org/x/net v0.0.0-20220708220712-1185a9018129 // indirect
-	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
+	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
+	golang.org/x/net v0.0.0-20220809184613-07c6da5e1ced // indirect
+	golang.org/x/sys v0.0.0-20220808155132-1c4a2a72c664 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
