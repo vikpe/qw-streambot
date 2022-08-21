@@ -195,7 +195,7 @@ func (b *QuakeManager) evaluateAutoModeDisabled() {
 	const MinScore = 25
 	isOkServer := currentServer.Score >= MinScore
 
-	if !isOkServer {
+	if isOkServer {
 		return
 	}
 
