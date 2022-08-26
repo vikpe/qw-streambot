@@ -21,7 +21,7 @@
 * **Twitch Manager**: Interaction with Twitch channel (e.g. set title).
 * **Twitch Bot**: Interaction with Twitch chat.
 
-### Evaluation loop
+### Quake Manager - evaluation loop
 
 * Run every 10 seconds
 * Join "best server" available. Servers are ranked using a
