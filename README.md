@@ -12,6 +12,14 @@ Visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
 * [ZeroMQ](https://zeromq.org/) - Communication/messages (single proxy and multiple subscribers/publishers)
 * [serverstat](https://github.com/vikpe/serverstat) - Get info from QuakeWorld servers
 
+## How does it work? (TLDR version)
+
+ezQuake reads from a pipe located at `/tmp/ezquake_[username]` on posix systems, where `username` is the username of the user who started the ezQuake process. 
+
+So basically all you have to do is to write commands to `/tmp/ezquake_[username]`.
+
+Most of the code in this project is related to making sure that the client always is connected to the "best" server available (check ezQuake process, current server, available servers, handling commands from Twitch etc).
+
 ## Overview
 
 ![image](https://user-images.githubusercontent.com/1616817/186941072-cc99679d-b1d0-41f7-bdba-913bb733e140.png)
@@ -108,6 +116,21 @@ Build all apps and run all app controller scripts.
 ./scripts/build.sh && ./scripts/start.sh
 ```
 
+## Chatbot commands
+See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambot/blob/main/internal/app/twitchbot/twitchbot.go)
+
+| Command        | Description                         |
+|----------------|-------------------------------------|
+| `!auto`        | Enable auto-mode (join best server) |
+| `!autotrack`   | Toggle autotrack                    |
+| `!cfg_load`    | Re-load config                      |
+| `!console`     | Toggle console                      |
+| `!find [name]` | Find `[name]` and join server       |
+| `!lastscores ` | Show list of last scores            |
+| `!restart `    | Restart ezQuake client              |
+| `!showscores ` | Show scoreboard                     |
+| `!track [x] `  | Track player `x`                    |
+
 ## Credits
 
 Thanks to everyone that has provided feedback and improvement suggestions (andeh, bps, circle, hangtime, milton, splash,
@@ -116,6 +139,7 @@ wimpeeh) among others.
 ## Related projects
 
 * [ezQuake](https://github.com/ezQuake/ezquake-source) - QuakeWorld client
-* [qw-streambot-ezquake](https://github.com/vikpe/qw-streambot-ezquake) - ezQuake setup used by [twitch.tv/vikpe](https://twitch.tv/vikpe)
+* [qw-streambot-ezquake](https://github.com/vikpe/qw-streambot-ezquake) - ezQuake setup used
+  by [twitch.tv/vikpe](https://twitch.tv/vikpe)
 * [serverstat](https://github.com/vikpe/serverstat) - Get info from QuakeWorld servers.
 * [masterstat](https://github.com/vikpe/masterstat) - Get server addresses from QuakeWorld master servers.
