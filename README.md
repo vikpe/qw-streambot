@@ -7,7 +7,7 @@
 * Written in Go (Golang)
 * [ezQuake](https://github.com/ezQuake/ezquake-source/releases) - QuakeWorld client
 * [ZeroMQ](https://zeromq.org/) - Communication/messages (single proxy and multiple subscribers/publishers)
-* [serverstat](https://github.com/vikpe/serverstat) - Query server information
+* [serverstat](https://github.com/vikpe/serverstat) - Get server information
 
 ## Overview
 
