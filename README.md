@@ -2,15 +2,11 @@
 
 > Setup for automated QuakeWorld client accepting commands via Twitch chat.
 
-## Example
+## Description
 
-Visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
+An evaluation loop is run every 10 seconds to make sure that the client is connected to the "best" server available (auto mode enabled) unless commanded to join a specific server (auto mode disabled).
 
-## Stack
-
-* Written in Go (Golang)
-* [ZeroMQ](https://zeromq.org/) - Communication/messages (single proxy and multiple subscribers/publishers)
-* [serverstat](https://github.com/vikpe/serverstat) - Get info from QuakeWorld servers
+**Example**: visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
 
 ## How does it work? (TLDR version)
 
@@ -19,6 +15,12 @@ ezQuake reads from a pipe located at `/tmp/ezquake_[username]` on posix systems,
 So basically all you have to do is to write commands to `/tmp/ezquake_[username]`.
 
 Most of the code in this project is related to making sure that the client always is connected to the "best" server available (check ezQuake process, current server, available servers, handling commands from Twitch etc).
+
+## Stack
+
+* Written in Go (Golang)
+* [ZeroMQ](https://zeromq.org/) - Communication/messages (single proxy and multiple subscribers/publishers)
+* [serverstat](https://github.com/vikpe/serverstat) - Get info from QuakeWorld servers
 
 ## Overview
 
