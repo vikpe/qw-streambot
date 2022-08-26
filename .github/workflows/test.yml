@@ -18,11 +18,11 @@ jobs:
       - name: Install dependencies
         run: go mod tidy
 
+      - name: Build
+        run: ./scripts/build.sh
+
       - name: Test
         run: go test ./... -covermode=atomic -coverprofile=coverage.out
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
-
-      - name: Build
-        run: ./scripts/build.sh
