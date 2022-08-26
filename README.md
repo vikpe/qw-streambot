@@ -31,7 +31,7 @@ Visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
   custom [scoring algorithm](https://github.com/vikpe/serverstat/blob/main/qserver/mvdsv/qscore/qscore.go).
 * Only change server in between matches or if current server has enabled a custom game mode (e.g. `race`).
 
-![image](https://user-images.githubusercontent.com/1616817/186943108-6c87bb9a-72cf-4e20-b288-824a7d292543.png)
+![image](https://user-images.githubusercontent.com/1616817/186950564-2d731d49-c92a-4928-9ab2-b03dc931cf23.png)
 
 ## Requirements
 
