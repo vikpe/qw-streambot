@@ -4,7 +4,7 @@
 
 ## Description
 
-An evaluation loop is run every 10 seconds to make sure that the client is connected to the "best" server available (auto mode enabled) unless commanded to join a specific server (auto mode disabled).
+An evaluation is run every 10 seconds to make sure that the client is connected to the "best" server available (auto mode enabled) unless commanded to join a specific server (auto mode disabled).
 
 **Example**: visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
 
@@ -45,13 +45,14 @@ Most of the code in this project is related to making sure that the client alway
 
 ## Requirements
 
-* [ezQuake](https://github.com/ezQuake/ezquake-source/releases) - QuakeWorld client
-* Streaming software, e.g. [Open Broadcaster Sofware (OBS)](https://obsproject.com/)
+* [ezQuake](https://github.com/ezQuake/ezquake-source/releases) (unix) - QuakeWorld client
 * Twitch account for the stream
 * Twitch account for the chatbot
 * [Twitch access tokens](https://twitchtokengenerator.com/) (for chatbot and twitch channel)
 * ZeroMQ: `apt-get install libzmq3-dev`
 * Create `.env` (see `.env.example`)
+
+For streaming I highly recommend [Open Broadcaster Sofware (OBS)](https://obsproject.com/).
 
 ## Development
 
