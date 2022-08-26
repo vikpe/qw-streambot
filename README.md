@@ -9,7 +9,6 @@ Visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
 ## Stack
 
 * Written in Go (Golang)
-* [ezQuake](https://github.com/ezQuake/ezquake-source/releases) - QuakeWorld client
 * [ZeroMQ](https://zeromq.org/) - Communication/messages (single proxy and multiple subscribers/publishers)
 * [serverstat](https://github.com/vikpe/serverstat) - Get server information
 
@@ -36,6 +35,7 @@ Visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
 
 ## Requirements
 
+* [ezQuake](https://github.com/ezQuake/ezquake-source/releases) - QuakeWorld client
 * Streaming software, e.g. [Open Broadcaster Sofware (OBS)](https://obsproject.com/)
 * Twitch account for the stream
 * Twitch account for the chatbot
