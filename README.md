@@ -1,6 +1,6 @@
 # QW streambot [![Test](https://github.com/vikpe/qw-streambot/actions/workflows/test.yml/badge.svg)](https://github.com/vikpe/qw-streambot/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/vikpe/qw-streambot/branch/main/graph/badge.svg)](https://codecov.io/gh/vikpe/qw-streambot) [![Go Report Card](https://goreportcard.com/badge/github.com/vikpe/qw-streambot)](https://goreportcard.com/report/github.com/vikpe/qw-streambot)
 
-> Automated QuakeWorld client controlled via on Twitch chat.
+> Setup for automated QuakeWorld client accepting commands via Twitch chat.
 
 ## Example
 
