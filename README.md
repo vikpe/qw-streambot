@@ -33,8 +33,9 @@
 
 ## Requirements
 
-* **[Twitch access tokens](https://twitchtokengenerator.com/)**
-* **ZeroMQ**: `apt-get install libzmq3-dev`
+* Twitch account for the chatbot
+* [Twitch access tokens](https://twitchtokengenerator.com/) (for chatbot and twitch channel)
+* ZeroMQ: `apt-get install libzmq3-dev`
 * Create `.env` (see `.env.example`)
 
 ## Development
