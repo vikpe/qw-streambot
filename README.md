@@ -2,6 +2,13 @@
 
 > Automated QuakeWorld streaming on Twitch.
 
+## Stack
+
+* Written in Go (Golang)
+* [ezQuake](https://github.com/ezQuake/ezquake-source/releases) - QuakeWorld client
+* [ZeroMQ](https://zeromq.org/) - Communication/messages (single proxy and multiple subscribers/publishers)
+* [serverstat](https://github.com/vikpe/serverstat) - Query server information
+
 ## Overview
 
 ### Components
@@ -17,40 +24,36 @@
 * **Twitch Bot**: Interaction with Twitch chat.
 * **Discord Bot**: Interaction with Discord.
 
-### Stack
+### Evaluation loop
 
-* Written in Go (Golang)
-* Communication/messages are over [ZeroMQ](https://zeromq.org/) sockets. Single proxy, multiple
-  subscribers/publishers.
-
-
-## Evaluation loop
 * Run every 10 seconds
 * Join "best server" available. Servers are ranked using a custom scoring algorithm.
 * Only change server in between matches or if current server has enabled a custom game mode (e.g. race).
 
 ![image](https://user-images.githubusercontent.com/1616817/178297376-f4f79a29-94c6-4dce-bb50-95183ef8dfb6.png)
 
-
 ## Requirements
 
-* **[ezQuake](https://github.com/ezQuake/ezquake-source/releases)**
 * **[Twitch access tokens](https://twitchtokengenerator.com/)**
 * **ZeroMQ**: `apt-get install libzmq3-dev`
 
-## Test
+## Development
+
+### Run tests
 
 ```shell
 go test ./... --cover
 ```
 
-## Build
+## Production
+
+### Build
 
 ```shell
 ./scripts/build.sh
 ```
 
-## Start
+### Start
 
 ```shell
 ./scripts/start.sh
