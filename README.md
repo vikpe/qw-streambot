@@ -15,8 +15,8 @@
 
 * **Message Proxy**: Central point for communication.
 * **Quake Manager**: Interaction with ezQuake
-    * **Server monitor**: Server events (map change etc)
-    * **Process monitor**: ezQuake events (started, stopped)
+    * Server monitor (thread): Server events (map change etc)
+    * Process monitor (thread): ezQuake events (started, stopped)
 
 * **Twitch Manager**: Interaction with Twitch channel (e.g. set title).
 * **Twitch Bot**: Interaction with Twitch chat.
