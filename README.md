@@ -28,7 +28,7 @@
   custom [scoring algorithm](https://github.com/vikpe/serverstat/blob/main/qserver/mvdsv/qscore/qscore.go).
 * Only change server in between matches or if current server has enabled a custom game mode (e.g. `race`).
 
-![image](https://user-images.githubusercontent.com/1616817/178297376-f4f79a29-94c6-4dce-bb50-95183ef8dfb6.png)
+![image](https://user-images.githubusercontent.com/1616817/186943108-6c87bb9a-72cf-4e20-b288-824a7d292543.png)
 
 ## Requirements
 * Streaming software, e.g. [Open Broadcaster Sofware (OBS)](https://obsproject.com/)
