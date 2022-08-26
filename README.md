@@ -5,7 +5,6 @@
 ## Example
 
 Visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
-Uses [github.com/vikpe/qw-streambot-ezquake](https://github.com/vikpe/qw-streambot-ezquake) ezQuake setup.
 
 ## Stack
 
