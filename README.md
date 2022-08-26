@@ -1,4 +1,4 @@
-# QW streambot [![Test](https://github.com/vikpe/streambot/actions/workflows/test.yml/badge.svg)](https://github.com/vikpe/streambot/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/vikpe/streambot/branch/main/graph/badge.svg)](https://codecov.io/gh/vikpe/streambot)
+# QW streambot [![Test](https://github.com/vikpe/qw-streambot/actions/workflows/test.yml/badge.svg)](https://github.com/vikpe/qw-streambot/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/vikpe/qw-streambot/branch/main/graph/badge.svg)](https://codecov.io/gh/vikpe/qw-streambot)
 
 > Automated QuakeWorld client controlled via on Twitch chat.
 
