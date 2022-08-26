@@ -2,6 +2,11 @@
 
 > Automated QuakeWorld client controlled via on Twitch chat.
 
+## Example
+
+Visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
+Uses [github.com/vikpe/qw-streambot-ezquake](https://github.com/vikpe/qw-streambot-ezquake) ezQuake setup.
+
 ## Stack
 
 * Written in Go (Golang)
@@ -31,6 +36,7 @@
 ![image](https://user-images.githubusercontent.com/1616817/186943108-6c87bb9a-72cf-4e20-b288-824a7d292543.png)
 
 ## Requirements
+
 * Streaming software, e.g. [Open Broadcaster Sofware (OBS)](https://obsproject.com/)
 * Twitch account for the stream
 * Twitch account for the chatbot
@@ -102,3 +108,8 @@ Build all apps and run all app controller scripts.
 ```shell
 ./scripts/build.sh && ./scripts/start.sh
 ```
+
+## Credits
+
+Thanks to everyone that has provided feedback and improvement suggestions (andeh, bps, circle, hangtime, milton, splash,
+wimpeeh) among others.
