@@ -18,7 +18,7 @@ Most of the code in this project is related to making sure that the client alway
 
 ## Stack
 
-* Written in Go (Golang)
+* Written in [Go (Golang)](https://github.com/golang/go)
 * [ZeroMQ](https://zeromq.org/) - Communication/messages (single proxy and multiple subscribers/publishers)
 * [serverstat](https://github.com/vikpe/serverstat) - Get info from QuakeWorld servers
 
