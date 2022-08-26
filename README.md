@@ -124,6 +124,7 @@ See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambo
 | `!auto`        | Enable auto-mode (join best server) |
 | `!autotrack`   | Toggle autotrack                    |
 | `!cfg_load`    | Re-load config                      |
+| `!cmd [x]`     | Run command `x` (mod only)          |
 | `!console`     | Toggle console                      |
 | `!find [name]` | Find `[name]` and join server       |
 | `!lastscores ` | Show list of last scores            |
