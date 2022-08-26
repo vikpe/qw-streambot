@@ -1,6 +1,6 @@
 # streambot [![Test](https://github.com/vikpe/streambot/actions/workflows/test.yml/badge.svg)](https://github.com/vikpe/streambot/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/vikpe/streambot/branch/main/graph/badge.svg)](https://codecov.io/gh/vikpe/streambot)
 
-> Automated QuakeWorld streaming on Twitch.
+> Automated QuakeWorld client controlled via on Twitch chat.
 
 ## Stack
 
@@ -20,7 +20,6 @@
 
 * **Twitch Manager**: Interaction with Twitch channel (e.g. set title).
 * **Twitch Bot**: Interaction with Twitch chat.
-* **Discord Bot** (work in progress): Interaction with Discord.
 
 ### Evaluation loop
 
@@ -32,7 +31,8 @@
 ![image](https://user-images.githubusercontent.com/1616817/178297376-f4f79a29-94c6-4dce-bb50-95183ef8dfb6.png)
 
 ## Requirements
-
+* Streaming software, e.g. [Open Broadcaster Sofware (OBS)](https://obsproject.com/)
+* Twitch account for the stream
 * Twitch account for the chatbot
 * [Twitch access tokens](https://twitchtokengenerator.com/) (for chatbot and twitch channel)
 * ZeroMQ: `apt-get install libzmq3-dev`
