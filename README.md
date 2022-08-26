@@ -10,7 +10,7 @@ Visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe) to see it in action.
 
 * Written in Go (Golang)
 * [ZeroMQ](https://zeromq.org/) - Communication/messages (single proxy and multiple subscribers/publishers)
-* [serverstat](https://github.com/vikpe/serverstat) - Get server information
+* [serverstat](https://github.com/vikpe/serverstat) - Get info from QuakeWorld servers
 
 ## Overview
 
@@ -112,3 +112,10 @@ Build all apps and run all app controller scripts.
 
 Thanks to everyone that has provided feedback and improvement suggestions (andeh, bps, circle, hangtime, milton, splash,
 wimpeeh) among others.
+
+## Related projects
+
+* [ezQuake](https://github.com/ezQuake/ezquake-source) - QuakeWorld client
+* [qw-streambot-ezquake](https://github.com/vikpe/qw-streambot-ezquake) - ezQuake setup used by [twitch.tv/vikpe](https://twitch.tv/vikpe)
+* [serverstat](https://github.com/vikpe/serverstat) - Get info from QuakeWorld servers.
+* [masterstat](https://github.com/vikpe/masterstat) - Get server addresses from QuakeWorld master servers.
