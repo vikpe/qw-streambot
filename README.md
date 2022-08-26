@@ -11,7 +11,7 @@
 
 ## Overview
 
-![image](https://user-images.githubusercontent.com/1616817/178285267-eade607d-8660-4b4d-9522-ab3772dde229.png)
+![image](https://user-images.githubusercontent.com/1616817/186941072-cc99679d-b1d0-41f7-bdba-913bb733e140.png)
 
 * **Message Proxy**: Central point for communication.
 * **Quake Manager**: Interaction with ezQuake
