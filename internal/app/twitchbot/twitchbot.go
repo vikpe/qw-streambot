@@ -2,7 +2,6 @@ package twitchbot
 
 import (
 	"os"
-	"time"
 
 	"github.com/fatih/color"
 	"github.com/gempir/go-twitch-irc/v3"
@@ -10,7 +9,6 @@ import (
 	"github.com/vikpe/streambot/internal/comms/commander"
 	"github.com/vikpe/streambot/internal/comms/topic"
 	"github.com/vikpe/streambot/internal/pkg/qws"
-	"github.com/vikpe/streambot/internal/pkg/task"
 	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 	chatbot "github.com/vikpe/twitch-chatbot"
@@ -31,24 +29,17 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 		}
 	}
 
-	// todo: swoop
-	swoopTask := task.NewPeriodicalTask(func() {
-		bot.Say("Support fellow quaker swoop in affording cancer treatment -> https://gofund.me/4955eac4")
-	})
-
 	// bot events
 	bot.OnConnected = func() {
 		pfmt.Println("connected as", botUsername)
+		go subscriber.Start()
 	}
 
 	bot.OnStarted = func() {
 		pfmt.Println("started")
-		go subscriber.Start()
-		go swoopTask.Start(time.Minute * 90)
 	}
 
 	bot.OnStopped = func(sig os.Signal) {
-		swoopTask.Stop()
 		subscriber.Stop()
 		pfmt.Printfln("stopped (%s)", sig)
 	}
