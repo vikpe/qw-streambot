@@ -20,7 +20,7 @@ func StartSubscriber(address, topics string, onMessage message.Handler) error {
 		zmqMsg, err := subSocket.RecvMessage(0)
 
 		if err != nil {
-			return errors.New(fmt.Sprintf("Error recieving message: %s", err))
+			return errors.New(fmt.Sprintf("Error receiving message: %s", err))
 		}
 
 		msg, err := message.NewMessageFromFrames(zmqMsg)
