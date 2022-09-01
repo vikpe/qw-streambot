@@ -6,7 +6,7 @@
 
 An evaluation is run every 10 seconds to make sure that the client is connected to the "best" server available (auto mode enabled) unless commanded to join a specific server (auto mode disabled).
 
-* **Visit [twitch.tv/vikpe](https://www.twitch.tv/vikpe)** to see it in action.
+* **Visit [twitch.tv/QuakeWorld](https://www.twitch.tv/QuakeWorld)** to see it in action.
 
 ## How does it work? (TLDR version)
 
