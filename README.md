@@ -48,9 +48,10 @@ Most of the code in this project is related to making sure that the client alway
 * [ezQuake](https://github.com/ezQuake/ezquake-source/releases) (unix) - QuakeWorld client
 * Twitch account for the stream
 * Twitch account for the chatbot
-* [Twitch access tokens](https://twitchtokengenerator.com/) (for chatbot and twitch channel)
+* Add [Twitch access tokens](https://twitchtokengenerator.com/) to `.env.`, ([see .env.example](./env.example))
+  * Channel access token to update title, scope: `channel:manage:broadcast`
+  * Chatbot access token to read and write to chat, scopes: `chat:read` and `chat:edit`.
 * ZeroMQ: `apt-get install libzmq3-dev`
-* Create `.env` (see `.env.example`)
 
 For streaming I highly recommend [Open Broadcaster Sofware (OBS)](https://obsproject.com/).
 
