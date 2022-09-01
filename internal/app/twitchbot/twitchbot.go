@@ -1,6 +1,7 @@
 package twitchbot
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/fatih/color"
@@ -83,7 +84,8 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	})
 
 	bot.AddCommand("commands", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		bot.Reply(msg, "see the channel description for info/commands.")
+		replyMessage := fmt.Sprintf(`available commands: %s`, bot.GetCommands(", "))
+		bot.Reply(msg, replyMessage)
 	})
 
 	bot.AddCommand("find", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
