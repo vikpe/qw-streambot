@@ -2,11 +2,10 @@
 
 > Setup for automated QuakeWorld client accepting commands via Twitch chat.
 
-## Description
-
-An evaluation is run every 10 seconds to make sure that the client is connected to the "best" server available (auto mode enabled) unless commanded to join a specific server (auto mode disabled).
+![image](https://user-images.githubusercontent.com/1616817/188150714-cc81b7a6-d97d-4cb4-ad22-2100a17533ed.png)
 
 * **Visit [twitch.tv/QuakeWorld](https://www.twitch.tv/QuakeWorld)** to see it in action.
+
 
 ## How does it work? (TLDR version)
 
@@ -35,6 +34,7 @@ Most of the code in this project is related to making sure that the client alway
 * **Twitch Bot**: Interaction with Twitch chat.
 
 ### Quake Manager - evaluation loop
+An evaluation is run to make sure that the client is connected to the "best" server available (auto mode enabled) unless commanded to join a specific server (auto mode disabled).
 
 * Run every 10 seconds
 * Join "best server" available. Servers are ranked using a
