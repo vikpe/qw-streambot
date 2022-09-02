@@ -43,6 +43,26 @@ An evaluation is run to make sure that the client is connected to the "best" ser
 
 ![image](https://user-images.githubusercontent.com/1616817/186950564-2d731d49-c92a-4928-9ab2-b03dc931cf23.png)
 
+## Chatbot commands
+Example, find `XantoM` and join that server.
+
+![image](https://user-images.githubusercontent.com/1616817/188152018-f4c43219-e969-4330-bb7d-2f89e4d45154.png)
+
+| Command        | Description                         |
+|----------------|-------------------------------------|
+| `!auto`        | Enable auto-mode (join best server) |
+| `!autotrack`   | Toggle autotrack                    |
+| `!cfg_load`    | Re-load config                      |
+| `!cmd [x]`     | Run command `x` (mod only)          |
+| `!console`     | Toggle console                      |
+| `!find [name]` | Find `[name]` and join server       |
+| `!lastscores ` | Show list of last scores            |
+| `!restart `    | Restart ezQuake client              |
+| `!showscores ` | Show scoreboard                     |
+| `!track [x] `  | Track player `x`                    |
+
+See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambot/blob/main/internal/app/twitchbot/twitchbot.go) for all commands.
+
 ## Requirements
 
 * [ezQuake](https://github.com/ezQuake/ezquake-source/releases) (unix) - QuakeWorld client
@@ -119,26 +139,6 @@ Build all apps and run all app controller scripts.
 ```shell
 ./scripts/build.sh && ./scripts/start.sh
 ```
-
-## Chatbot commands
-Example, find `XantoM` and join that server.
-
-![image](https://user-images.githubusercontent.com/1616817/188152018-f4c43219-e969-4330-bb7d-2f89e4d45154.png)
-
-| Command        | Description                         |
-|----------------|-------------------------------------|
-| `!auto`        | Enable auto-mode (join best server) |
-| `!autotrack`   | Toggle autotrack                    |
-| `!cfg_load`    | Re-load config                      |
-| `!cmd [x]`     | Run command `x` (mod only)          |
-| `!console`     | Toggle console                      |
-| `!find [name]` | Find `[name]` and join server       |
-| `!lastscores ` | Show list of last scores            |
-| `!restart `    | Restart ezQuake client              |
-| `!showscores ` | Show scoreboard                     |
-| `!track [x] `  | Track player `x`                    |
-
-See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambot/blob/main/internal/app/twitchbot/twitchbot.go) for all commands.
 
 ## Credits
 
