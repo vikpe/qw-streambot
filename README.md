@@ -121,7 +121,9 @@ Build all apps and run all app controller scripts.
 ```
 
 ## Chatbot commands
-See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambot/blob/main/internal/app/twitchbot/twitchbot.go)
+Example, find `XantoM` and join that server.
+
+![image](https://user-images.githubusercontent.com/1616817/188152018-f4c43219-e969-4330-bb7d-2f89e4d45154.png)
 
 | Command        | Description                         |
 |----------------|-------------------------------------|
@@ -135,6 +137,8 @@ See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambo
 | `!restart `    | Restart ezQuake client              |
 | `!showscores ` | Show scoreboard                     |
 | `!track [x] `  | Track player `x`                    |
+
+See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambot/blob/main/internal/app/twitchbot/twitchbot.go) for all commands.
 
 ## Credits
 
