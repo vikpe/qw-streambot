@@ -101,10 +101,6 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 		cmder.Lastscores()
 	})
 
-	bot.AddCommand("next", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		cmder.Command("next_best")
-	})
-
 	bot.AddCommand("restart", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.StopEzquake()
 	})
