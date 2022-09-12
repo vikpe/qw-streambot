@@ -12,7 +12,7 @@ import (
 )
 
 func GetMvdsvServers(queryParams map[string]string) []mvdsv.Mvdsv {
-	serversUrl := "https://metaqtv.quake.se/v2/servers/mvdsv"
+	serversUrl := "https://hubapi.quakeworld.nu/v2/servers/mvdsv"
 	resp, err := resty.New().R().SetResult([]mvdsv.Mvdsv{}).SetQueryParams(queryParams).Get(serversUrl)
 
 	if err != nil {
