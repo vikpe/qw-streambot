@@ -23,7 +23,7 @@ func TestIsRelevantServer(t *testing.T) {
 	t.Run("no - excluded region", func(t *testing.T) {
 		server := mvdsv.Mvdsv{
 			SpectatorSlots: slots.New(4, 0),
-			Geo:            geo.Info{Region: "South America"},
+			Geo:            geo.Location{Region: "South America"},
 		}
 		assert.False(t, qws.IsRelevantServer(server))
 	})
@@ -31,7 +31,7 @@ func TestIsRelevantServer(t *testing.T) {
 	t.Run("yes", func(t *testing.T) {
 		server := mvdsv.Mvdsv{
 			SpectatorSlots: slots.New(4, 0),
-			Geo:            geo.Info{Region: "Europe"},
+			Geo:            geo.Location{Region: "Europe"},
 		}
 		assert.True(t, qws.IsRelevantServer(server))
 	})

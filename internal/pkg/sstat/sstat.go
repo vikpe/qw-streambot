@@ -7,7 +7,7 @@ import (
 )
 
 func GetMvdsvServer(address string) mvdsv.Mvdsv {
-	server, err := serverstat.GetInfo(address)
+	server, err := serverstat.NewClient().GetInfo(address)
 
 	if err != nil {
 		return mvdsv.Mvdsv{}

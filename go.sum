@@ -79,6 +79,8 @@ github.com/vikpe/serverstat v0.1.86 h1:dkeKom2zqsD0w5fyG9aH0LnTwouRVmInynZoKYB8p
 github.com/vikpe/serverstat v0.1.86/go.mod h1:2pkuQfU4jAP5WxtsLclYvVC9C38nrJL67xHPny3N3MI=
 github.com/vikpe/serverstat v0.1.89 h1:fOuGW3vOPaaweR6K/dmkCcNTZE0nR74YW6oUe0LN3CA=
 github.com/vikpe/serverstat v0.1.89/go.mod h1:LailSLpCo0sbVkWIOF91+buit2EDHbjAejh9HiGZhrg=
+github.com/vikpe/serverstat v0.2.0 h1:H575xFoyN10FVKRsF8kGQ6/cCqVMx50Hjo8sact4rso=
+github.com/vikpe/serverstat v0.2.0/go.mod h1:ivPxoxhHGmk5JKh90Huub4JyIhlfvCfmOzDS1YJLoHU=
 github.com/vikpe/twitch-chatbot v0.1.0 h1:i3AaDvLNoeYvXyftejXtpxeCsb6chg72Pr/gQdoTWrk=
 github.com/vikpe/twitch-chatbot v0.1.0/go.mod h1:IUfuGEwGaDglqrpVls1vPoiBsb8yfZIeAdvGVzGxbP4=
 github.com/vikpe/twitch-chatbot v0.1.1 h1:QlR81+THvckDBEzCH2b6ll0WDwg+lJgvQxSXRrIgoJk=
@@ -145,6 +147,8 @@ golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 h1:v6hYoSR9T5oet+pMXwUWkbiVq
 golang.org/x/sys v0.0.0-20220829200755-d48e67d00261/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220909162455-aba9fc2a8ff2 h1:wM1k/lXfpc5HdkJJyW9GELpd8ERGdnh8sMGL6Gzq3Ho=
 golang.org/x/sys v0.0.0-20220909162455-aba9fc2a8ff2/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20220913153101-76c7481b5158 h1:XQphkCZeKYaMRSo28HqvvNYuLOoM5CIOOvTZfthvTgI=
+golang.org/x/sys v0.0.0-20220913153101-76c7481b5158/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/text v0.3.6/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
 golang.org/x/text v0.3.7 h1:olpwvP2KacW1ZWvsR7uQhoyTYvKAupfQrRGBFM352Gk=

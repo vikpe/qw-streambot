@@ -12,7 +12,7 @@ require (
 	github.com/pebbe/zmq4 v1.2.9
 	github.com/stretchr/testify v1.8.0
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
-	github.com/vikpe/serverstat v0.1.89
+	github.com/vikpe/serverstat v0.2.0
 	github.com/vikpe/twitch-chatbot v0.1.1
 	github.com/vikpe/udphelper v0.1.3
 	golang.org/x/exp v0.0.0-20220909182711-5c715a9e8561
@@ -35,7 +35,7 @@ require (
 	github.com/vikpe/wildcard v0.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20220829220503-c86fa9a7ed90 // indirect
 	golang.org/x/net v0.0.0-20220909164309-bea034e7d591 // indirect
-	golang.org/x/sys v0.0.0-20220909162455-aba9fc2a8ff2 // indirect
+	golang.org/x/sys v0.0.0-20220913153101-76c7481b5158 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

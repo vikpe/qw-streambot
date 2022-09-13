@@ -112,7 +112,7 @@ func BenchmarkSerialize(b *testing.B) {
 					"maxfps":          "77",
 					"pm_ktjump":       "1",
 				},
-				Geo: geo.Info{},
+				Geo: geo.Location{},
 				ExtraInfo: struct {
 					QtvStream qtvstream.QtvStream `json:"qtv_stream"`
 				}{
