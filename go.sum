@@ -62,8 +62,8 @@ github.com/stretchr/testify v1.8.0 h1:pSgiaMZlXftHpm5L7V1+rVB+AZJydKsMxsQBIJw4PK
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/valyala/fastjson v1.6.3 h1:tAKFnnwmeMGPbwJ7IwxcTPCNr3uIzoIj3/Fh90ra4xc=
 github.com/valyala/fastjson v1.6.3/go.mod h1:CLCAqky6SMuOcxStkYQvblddUtoRxhYMGLrsQns1aXY=
-github.com/vikpe/go-ezquake v0.1.0 h1:1QwNR2CKjdVu3a+lCeh8ZS9e/oMz9yi19UuxzJqBP7k=
-github.com/vikpe/go-ezquake v0.1.0/go.mod h1:D8vNPGnXFt0Xg7d91DacrHd/OeU9VIvfb9BpFQwO3+8=
+github.com/vikpe/go-ezquake v0.1.3 h1:TRACgh8sweisVWwmM6gZTFUGl/hTVn2SpETuaRZu5kg=
+github.com/vikpe/go-ezquake v0.1.3/go.mod h1:taxZ68rlgsz5keyzhMZAFHuWdOq4AMGB+xhcrjHqR58=
 github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771 h1:DrBPzJ7Snsm7X2mwEb7hK7tgUF2bW49+L2Helr15cqE=
 github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771/go.mod h1:ZX829Mvv2GUtcZbUAyuVKfHjm/YDb1iWoCfyWpYtQ4A=
 github.com/vikpe/serverstat v0.2.0 h1:H575xFoyN10FVKRsF8kGQ6/cCqVMx50Hjo8sact4rso=

@@ -11,7 +11,7 @@ require (
 	github.com/nicklaw5/helix/v2 v2.7.1
 	github.com/pebbe/zmq4 v1.2.9
 	github.com/stretchr/testify v1.8.0
-	github.com/vikpe/go-ezquake v0.1.0
+	github.com/vikpe/go-ezquake v0.1.3
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
 	github.com/vikpe/serverstat v0.2.0
 	github.com/vikpe/twitch-chatbot v0.2.0
