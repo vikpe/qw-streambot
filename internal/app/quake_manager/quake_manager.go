@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/vikpe/go-ezquake"
 	"github.com/vikpe/prettyfmt"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
@@ -15,7 +16,6 @@ import (
 	"github.com/vikpe/streambot/internal/comms/commander"
 	"github.com/vikpe/streambot/internal/comms/topic"
 	"github.com/vikpe/streambot/internal/pkg/calc"
-	"github.com/vikpe/streambot/internal/pkg/ezquake"
 	"github.com/vikpe/streambot/internal/pkg/proc"
 	"github.com/vikpe/streambot/internal/pkg/qws"
 	"github.com/vikpe/streambot/internal/pkg/sstat"
