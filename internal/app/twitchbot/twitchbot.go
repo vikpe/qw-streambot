@@ -67,7 +67,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	})
 
 	bot.AddCommand("cmd", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		if !chatbot.IsBroadcaster(msg.User) {
+		if !chatbot.IsModerator(msg.User) {
 			bot.Reply(msg, "cmd is a mod-only command.")
 			return
 		}
