@@ -8,22 +8,23 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goccy/go-json v0.9.11
 	github.com/joho/godotenv v1.4.0
-	github.com/nicklaw5/helix/v2 v2.7.1
+	github.com/nicklaw5/helix/v2 v2.7.2
 	github.com/pebbe/zmq4 v1.2.9
 	github.com/stretchr/testify v1.8.0
-	github.com/vikpe/go-ezquake v0.1.3
+	github.com/vikpe/go-ezquake v0.1.7
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
 	github.com/vikpe/serverstat v0.2.0
 	github.com/vikpe/twitch-chatbot v0.2.0
 	github.com/vikpe/udphelper v0.1.3
-	golang.org/x/exp v0.0.0-20220915105810-2d61f44442a3
+	golang.org/x/exp v0.0.0-20220916125017-b168a2c6b86b
 )
 
 require (
+	github.com/cavaliergopher/grab/v3 v3.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/go-playground/validator/v10 v10.11.0 // indirect
+	github.com/go-playground/validator/v10 v10.11.1 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
 	github.com/jpillora/longestcommon v0.0.0-20161227235612-adb9d91ee629 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
@@ -34,9 +35,9 @@ require (
 	github.com/valyala/fastjson v1.6.3 // indirect
 	github.com/vikpe/udpclient v0.1.3 // indirect
 	github.com/vikpe/wildcard v0.1.0 // indirect
-	golang.org/x/crypto v0.0.0-20220829220503-c86fa9a7ed90 // indirect
-	golang.org/x/net v0.0.0-20220909164309-bea034e7d591 // indirect
-	golang.org/x/sys v0.0.0-20220913175220-63ea55921009 // indirect
+	golang.org/x/crypto v0.0.0-20220919173607-35f4265a4bc0 // indirect
+	golang.org/x/net v0.0.0-20220919232410-f2f64ebce3c1 // indirect
+	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
