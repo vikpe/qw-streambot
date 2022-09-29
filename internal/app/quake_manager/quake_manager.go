@@ -132,8 +132,8 @@ func (m *QuakeManager) ValidateCurrentServer() {
 		return
 	}
 
-	connectionGracePeriod := 10.0
-	if m.serverMonitor.GetTimeConnected().Seconds() <= connectionGracePeriod {
+	const connectionGraceDuration = 10 * time.Second
+	if m.serverMonitor.GetTimeConnected() <= connectionGraceDuration {
 		return
 	}
 
@@ -184,7 +184,8 @@ func (m *QuakeManager) OnStreambotEvaluate(msg message.Message) {
 }
 
 func (m *QuakeManager) evaluateAutoModeEnabled() {
-	if m.serverMonitor.GetTimeConnected() <= 30*time.Second {
+	const connectionGraceDuration = 30 * time.Second
+	if m.serverMonitor.GetTimeConnected() <= connectionGraceDuration {
 		return
 	}
 
@@ -213,14 +214,13 @@ func (m *QuakeManager) evaluateAutoModeEnabled() {
 func (m *QuakeManager) evaluateAutoModeDisabled() {
 	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
 
-	minAcceptableScore := 2
+	const minAcceptableScore = 2
 	if currentServer.Score >= minAcceptableScore {
 		return
 	}
 
-	gracePeriod := 60.0 * 5 // 5 minutes
-
-	if m.serverMonitor.GetTimeConnected().Seconds() <= gracePeriod {
+	const connectionGraceDuration = 5 * time.Minute
+	if m.serverMonitor.GetTimeConnected() <= connectionGraceDuration {
 		return
 	}
 
