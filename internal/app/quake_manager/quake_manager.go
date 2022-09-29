@@ -184,6 +184,10 @@ func (m *QuakeManager) OnStreambotEvaluate(msg message.Message) {
 }
 
 func (m *QuakeManager) evaluateAutoModeEnabled() {
+	if m.serverMonitor.GetTimeConnected() <= 30*time.Second {
+		return
+	}
+
 	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
 	shouldConsiderChange := 0 == currentServer.Score || currentServer.Mode.IsCustom() || currentServer.Status.IsStandby()
 
