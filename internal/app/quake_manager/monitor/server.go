@@ -30,6 +30,10 @@ func NewServerMonitor(getInfo MvdsvProvider, onEvent func(topic string, data ...
 
 func (s *ServerMonitor) SetAddress(address string) {
 	s.address = address
+	s.touchServerTimestamp()
+}
+
+func (s *ServerMonitor) touchServerTimestamp() {
 	s.serverTimestamp = time.Now()
 }
 
@@ -69,6 +73,7 @@ func (s *ServerMonitor) CompareStates() {
 
 	if currentState.Map != s.prevState.Map {
 		s.onEvent(topic.ServerMapChanged, currentState.Map)
+		s.touchServerTimestamp()
 	}
 
 	if currentState.Title != s.prevState.Title {
