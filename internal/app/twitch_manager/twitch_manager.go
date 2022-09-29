@@ -3,6 +3,7 @@ package twitch_manager
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/nicklaw5/helix/v2"
 	"github.com/vikpe/streambot/internal/comms/topic"
@@ -14,6 +15,7 @@ func New(clientID, accessToken, broadcasterID, subscriberAddress string) (*zerom
 	apiClient, err := helix.NewClient(&helix.Options{
 		ClientID:       clientID,
 		AppAccessToken: accessToken,
+		RateLimitFunc:  rateLimitCallback,
 	})
 
 	subscriber := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
@@ -37,6 +39,22 @@ func New(clientID, accessToken, broadcasterID, subscriberAddress string) (*zerom
 	}
 
 	return subscriber, nil
+}
+
+func rateLimitCallback(lastResponse *helix.Response) error {
+	if lastResponse.GetRateLimitRemaining() > 0 {
+		return nil
+	}
+
+	nextReset := int64(lastResponse.GetRateLimitReset())
+	currentTime := time.Now().Unix()
+
+	if nextReset > currentTime {
+		timeToNextReset := time.Duration(nextReset - currentTime)
+		time.Sleep(timeToNextReset * time.Second)
+	}
+
+	return nil
 }
 
 func SetTitle(apiClient *helix.Client, broadcasterID, title string) error {
