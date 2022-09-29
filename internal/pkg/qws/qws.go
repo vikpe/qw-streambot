@@ -9,6 +9,7 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
+	"github.com/vikpe/streambot/internal/pkg/mtag"
 )
 
 func GetMvdsvServers(queryParams map[string]string) []mvdsv.Mvdsv {
@@ -44,8 +45,37 @@ func FindPlayer(pattern string) (mvdsv.Mvdsv, error) {
 	return servers[0], nil
 }
 
+func ServerScoreBonus(server mvdsv.Mvdsv) int {
+	if !server.Mode.IsXonX() {
+		return 0
+	}
+
+	if !mtag.IsOfficial(server.Settings.Get("matchtag", "")) {
+		return 0
+	}
+
+	if server.Mode.Is1on1() && server.PlayerSlots.Free > 0 {
+		return 0
+	}
+
+	if server.Mode.Is2on2() && server.PlayerSlots.Free > 1 {
+		return 0
+	}
+
+	if server.Mode.Is4on4() && server.PlayerSlots.Free > 2 {
+		return 0
+	}
+
+	return 30
+}
+
 func GetBestServer() (mvdsv.Mvdsv, error) {
 	servers := GetMvdsvServers(nil)
+
+	// add custom score
+	for _, server := range servers {
+		server.Score += ServerScoreBonus(server)
+	}
 
 	sort.Slice(servers, func(i, j int) bool {
 		return servers[i].Score > servers[j].Score
