@@ -41,6 +41,14 @@ func (s *ServerMonitor) GetAddressTimestamp() time.Time {
 	return s.addressTimestamp
 }
 
+func (s *ServerMonitor) GetTimeConnected() time.Duration {
+	if s.GetAddressTimestamp().IsZero() {
+		return 0
+	}
+
+	return time.Now().Sub(s.GetAddressTimestamp())
+}
+
 func (s *ServerMonitor) Start(interval time.Duration) {
 	s.isDone = false
 

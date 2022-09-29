@@ -62,3 +62,14 @@ func TestServerMonitor_Address(t *testing.T) {
 	timeFormat := "2006:01:02 15:04:05"
 	assert.Equal(t, time.Now().Format(timeFormat), serverMonitor.GetAddressTimestamp().Format(timeFormat))
 }
+
+func TestServerMonitor_GetTimeConnected(t *testing.T) {
+	getInfo := func(address string) mvdsv.Mvdsv { return mvdsv.Mvdsv{} }
+	onEvent := func(topic string, data ...any) {}
+	serverMonitor := monitor.NewServerMonitor(getInfo, onEvent)
+
+	assert.Equal(t, int64(0), serverMonitor.GetTimeConnected().Milliseconds())
+	serverMonitor.SetAddress("qw.foppa.dk:27501")
+	time.Sleep(10 * time.Millisecond)
+	assert.Equal(t, int64(10), serverMonitor.GetTimeConnected().Milliseconds())
+}
