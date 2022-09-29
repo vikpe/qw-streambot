@@ -59,8 +59,15 @@ func TestServerMonitor_Address(t *testing.T) {
 	onEvent := func(topic string, data ...any) {}
 	serverMonitor := monitor.NewServerMonitor(getInfo, onEvent)
 
+	assert.False(t, serverMonitor.IsConnected())
+
 	serverMonitor.SetAddress("qw.foppa.dk:27501")
 	assert.Equal(t, "qw.foppa.dk:27501", serverMonitor.GetAddress())
+	assert.True(t, serverMonitor.IsConnected())
+
+	serverMonitor.ClearAddress()
+	assert.Equal(t, "", serverMonitor.GetAddress())
+	assert.False(t, serverMonitor.IsConnected())
 }
 
 func TestServerMonitor_GetTimeConnected(t *testing.T) {
@@ -69,7 +76,11 @@ func TestServerMonitor_GetTimeConnected(t *testing.T) {
 	serverMonitor := monitor.NewServerMonitor(getInfo, onEvent)
 
 	assert.Equal(t, int64(0), serverMonitor.GetTimeConnected().Milliseconds())
+
 	serverMonitor.SetAddress("qw.foppa.dk:27501")
 	time.Sleep(10 * time.Millisecond)
-	assert.Equal(t, int64(10), serverMonitor.GetTimeConnected().Milliseconds())
+	assert.GreaterOrEqual(t, int64(10), serverMonitor.GetTimeConnected().Milliseconds())
+
+	serverMonitor.ClearAddress()
+	assert.Equal(t, int64(0), serverMonitor.GetTimeConnected().Milliseconds())
 }

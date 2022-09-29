@@ -128,7 +128,7 @@ func (m *QuakeManager) OnStreambotDisableAuto(msg message.Message) {
 }
 
 func (m *QuakeManager) ValidateCurrentServer() {
-	if "" == m.serverMonitor.GetAddress() {
+	if !m.serverMonitor.IsConnected() {
 		return
 	}
 
@@ -166,7 +166,7 @@ func (m *QuakeManager) ValidateCurrentServer() {
 	}
 
 	pfmt.Println("not connected to current server (reset server address)", currentServer.SpectatorNames, currentServer.QtvStream.SpectatorNames)
-	m.serverMonitor.SetAddress("")
+	m.serverMonitor.ClearAddress()
 }
 
 func (m *QuakeManager) OnStreambotEvaluate(msg message.Message) {
@@ -185,7 +185,7 @@ func (m *QuakeManager) OnStreambotEvaluate(msg message.Message) {
 
 func (m *QuakeManager) evaluateAutoModeEnabled() {
 	const connectionGraceDuration = 30 * time.Second
-	if m.serverMonitor.GetTimeConnected() <= connectionGraceDuration {
+	if m.serverMonitor.IsConnected() && m.serverMonitor.GetTimeConnected() <= connectionGraceDuration {
 		return
 	}
 
@@ -289,7 +289,7 @@ func (m *QuakeManager) OnStopEzquake(msg message.Message) {
 
 func (m *QuakeManager) OnEzquakeStopped(msg message.Message) {
 	pfmt.Println("OnEzquakeStopped")
-	m.serverMonitor.SetAddress("")
+	m.serverMonitor.ClearAddress()
 	m.evaluateTask.Stop()
 }
 
