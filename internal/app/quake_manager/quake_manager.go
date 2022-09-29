@@ -196,7 +196,7 @@ func (m *QuakeManager) evaluateAutoModeDisabled() {
 
 	gracePeriod := 60.0 * 5 // 5 minutes
 
-	if m.serverMonitor.GetTimeConnected().Seconds() < gracePeriod {
+	if m.serverMonitor.GetTimeConnected().Seconds() <= gracePeriod {
 		return
 	}
 
