@@ -189,10 +189,9 @@ func (m *QuakeManager) evaluateAutoModeEnabled() {
 
 func (m *QuakeManager) evaluateAutoModeDisabled() {
 	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
-	const MinScore = 2
-	isOkServer := currentServer.Score >= MinScore
 
-	if isOkServer {
+	minAcceptableScore := 2
+	if currentServer.Score >= minAcceptableScore {
 		return
 	}
 
