@@ -67,6 +67,10 @@ func (s *ServerMonitor) CompareStates() {
 		s.onEvent(topic.ServerMatchtagChanged, currentState.Matchtag)
 	}
 
+	if currentState.Map != s.prevState.Map {
+		s.onEvent(topic.ServerMapChanged, currentState.Map)
+	}
+
 	if currentState.Title != s.prevState.Title {
 		s.onEvent(topic.ServerTitleChanged, currentState.Title)
 	}
@@ -80,6 +84,7 @@ func (s *ServerMonitor) Stop() {
 
 type serverState struct {
 	Matchtag string
+	Map      string
 	Title    string
 }
 
@@ -88,6 +93,7 @@ func newServerState(getInfo MvdsvProvider, address string) serverState {
 
 	return serverState{
 		Matchtag: server.Settings.Get("matchtag", ""),
+		Map:      server.Settings.Get("map", ""),
 		Title:    server.Title,
 	}
 }
