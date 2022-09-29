@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 	"time"
 
@@ -33,6 +34,7 @@ type QuakeManager struct {
 	evaluateTask     *task.PeriodicalTask
 	subscriber       *zeromq.Subscriber
 	commander        *commander.Commander
+	assetManager     *ezquake.AssetManager
 	stopChan         chan os.Signal
 	AutoMode         bool
 }
@@ -49,6 +51,7 @@ func New(
 	subscriber := zeromq.NewSubscriber(subscriberAddress, zeromq.TopicsAll)
 
 	manager := QuakeManager{
+		assetManager:     ezquake.NewAssetManager(filepath.Dir(ezquakeBinPath)),
 		clientPlayerName: clientPlayerName,
 		controller:       controller,
 		processMonitor:   monitor.NewProcessMonitor(controller.Process.IsStarted, publisher.SendMessage),
@@ -139,10 +142,27 @@ func (m *QuakeManager) ValidateCurrentServer() {
 		return
 	}
 
+	//
 	altName := fmt.Sprintf("%s(1)", m.clientPlayerName)
 	if analyze.HasSpectator(currentServer, altName) {
 		m.commander.Commandf("name %s", m.clientPlayerName)
 		return
+	}
+
+	// download missing maps
+	mapName := currentServer.Settings.Get("map", "")
+
+	if len(mapName) > 0 && !m.assetManager.HasMap(mapName) {
+		pfmt.Printfln("trying to download map %s", mapName)
+
+		err := m.assetManager.DownloadMap(mapName)
+
+		if err == nil {
+			pfmt.Printfln("fail")
+		} else {
+			pfmt.Printfln("success")
+			return
+		}
 	}
 
 	pfmt.Println("not connected to current server (reset server address)", currentServer.SpectatorNames, currentServer.QtvStream.SpectatorNames)
