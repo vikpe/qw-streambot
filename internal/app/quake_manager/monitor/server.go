@@ -10,12 +10,12 @@ import (
 type MvdsvProvider func(address string) mvdsv.Mvdsv
 
 type ServerMonitor struct {
-	isDone           bool
-	onEvent          func(string, ...any)
-	getInfo          MvdsvProvider
-	address          string
-	addressTimestamp time.Time
-	prevState        serverState
+	isDone          bool
+	onEvent         func(string, ...any)
+	getInfo         MvdsvProvider
+	address         string
+	serverTimestamp time.Time
+	prevState       serverState
 }
 
 func NewServerMonitor(getInfo MvdsvProvider, onEvent func(topic string, data ...any)) *ServerMonitor {
@@ -30,23 +30,19 @@ func NewServerMonitor(getInfo MvdsvProvider, onEvent func(topic string, data ...
 
 func (s *ServerMonitor) SetAddress(address string) {
 	s.address = address
-	s.addressTimestamp = time.Now()
+	s.serverTimestamp = time.Now()
 }
 
 func (s *ServerMonitor) GetAddress() string {
 	return s.address
 }
 
-func (s *ServerMonitor) GetAddressTimestamp() time.Time {
-	return s.addressTimestamp
-}
-
 func (s *ServerMonitor) GetTimeConnected() time.Duration {
-	if s.GetAddressTimestamp().IsZero() {
+	if s.serverTimestamp.IsZero() {
 		return 0
 	}
 
-	return time.Now().Sub(s.GetAddressTimestamp())
+	return time.Now().Sub(s.serverTimestamp)
 }
 
 func (s *ServerMonitor) Start(interval time.Duration) {

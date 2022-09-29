@@ -58,9 +58,6 @@ func TestServerMonitor_Address(t *testing.T) {
 
 	serverMonitor.SetAddress("qw.foppa.dk:27501")
 	assert.Equal(t, "qw.foppa.dk:27501", serverMonitor.GetAddress())
-
-	timeFormat := "2006:01:02 15:04:05"
-	assert.Equal(t, time.Now().Format(timeFormat), serverMonitor.GetAddressTimestamp().Format(timeFormat))
 }
 
 func TestServerMonitor_GetTimeConnected(t *testing.T) {
