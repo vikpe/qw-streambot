@@ -129,9 +129,8 @@ func (m *QuakeManager) ValidateCurrentServer() {
 		return
 	}
 
-	secondsConnected := time.Now().Sub(m.serverMonitor.GetAddressTimestamp()).Seconds()
 	connectionGracePeriod := 10.0
-	if secondsConnected <= connectionGracePeriod {
+	if m.serverMonitor.GetTimeConnected().Seconds() <= connectionGracePeriod {
 		return
 	}
 
@@ -195,10 +194,9 @@ func (m *QuakeManager) evaluateAutoModeDisabled() {
 		return
 	}
 
-	secondsConnected := time.Now().Sub(m.serverMonitor.GetAddressTimestamp()).Seconds()
 	gracePeriod := 60.0 * 5 // 5 minutes
 
-	if secondsConnected < gracePeriod {
+	if m.serverMonitor.GetTimeConnected().Seconds() < gracePeriod {
 		return
 	}
 
