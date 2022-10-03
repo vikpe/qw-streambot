@@ -70,6 +70,13 @@ See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambo
 * Twitch account for the chatbot
 * Add [Twitch access tokens](https://twitchtokengenerator.com/) to `.env.` (see [.env.example](./.env.example))
   * Channel access token to update title, scope: `channel:manage:broadcast`
+    ```
+    https://id.twitch.tv/oauth2/authorize
+    ?response_type=token
+    &client_id=CLIENT_ID
+    &redirect_uri=http://localhost:3000
+    &scope=channel%3Amanage%3Abroadcast
+    ``` 
   * Chatbot access token to read and write to chat, scopes: `chat:read` and `chat:edit`.
 * ZeroMQ: `apt-get install libzmq3-dev`
 
