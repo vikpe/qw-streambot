@@ -48,6 +48,10 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	// channel commands
 	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
+	bot.AddCommand("attack", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
+		cmder.Command("bot_attack")
+	})
+
 	bot.AddCommand("auto", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsToString())
 
@@ -95,6 +99,10 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 			return
 		}
 		cmder.SuggestServer(server)
+	})
+
+	bot.AddCommand("jump", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
+		cmder.Command("bot_jump")
 	})
 
 	bot.AddCommand("lastscores", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
