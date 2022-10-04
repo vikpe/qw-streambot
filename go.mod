@@ -13,6 +13,7 @@ require (
 	github.com/stretchr/testify v1.8.0
 	github.com/vikpe/go-ezquake v0.1.7
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
+	github.com/vikpe/qw-hub-api v0.0.0-20221004144214-da57bb22affc
 	github.com/vikpe/serverstat v0.2.1
 	github.com/vikpe/twitch-chatbot v0.2.0
 	github.com/vikpe/udphelper v0.1.3
