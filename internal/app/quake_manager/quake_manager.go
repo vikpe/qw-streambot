@@ -185,7 +185,7 @@ func (m *QuakeManager) OnStreambotEvaluate(msg message.Message) {
 }
 
 func (m *QuakeManager) evaluateAutoModeEnabled() {
-	const idleGraceDuration = 30 * time.Second
+	const idleGraceDuration = 20 * time.Second
 	if m.serverMonitor.IsConnected() && m.serverMonitor.GetIdleDuration() <= idleGraceDuration {
 		return
 	}
