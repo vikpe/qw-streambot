@@ -69,17 +69,19 @@ func TestServerMonitor_Address(t *testing.T) {
 	assert.False(t, serverMonitor.IsConnected())
 }
 
-func TestServerMonitor_GetTimeConnected(t *testing.T) {
+func TestServerMonitor_Durations(t *testing.T) {
 	getInfo := func(address string) mvdsv.Mvdsv { return mvdsv.Mvdsv{} }
 	onEvent := func(topic string, data ...any) {}
 	serverMonitor := monitor.NewServerMonitor(getInfo, onEvent)
 
-	assert.Equal(t, int64(0), serverMonitor.GetTimeConnected().Milliseconds())
+	assert.Equal(t, int64(0), serverMonitor.GetConnectionDuration().Milliseconds())
 
 	serverMonitor.SetAddress("qw.foppa.dk:27501")
 	time.Sleep(10 * time.Millisecond)
-	assert.GreaterOrEqual(t, int64(10), serverMonitor.GetTimeConnected().Milliseconds())
+	assert.GreaterOrEqual(t, int64(10), serverMonitor.GetConnectionDuration().Milliseconds())
+	assert.GreaterOrEqual(t, int64(10), serverMonitor.GetIdleDuration().Milliseconds())
 
 	serverMonitor.ClearAddress()
-	assert.Equal(t, int64(0), serverMonitor.GetTimeConnected().Milliseconds())
+	assert.Equal(t, int64(0), serverMonitor.GetConnectionDuration().Milliseconds())
+	assert.Equal(t, int64(0), serverMonitor.GetIdleDuration().Milliseconds())
 }

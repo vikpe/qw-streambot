@@ -10,22 +10,24 @@ import (
 type MvdsvProvider func(address string) mvdsv.Mvdsv
 
 type ServerMonitor struct {
-	isDone          bool
-	onEvent         func(string, ...any)
-	getInfo         MvdsvProvider
-	address         string
-	serverTimestamp time.Time
-	prevState       serverState
+	isDone               bool
+	onEvent              func(string, ...any)
+	getInfo              MvdsvProvider
+	address              string
+	connectionTimestamp  time.Time
+	lastStartedTimestamp time.Time
+	prevState            serverState
 }
 
 func NewServerMonitor(getInfo MvdsvProvider, onEvent func(topic string, data ...any)) *ServerMonitor {
 	return &ServerMonitor{
-		isDone:          false,
-		getInfo:         getInfo,
-		onEvent:         onEvent,
-		address:         "",
-		prevState:       serverState{},
-		serverTimestamp: time.Time{},
+		isDone:               false,
+		getInfo:              getInfo,
+		onEvent:              onEvent,
+		address:              "",
+		prevState:            serverState{},
+		connectionTimestamp:  time.Time{},
+		lastStartedTimestamp: time.Time{},
 	}
 }
 
@@ -33,14 +35,12 @@ func (s *ServerMonitor) SetAddress(address string) {
 	s.address = address
 
 	if "" == address {
-		s.serverTimestamp = time.Time{}
+		s.connectionTimestamp = time.Time{}
 	} else {
-		s.touchServerTimestamp()
+		s.connectionTimestamp = time.Now()
 	}
-}
 
-func (s *ServerMonitor) touchServerTimestamp() {
-	s.serverTimestamp = time.Now()
+	s.lastStartedTimestamp = s.connectionTimestamp
 }
 
 func (s *ServerMonitor) GetAddress() string {
@@ -55,12 +55,20 @@ func (s *ServerMonitor) IsConnected() bool {
 	return s.address != ""
 }
 
-func (s *ServerMonitor) GetTimeConnected() time.Duration {
-	if s.serverTimestamp.IsZero() {
+func (s *ServerMonitor) GetConnectionDuration() time.Duration {
+	if s.connectionTimestamp.IsZero() {
 		return 0
 	}
 
-	return time.Now().Sub(s.serverTimestamp)
+	return time.Now().Sub(s.connectionTimestamp)
+}
+
+func (s *ServerMonitor) GetIdleDuration() time.Duration {
+	if s.lastStartedTimestamp.IsZero() {
+		return 0
+	}
+
+	return time.Now().Sub(s.lastStartedTimestamp)
 }
 
 func (s *ServerMonitor) Start(interval time.Duration) {
@@ -85,12 +93,12 @@ func (s *ServerMonitor) CompareStates() {
 		s.onEvent(topic.ServerMatchtagChanged, currentState.Matchtag)
 	}
 
-	if currentState.Map != s.prevState.Map {
-		s.touchServerTimestamp()
-	}
-
 	if currentState.Title != s.prevState.Title {
 		s.onEvent(topic.ServerTitleChanged, currentState.Title)
+	}
+
+	if currentState.IsStarted {
+		s.lastStartedTimestamp = time.Now()
 	}
 
 	s.prevState = currentState
@@ -101,17 +109,17 @@ func (s *ServerMonitor) Stop() {
 }
 
 type serverState struct {
-	Matchtag string
-	Map      string
-	Title    string
+	Matchtag  string
+	IsStarted bool
+	Title     string
 }
 
 func newServerState(getInfo MvdsvProvider, address string) serverState {
 	server := getInfo(address)
 
 	return serverState{
-		Matchtag: server.Settings.Get("matchtag", ""),
-		Map:      server.Settings.Get("map", ""),
-		Title:    server.Title,
+		Matchtag:  server.Settings.Get("matchtag", ""),
+		IsStarted: server.Status.IsStarted(),
+		Title:     server.Title,
 	}
 }

@@ -134,7 +134,7 @@ func (m *QuakeManager) ValidateCurrentServer() {
 	}
 
 	const connectionGraceDuration = 10 * time.Second
-	if m.serverMonitor.GetTimeConnected() <= connectionGraceDuration {
+	if m.serverMonitor.GetConnectionDuration() <= connectionGraceDuration {
 		return
 	}
 
@@ -185,8 +185,8 @@ func (m *QuakeManager) OnStreambotEvaluate(msg message.Message) {
 }
 
 func (m *QuakeManager) evaluateAutoModeEnabled() {
-	const connectionGraceDuration = 30 * time.Second
-	if m.serverMonitor.IsConnected() && m.serverMonitor.GetTimeConnected() <= connectionGraceDuration {
+	const idleGraceDuration = 30 * time.Second
+	if m.serverMonitor.IsConnected() && m.serverMonitor.GetIdleDuration() <= idleGraceDuration {
 		return
 	}
 
@@ -220,8 +220,8 @@ func (m *QuakeManager) evaluateAutoModeDisabled() {
 		return
 	}
 
-	const connectionGraceDuration = 5 * time.Minute
-	if m.serverMonitor.GetTimeConnected() <= connectionGraceDuration {
+	const idleGraceDuration = 5 * time.Minute
+	if m.serverMonitor.GetIdleDuration() <= idleGraceDuration {
 		return
 	}
 
