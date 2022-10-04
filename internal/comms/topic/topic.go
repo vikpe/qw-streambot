@@ -5,7 +5,6 @@ const (
 	EzquakeStarted = "ezquake.started"
 	EzquakeStopped = "ezquake.stopped"
 
-	ServerMapChanged      = "server.map_changed"
 	ServerTitleChanged    = "server.title_changed"
 	ServerMatchtagChanged = "server.matchtag_changed"
 )

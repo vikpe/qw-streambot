@@ -86,7 +86,6 @@ func (s *ServerMonitor) CompareStates() {
 	}
 
 	if currentState.Map != s.prevState.Map {
-		s.onEvent(topic.ServerMapChanged, currentState.Map)
 		s.touchServerTimestamp()
 	}
 

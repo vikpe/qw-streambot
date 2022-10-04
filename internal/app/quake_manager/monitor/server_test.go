@@ -23,7 +23,7 @@ func TestServerMonitor(t *testing.T) {
 			Settings: qsettings.Settings{"matchtag": "kombat"},
 		},
 		{
-			Settings: qsettings.Settings{"map": "dm6"},
+			Settings: qsettings.Settings{"matchtag": ""},
 		},
 	}
 
@@ -48,7 +48,6 @@ func TestServerMonitor(t *testing.T) {
 		{"server.matchtag_changed", "kombat"},
 		{"server.title_changed", "kombat / 1on1: x vs y [dm2]"},
 		{"server.matchtag_changed", ""},
-		{"server.map_changed", "dm6"},
 		{"server.title_changed", ""},
 	}
 	assert.Equal(t, expectCalls, publisherMock.SendMessageCalls)
