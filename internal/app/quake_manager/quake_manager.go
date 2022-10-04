@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"syscall"
 	"time"
 
@@ -296,6 +297,10 @@ func (m *QuakeManager) OnEzquakeStopped(msg message.Message) {
 func (m *QuakeManager) OnServerMatchtagChanged(msg message.Message) {
 	matchtag := msg.Content.ToString()
 	pfmt.Println("OnServerMatchtagChanged", matchtag)
+
+	if strings.Contains(matchtag, "paus") {
+		return
+	}
 
 	if len(matchtag) > 0 {
 		m.commander.Commandf("hud_static_text_scale %f", calc.StaticTextScale(matchtag))
