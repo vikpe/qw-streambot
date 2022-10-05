@@ -9,6 +9,15 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/zeromq/mock"
 )
 
+func TestCommander_Attack(t *testing.T) {
+	publisher := mock.NewPublisherMock()
+	cmder := commander.NewCommander(publisher.SendMessage)
+	cmder.Attack()
+
+	expectedCalls := [][]any{{"ezquake.command", "bot_attack"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
+}
+
 func TestCommander_Autotrack(t *testing.T) {
 	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
@@ -69,6 +78,15 @@ func TestCommander_EnableAuto(t *testing.T) {
 	cmder.EnableAuto()
 
 	expectedCalls := [][]any{{"streambot.enable_auto"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
+}
+
+func TestCommander_Jump(t *testing.T) {
+	publisher := mock.NewPublisherMock()
+	cmder := commander.NewCommander(publisher.SendMessage)
+	cmder.Jump()
+
+	expectedCalls := [][]any{{"ezquake.command", "bot_jump"}}
 	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 

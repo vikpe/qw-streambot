@@ -60,7 +60,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	cmder := commander.NewCommander(zeromq.NewPublisher(publisherAddress).SendMessage)
 
 	bot.AddCommand("attack", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		cmder.Command("bot_attack")
+		cmder.Attack()
 	})
 
 	bot.AddCommand("auto", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
@@ -113,7 +113,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	})
 
 	bot.AddCommand("jump", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		cmder.Command("bot_jump")
+		cmder.Jump()
 	})
 
 	bot.AddCommand("lastscores", func(cmd chatbot.Command, msg twitch.PrivateMessage) {

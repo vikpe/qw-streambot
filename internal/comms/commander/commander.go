@@ -18,6 +18,10 @@ func NewCommander(sendMessage func(topic string, data ...any)) *Commander {
 	}
 }
 
+func (c Commander) Attack() {
+	c.sendMessage(topic.EzquakeCommand, "bot_attack")
+}
+
 func (c Commander) Autotrack() {
 	c.sendMessage(topic.EzquakeCommand, "bot_track")
 }
@@ -44,6 +48,10 @@ func (c Commander) Evaluate() {
 
 func (c Commander) DisableAuto() {
 	c.sendMessage(topic.StreambotDisableAuto)
+}
+
+func (c Commander) Jump() {
+	c.sendMessage(topic.EzquakeCommand, "bot_jump")
 }
 
 func (c Commander) Lastscores() {
