@@ -14,6 +14,7 @@ func TestPeriodicalTask(t *testing.T) {
 	interval := 20 * time.Millisecond
 	go countTask.Start(interval)
 	go countTask.Start(interval) // calls to start while started should have no effect
+	time.Sleep(time.Millisecond)
 
 	time.Sleep(2 * interval)
 	assert.Equal(t, 3, count)
