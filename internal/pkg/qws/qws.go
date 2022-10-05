@@ -6,23 +6,14 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-resty/resty/v2"
+	"github.com/vikpe/go-qwhub"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
 	"github.com/vikpe/streambot/internal/pkg/mtag"
 )
 
 func GetMvdsvServers(queryParams map[string]string) []mvdsv.Mvdsv {
-	serversUrl := "https://hubapi.quakeworld.nu/v2/servers/mvdsv"
-	resp, err := resty.New().R().SetResult([]mvdsv.Mvdsv{}).SetQueryParams(queryParams).Get(serversUrl)
-
-	if err != nil {
-		fmt.Println("server fetch error", err.Error())
-		return make([]mvdsv.Mvdsv, 0)
-	}
-
-	servers := resp.Result().(*[]mvdsv.Mvdsv)
-	return *servers
+	return qwhub.NewClient().MvdsvServers(queryParams)
 }
 
 func FindPlayer(pattern string) (mvdsv.Mvdsv, error) {
