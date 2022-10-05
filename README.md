@@ -48,18 +48,20 @@ Example, find `XantoM` and join that server.
 
 ![image](https://user-images.githubusercontent.com/1616817/188152018-f4c43219-e969-4330-bb7d-2f89e4d45154.png)
 
-| Command        | Description                         |
-|----------------|-------------------------------------|
-| `!auto`        | Enable auto-mode (join best server) |
-| `!autotrack`   | Toggle autotrack                    |
-| `!cfg_load`    | Re-load config                      |
-| `!cmd [x]`     | Run command `x` (mod only)          |
-| `!console`     | Toggle console                      |
-| `!find [name]` | Find `[name]` and join server       |
-| `!lastscores ` | Show list of last scores            |
-| `!restart `    | Restart ezQuake client              |
-| `!showscores ` | Show scoreboard                     |
-| `!track [x] `  | Track player `x`                    |
+| Command        | Description                                             |
+|----------------|---------------------------------------------------------|
+| `!auto`        | Enable auto-mode (join best server)                     |
+| `!autotrack`   | Toggle autotrack                                        |
+| `!cfg_load`    | Re-load config                                          |
+| `!cmd [x]`     | Run command `x` (mod only)                              |
+| `!console`     | Toggle console                                          |
+| `!find [name]` | Find `[name]` and join server                           |
+| `!lastscores ` | Show list of last scores                                |
+| `!restart `    | Restart ezQuake client                                  |
+| `!showscores ` | Show scoreboard                                         |
+| `!track [x] `  | Track player `x`                                        |
+| `!attack`      | Toggle between free float spectator mode and player pov |
+| `!jump`        | Track next player                                       |
 
 See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambot/blob/main/internal/app/twitchbot/twitchbot.go) for all commands.
 
