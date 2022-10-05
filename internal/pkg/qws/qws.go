@@ -12,10 +12,6 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/mtag"
 )
 
-func GetMvdsvServers(queryParams map[string]string) []mvdsv.Mvdsv {
-	return qwhub.NewClient().MvdsvServers(queryParams)
-}
-
 func FindPlayer(pattern string) (mvdsv.Mvdsv, error) {
 	const minFindLength = 2
 
@@ -27,7 +23,7 @@ func FindPlayer(pattern string) (mvdsv.Mvdsv, error) {
 		pattern = fmt.Sprintf("*%s*", pattern)
 	}
 
-	servers := GetMvdsvServers(map[string]string{"has_player": pattern})
+	servers := qwhub.NewClient().MvdsvServers(map[string]string{"has_player": pattern})
 
 	if 0 == len(servers) {
 		return mvdsv.Mvdsv{}, errors.New(fmt.Sprintf(`player "%s" not found.`, pattern))
@@ -61,7 +57,7 @@ func ServerScoreBonus(server mvdsv.Mvdsv) int {
 }
 
 func GetBestServer() (mvdsv.Mvdsv, error) {
-	servers := GetMvdsvServers(nil)
+	servers := qwhub.NewClient().MvdsvServers()
 
 	// add custom score
 	for _, server := range servers {
