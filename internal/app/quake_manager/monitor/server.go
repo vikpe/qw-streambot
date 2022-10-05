@@ -60,7 +60,7 @@ func (s *ServerMonitor) GetConnectionDuration() time.Duration {
 		return 0
 	}
 
-	return time.Now().Sub(s.connectionTimestamp)
+	return time.Since(s.connectionTimestamp)
 }
 
 func (s *ServerMonitor) GetIdleDuration() time.Duration {
@@ -68,7 +68,7 @@ func (s *ServerMonitor) GetIdleDuration() time.Duration {
 		return 0
 	}
 
-	return time.Now().Sub(s.lastStartedTimestamp)
+	return time.Since(s.lastStartedTimestamp)
 }
 
 func (s *ServerMonitor) Start(interval time.Duration) {
