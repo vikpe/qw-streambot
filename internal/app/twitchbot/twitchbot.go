@@ -36,7 +36,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 
 	// announce when streamers go live
 	streamsMonitor := monitor.NewStreamsMonitor(qwhub.NewClient().Streams, func(stream types.TwitchStream) {
-		bot.Say(fmt.Sprintf("%s is now streaming @ %s", stream.Channel, stream.Url))
+		bot.Say(fmt.Sprintf("%s is now streaming @ %s - %s", stream.Channel, stream.Url, stream.Title))
 	})
 
 	// bot events
