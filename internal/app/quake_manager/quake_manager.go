@@ -191,7 +191,7 @@ func (m *QuakeManager) evaluateAutoModeEnabled() {
 	}
 
 	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
-	shouldConsiderChange := 0 == currentServer.Score || !currentServer.Mode.IsXonX() || currentServer.Status.IsStandby()
+	shouldConsiderChange := 0 == currentServer.Score || !currentServer.Mode.IsXonX() || currentServer.Status.IsStandby() || currentServer.Status.Description == "Score screen"
 
 	if !shouldConsiderChange {
 		return
