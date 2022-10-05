@@ -11,11 +11,16 @@ import (
 func TestPeriodicalTask(t *testing.T) {
 	count := 0
 	countTask := task.NewPeriodicalTask(func() { count++ })
-	interval := time.Millisecond * 20
+	interval := 20 * time.Millisecond
 	go countTask.Start(interval)
-	time.Sleep(4 * interval)
-	countTask.Stop()
-	time.Sleep(interval)
+	go countTask.Start(interval) // calls to start while started should have no effect
 
-	assert.Equal(t, 5, count)
+	time.Sleep(2 * interval)
+	assert.Equal(t, 3, count)
+
+	countTask.Stop()
+	assert.Equal(t, 3, count)
+
+	time.Sleep(interval)
+	assert.Equal(t, 3, count)
 }
