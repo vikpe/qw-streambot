@@ -19,7 +19,6 @@ func TestEndToEnd(t *testing.T) {
 		{"domain.topic1", "hello world"},
 		{"domain.topic2", []string{"hello", "world"}},
 		{"domain.topic3", 666},
-		{"domain.topic4", ""},
 	}
 
 	// proxy
@@ -51,10 +50,14 @@ func TestEndToEnd(t *testing.T) {
 		for _, msg := range messagesToSend {
 			publisher.SendMessage(msg.Topic, msg.Content)
 		}
+
+		// send message with empty content
+		publisher.SendMessage("domain.topic4")
 	}()
 
 	wg.Add(1)
 	wg.Wait()
+	zeromq.WaitForConnection()
 
 	// assertions
 	// message 1
@@ -74,8 +77,8 @@ func TestEndToEnd(t *testing.T) {
 	assert.Equal(t, messagesToSend[2].Content, message3Content)
 
 	// message 4
-	assert.Equal(t, messagesToSend[2].Topic, messagesRecieved[2].Topic)
+	assert.Equal(t, "domain.topic4", messagesRecieved[3].Topic)
 	var message4Content string
-	messagesRecieved[2].Content.To(&message4Content)
-	assert.Equal(t, messagesToSend[3].Content, message4Content)
+	messagesRecieved[3].Content.To(&message4Content)
+	assert.Equal(t, "", message4Content)
 }
