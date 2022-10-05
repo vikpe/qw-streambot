@@ -5,23 +5,27 @@ import (
 )
 
 type PeriodicalTask struct {
-	isDone bool
-	onTick func()
+	isActive bool
+	onTick   func()
 }
 
 func NewPeriodicalTask(callback func()) *PeriodicalTask {
 	return &PeriodicalTask{
-		onTick: callback,
+		isActive: false,
+		onTick:   callback,
 	}
 }
 
 func (t *PeriodicalTask) Start(interval time.Duration) {
-	t.isDone = false
+	if t.isActive {
+		return
+	}
 
+	t.isActive = true
 	ticker := time.NewTicker(interval)
 
 	for ; true; <-ticker.C {
-		if t.isDone {
+		if !t.isActive {
 			return
 		}
 
@@ -30,5 +34,5 @@ func (t *PeriodicalTask) Start(interval time.Duration) {
 }
 
 func (t *PeriodicalTask) Stop() {
-	t.isDone = true
+	t.isActive = false
 }
