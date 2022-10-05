@@ -35,6 +35,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/ssoroka/slice v0.0.0-20220402005549-78f0cea3df8b // indirect
 	github.com/valyala/fastjson v1.6.3 // indirect
+	github.com/vikpe/go-qwhub v0.1.0 // indirect
 	github.com/vikpe/udpclient v0.1.3 // indirect
 	golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be // indirect
 	golang.org/x/net v0.0.0-20221002022538-bcab6841153b // indirect

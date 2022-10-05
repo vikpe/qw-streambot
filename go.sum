@@ -66,6 +66,8 @@ github.com/valyala/fastjson v1.6.3 h1:tAKFnnwmeMGPbwJ7IwxcTPCNr3uIzoIj3/Fh90ra4x
 github.com/valyala/fastjson v1.6.3/go.mod h1:CLCAqky6SMuOcxStkYQvblddUtoRxhYMGLrsQns1aXY=
 github.com/vikpe/go-ezquake v0.1.7 h1:baDJTmr1J6qyy5yqiPGVIb9aFAxrgSrUUoyIhqntdSs=
 github.com/vikpe/go-ezquake v0.1.7/go.mod h1:zz2Mhhdtu0iw94q72KviR0eBzOcwItC6NQxxIbNBpr8=
+github.com/vikpe/go-qwhub v0.1.0 h1:b1TqUTdfCfl349rNLpRq+b7SAKRXxcgPgFjOwdHVKps=
+github.com/vikpe/go-qwhub v0.1.0/go.mod h1:NpRrTfaBGWotTd63d/QKuJpoS2pRhdGK6OlUC2sMPHc=
 github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771 h1:DrBPzJ7Snsm7X2mwEb7hK7tgUF2bW49+L2Helr15cqE=
 github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771/go.mod h1:ZX829Mvv2GUtcZbUAyuVKfHjm/YDb1iWoCfyWpYtQ4A=
 github.com/vikpe/qw-hub-api v0.0.0-20221004144214-da57bb22affc h1:JUt/wVch29R4wZTGfY7kJrMMfAuWnzFlcTewK4b12Pc=

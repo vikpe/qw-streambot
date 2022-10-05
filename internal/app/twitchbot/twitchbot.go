@@ -3,10 +3,14 @@ package twitchbot
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/gempir/go-twitch-irc/v3"
+	"github.com/vikpe/go-qwhub"
 	"github.com/vikpe/prettyfmt"
+	"github.com/vikpe/qw-hub-api/types"
+	"github.com/vikpe/streambot/internal/app/twitchbot/monitor"
 	"github.com/vikpe/streambot/internal/comms/commander"
 	"github.com/vikpe/streambot/internal/comms/topic"
 	"github.com/vikpe/streambot/internal/pkg/qws"
@@ -30,18 +34,25 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 		}
 	}
 
+	// announce when streamers go live
+	streamsMonitor := monitor.NewStreamsMonitor(qwhub.NewClient().Streams, func(stream types.TwitchStream) {
+		bot.Say(fmt.Sprintf("%s is now streaming @ %s", stream.Channel, stream.Url))
+	})
+
 	// bot events
 	bot.OnConnected = func() {
 		pfmt.Println("connected as", botUsername)
-		go subscriber.Start()
 	}
 
 	bot.OnStarted = func() {
 		pfmt.Println("started")
+		go subscriber.Start()
+		go streamsMonitor.Start(15 * time.Second)
 	}
 
 	bot.OnStopped = func(sig os.Signal) {
 		subscriber.Stop()
+		streamsMonitor.Stop()
 		pfmt.Printfln("stopped (%s)", sig)
 	}
 
