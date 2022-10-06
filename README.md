@@ -162,3 +162,4 @@ wimpeeh) among others.
 * [serverstat](https://github.com/vikpe/serverstat) - Get info from QuakeWorld servers.
 * [masterstat](https://github.com/vikpe/masterstat) - Get server addresses from QuakeWorld master servers.
 * [QuakeWorld Server Browser](https://github.com/vikpe/qw-server-browser)
+* [carmack](https://github.com/vikpe/carmack) - QuakeWorld utility bot for Discord
