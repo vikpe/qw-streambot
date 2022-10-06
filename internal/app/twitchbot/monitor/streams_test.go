@@ -11,14 +11,15 @@ import (
 
 func TestStreamsMonitor(t *testing.T) {
 	// mock getStreams
-	chan1 := types.TwitchStream{Channel: "1"}
-	chan2 := types.TwitchStream{Channel: "2"}
-	chan3 := types.TwitchStream{Channel: "3"}
-	chanQW := types.TwitchStream{Channel: "QuakeWorld"}
+	chan1 := types.TwitchStream{Channel: "1", ViewerCount: 1}
+	chan2 := types.TwitchStream{Channel: "2", ViewerCount: 1}
+	chan2Updated := types.TwitchStream{Channel: "2", ViewerCount: 2}
+	chan3 := types.TwitchStream{Channel: "3", ViewerCount: 1}
+	chanQW := types.TwitchStream{Channel: "QuakeWorld", ViewerCount: 1}
 	mockedResult := [][]types.TwitchStream{
-		{chan1},                       // call 1
-		{chan1, chan2, chanQW},        // call 2
-		{chan1, chan2, chan3, chanQW}, // call 3
+		{chan1},                              // call 1
+		{chan1, chan2, chanQW},               // call 2
+		{chan1, chan2Updated, chan3, chanQW}, // call 3
 	}
 
 	callCount := 0
