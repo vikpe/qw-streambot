@@ -19,11 +19,11 @@ func NewCommander(sendMessage func(topic string, data ...any)) *Commander {
 }
 
 func (c Commander) Attack() {
-	c.sendMessage(topic.EzquakeCommand, "bot_attack")
+	c.Commandf("bot_attack")
 }
 
 func (c Commander) Autotrack() {
-	c.sendMessage(topic.EzquakeCommand, "bot_track")
+	c.Commandf("bot_track")
 }
 
 func (c Commander) TwitchbotSay(text string) {
@@ -51,7 +51,7 @@ func (c Commander) DisableAuto() {
 }
 
 func (c Commander) Jump() {
-	c.sendMessage(topic.EzquakeCommand, "bot_jump")
+	c.Command("bot_jump")
 }
 
 func (c Commander) Lastscores() {
