@@ -12,7 +12,7 @@ require (
 	github.com/ssoroka/slice v0.0.0-20220402005549-78f0cea3df8b
 	github.com/stretchr/testify v1.8.0
 	github.com/vikpe/go-ezquake v0.1.7
-	github.com/vikpe/go-qwhub v0.1.0
+	github.com/vikpe/go-qwhub v0.1.1
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
 	github.com/vikpe/qw-hub-api v0.1.0
 	github.com/vikpe/serverstat v0.2.5
