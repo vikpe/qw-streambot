@@ -124,6 +124,10 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 		cmder.StopEzquake()
 	})
 
+	bot.AddCommand("say", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
+		cmder.Commandf("bot_say %s", cmd.ArgsToString())
+	})
+
 	bot.AddCommand("showscores", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.Showscores()
 	})

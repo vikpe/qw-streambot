@@ -99,6 +99,15 @@ func TestCommander_Lastscores(t *testing.T) {
 	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
+func TestCommander_Say(t *testing.T) {
+	publisher := mock.NewPublisherMock()
+	cmder := commander.NewCommander(publisher.SendMessage)
+	cmder.Say("hello world!")
+
+	expectedCalls := [][]any{{"ezquake.command", "bot_say hello world!"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
+}
+
 func TestCommander_SuggestServer(t *testing.T) {
 	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)
