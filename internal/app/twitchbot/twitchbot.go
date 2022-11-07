@@ -125,7 +125,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	})
 
 	bot.AddCommand("say", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		cmder.Commandf("bot_say %s", cmd.ArgsToString())
+		cmder.Commandf("bot_say %s: %s", msg.User.DisplayName, cmd.ArgsToString())
 	})
 
 	bot.AddCommand("showscores", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
