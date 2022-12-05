@@ -186,12 +186,9 @@ func (m *QuakeManager) OnStreambotEvaluate(msg message.Message) {
 
 func (m *QuakeManager) evaluateAutoModeEnabled() {
 	const idleGraceDuration = 20 * time.Second
-	if m.serverMonitor.IsConnected() && m.serverMonitor.GetIdleDuration() <= idleGraceDuration {
-		return
-	}
-
 	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
-	shouldConsiderChange := 0 == currentServer.Score || !currentServer.Mode.IsXonX() || currentServer.Status.IsStandby() || currentServer.Status.Description == "Score screen"
+	isAllowedIdle := m.serverMonitor.IsConnected() && m.serverMonitor.GetIdleDuration() <= idleGraceDuration && currentServer.Mode.IsXonX()
+	shouldConsiderChange := !isAllowedIdle || (0 == currentServer.Score) || !currentServer.Mode.IsXonX() || currentServer.Status.IsStandby() || (currentServer.Status.Description == "Score screen")
 
 	if !shouldConsiderChange {
 		return
