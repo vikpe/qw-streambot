@@ -212,13 +212,20 @@ func (m *QuakeManager) evaluateAutoModeEnabled() {
 func (m *QuakeManager) evaluateAutoModeDisabled() {
 	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
 
-	const minAcceptableScore = 2
+	const minAcceptableScore = 4
 	if currentServer.Score >= minAcceptableScore {
 		return
 	}
 
-	const idleGraceDuration = 5 * time.Minute
-	if m.serverMonitor.GetIdleDuration() <= idleGraceDuration {
+	var idleGraceDuration float64
+
+	if currentServer.Score >= 50 {
+		idleGraceDuration = 5
+	} else {
+		idleGraceDuration = 3
+	}
+
+	if m.serverMonitor.GetIdleDuration().Minutes() <= idleGraceDuration {
 		return
 	}
 
