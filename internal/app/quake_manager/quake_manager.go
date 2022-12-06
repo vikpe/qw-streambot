@@ -219,7 +219,7 @@ func (m *QuakeManager) evaluateAutoModeDisabled() {
 
 	var idleGraceDuration float64
 
-	if currentServer.Score >= 50 {
+	if currentServer.Score >= 30 {
 		idleGraceDuration = 5
 	} else {
 		idleGraceDuration = 3
