@@ -78,8 +78,8 @@ func TestServerMonitor_Durations(t *testing.T) {
 
 	serverMonitor.SetAddress("qw.foppa.dk:27501")
 	time.Sleep(10 * time.Millisecond)
-	assert.GreaterOrEqual(t, int64(10), serverMonitor.GetConnectionDuration().Milliseconds())
-	assert.GreaterOrEqual(t, int64(10), serverMonitor.GetIdleDuration().Milliseconds())
+	assert.GreaterOrEqual(t, serverMonitor.GetConnectionDuration().Milliseconds(), int64(10))
+	assert.GreaterOrEqual(t, serverMonitor.GetIdleDuration().Milliseconds(), int64(10))
 
 	serverMonitor.ClearAddress()
 	assert.Equal(t, int64(0), serverMonitor.GetConnectionDuration().Milliseconds())
