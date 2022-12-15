@@ -188,7 +188,12 @@ func (m *QuakeManager) evaluateAutoModeEnabled() {
 	const idleGraceDuration = 20 * time.Second
 	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
 	isAllowedIdle := m.serverMonitor.IsConnected() && m.serverMonitor.GetIdleDuration() <= idleGraceDuration && currentServer.Mode.IsXonX()
-	shouldConsiderChange := !isAllowedIdle || (0 == currentServer.Score) || !currentServer.Mode.IsXonX() || currentServer.Status.IsStandby() || (currentServer.Status.Description == "Score screen")
+
+	if isAllowedIdle {
+		return
+	}
+
+	shouldConsiderChange := (0 == currentServer.Score) || !currentServer.Mode.IsXonX() || currentServer.Status.IsStandby() || (currentServer.Status.Description == "Score screen")
 
 	if !shouldConsiderChange {
 		return
