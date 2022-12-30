@@ -15,7 +15,7 @@ require (
 	github.com/vikpe/go-qwhub v0.1.1
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
 	github.com/vikpe/qw-hub-api v0.1.4
-	github.com/vikpe/serverstat v0.3.2
+	github.com/vikpe/serverstat v0.3.3
 	github.com/vikpe/twitch-chatbot v0.2.1
 	github.com/vikpe/udphelper v0.1.3
 	github.com/vikpe/wildcard v0.1.0
