@@ -4,7 +4,7 @@ COLOR_YELLOW="1;33"  # ezquake
 COLOR_MAGENTA="0;35" # chatbot
 COLOR_RED="0;31"     # channel manager
 COLOR_CYAN="0;36"    # quake_manager
-#COLOR_BLUE="0;34"   # discord
+COLOR_BLUE="0;34"    # team viewer
 SEQ_RESET="\e[0m"
 
 function text_in_color() {
