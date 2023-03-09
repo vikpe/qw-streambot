@@ -143,9 +143,8 @@ func (m *QuakeManager) ValidateCurrentServer() {
 		return
 	}
 
-	//
-	altName := fmt.Sprintf("%s(1)", m.clientPlayerName)
-	if analyze.HasSpectator(currentServer, altName) {
+	// check name
+	if analyze.HasSpectator(currentServer, fmt.Sprintf("%s(1)", m.clientPlayerName)) || analyze.HasSpectator(currentServer, fmt.Sprintf("(1)%s", m.clientPlayerName)) {
 		m.commander.Commandf("name %s", m.clientPlayerName)
 		return
 	}
