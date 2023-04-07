@@ -184,14 +184,26 @@ func (m *QuakeManager) OnStreambotEvaluate(msg message.Message) {
 }
 
 func (m *QuakeManager) evaluateAutoModeEnabled() {
-	const idleGraceDuration = 20 * time.Second
 	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
-	isAllowedIdle := m.serverMonitor.IsConnected() && m.serverMonitor.GetIdleDuration() <= idleGraceDuration && currentServer.Mode.IsXonX()
+
+	// allow idle?
+	var allowedIdleDuration time.Duration
+
+	if currentServer.Mode.Is4on4() && currentServer.PlayerSlots.Used >= 6 {
+		allowedIdleDuration = 5 * time.Minute
+	} else if currentServer.Mode.Is2on2() && currentServer.PlayerSlots.Used >= 3 {
+		allowedIdleDuration = 2 * time.Minute
+	} else {
+		allowedIdleDuration = 30 * time.Second
+	}
+
+	isAllowedIdle := m.serverMonitor.IsConnected() && m.serverMonitor.GetIdleDuration() <= allowedIdleDuration && currentServer.Mode.IsXonX()
 
 	if isAllowedIdle {
 		return
 	}
 
+	// change server?
 	shouldConsiderChange := (0 == currentServer.Score) || !currentServer.Mode.IsXonX() || currentServer.Status.IsStandby() || (currentServer.Status.Description == "Score screen")
 
 	if !shouldConsiderChange {
