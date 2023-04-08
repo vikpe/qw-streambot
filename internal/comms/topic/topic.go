@@ -17,6 +17,8 @@ const (
 	EzquakeScript  = "ezquake.script"
 	EzquakeStop    = "ezquake.stop"
 
+	QuakeManagerStop = "quake_manager.stop"
+
 	StreambotSuggestServer = "streambot.suggest_server"
 	StreambotEnableAuto    = "streambot.enable_auto"
 	StreambotDisableAuto   = "streambot.disable_auto"

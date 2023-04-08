@@ -105,6 +105,7 @@ func (m *QuakeManager) OnMessage(msg message.Message) {
 		topic.EzquakeCommand:         m.OnEzquakeCommand,
 		topic.EzquakeScript:          m.OnEzquakeScript,
 		topic.EzquakeStop:            m.OnStopEzquake,
+		topic.QuakeManagerStop:       m.OnStopQuakeManager,
 
 		// ezquake events
 		topic.EzquakeStarted: m.OnEzquakeStarted,
@@ -117,6 +118,10 @@ func (m *QuakeManager) OnMessage(msg message.Message) {
 	if handler, ok := handlers[msg.Topic]; ok {
 		handler(msg)
 	}
+}
+
+func (m *QuakeManager) OnStopQuakeManager(msg message.Message) {
+	m.Stop()
 }
 
 func (m *QuakeManager) OnStreambotEnableAuto(msg message.Message) {

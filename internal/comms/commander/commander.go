@@ -74,6 +74,10 @@ func (c Commander) StopEzquake() {
 	c.sendMessage(topic.EzquakeStop)
 }
 
+func (c Commander) StopQuakeManager() {
+	c.sendMessage(topic.QuakeManagerStop)
+}
+
 func (c Commander) Track(target string) {
 	c.sendMessage(topic.EzquakeCommand, fmt.Sprintf("bot_track %s", target))
 }

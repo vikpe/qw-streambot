@@ -122,6 +122,9 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 
 	bot.AddCommand("restart", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
 		cmder.StopEzquake()
+		time.AfterFunc(500*time.Millisecond, func() {
+			cmder.StopQuakeManager()
+		})
 	})
 
 	bot.AddCommand("say", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
