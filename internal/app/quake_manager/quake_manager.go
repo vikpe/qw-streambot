@@ -306,7 +306,7 @@ func (m *QuakeManager) OnStopEzquake(msg message.Message) {
 	pfmt.Println("OnStopEzquake")
 	m.controller.Process.Stop(syscall.SIGTERM)
 
-	time.AfterFunc(2*time.Second, func() {
+	time.AfterFunc(1*time.Second, func() {
 		if m.controller.Process.IsStarted() {
 			m.controller.Process.Stop(syscall.SIGKILL)
 		}
