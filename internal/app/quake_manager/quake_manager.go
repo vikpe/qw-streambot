@@ -215,15 +215,12 @@ func (m *QuakeManager) evaluateAutoModeEnabled() {
 		return
 	}
 
+	m.connectToBestServer()
+}
+
+func (m *QuakeManager) connectToBestServer() {
 	bestServer, err := qws.GetBestServer()
-
 	if err != nil {
-		return
-	}
-
-	shouldStay := currentServer.Score >= bestServer.Score || currentServer.Address == bestServer.Address
-
-	if shouldStay {
 		return
 	}
 
