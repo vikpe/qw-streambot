@@ -126,7 +126,7 @@ func (m *QuakeManager) OnStopQuakeManager(msg message.Message) {
 
 func (m *QuakeManager) OnStreambotEnableAuto(msg message.Message) {
 	m.AutoMode = true
-	m.commander.Evaluate()
+	m.connectToBestServer()
 }
 
 func (m *QuakeManager) OnStreambotDisableAuto(msg message.Message) {
