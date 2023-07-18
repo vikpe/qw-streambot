@@ -1,10 +1,9 @@
 package monitor
 
 import (
-	"github.com/ssoroka/slice"
+	"github.com/samber/lo"
 	"github.com/vikpe/qw-hub-api/pkg/twitch"
 	"github.com/vikpe/streambot/internal/pkg/task"
-	"golang.org/x/exp/slices"
 )
 
 func NewStreamsMonitor(getStreams func() []twitch.Stream, onStreamStarted func(stream twitch.Stream)) *task.PeriodicalTask {
@@ -12,7 +11,7 @@ func NewStreamsMonitor(getStreams func() []twitch.Stream, onStreamStarted func(s
 
 	onTick := func() {
 		streams := getStreams()
-		currentChannels := slice.Map[twitch.Stream, string](streams, func(stream twitch.Stream) string {
+		currentChannels := lo.Map(streams, func(stream twitch.Stream, _ int) string {
 			return stream.Channel
 		})
 
@@ -26,7 +25,7 @@ func NewStreamsMonitor(getStreams func() []twitch.Stream, onStreamStarted func(s
 				continue
 			}
 
-			if !slices.Contains(prevChannels, stream.Channel) {
+			if !lo.Contains(prevChannels, stream.Channel) {
 				onStreamStarted(stream)
 			}
 		}

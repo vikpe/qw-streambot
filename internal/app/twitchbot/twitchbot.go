@@ -7,9 +7,10 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gempir/go-twitch-irc/v3"
+	"github.com/samber/lo"
 	"github.com/vikpe/go-qwhub"
 	"github.com/vikpe/prettyfmt"
-	foo "github.com/vikpe/qw-hub-api/pkg/twitch"
+	hubTwitch "github.com/vikpe/qw-hub-api/pkg/twitch"
 	"github.com/vikpe/streambot/internal/app/twitchbot/monitor"
 	"github.com/vikpe/streambot/internal/comms/commander"
 	"github.com/vikpe/streambot/internal/comms/topic"
@@ -17,7 +18,6 @@ import (
 	"github.com/vikpe/streambot/internal/pkg/zeromq"
 	"github.com/vikpe/streambot/internal/pkg/zeromq/message"
 	chatbot "github.com/vikpe/twitch-chatbot"
-	"golang.org/x/exp/slices"
 )
 
 func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherAddress string) *chatbot.Chatbot {
@@ -35,7 +35,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	}
 
 	// announce when streamers go live
-	streamsMonitor := monitor.NewStreamsMonitor(qwhub.NewClient().Streams, func(stream foo.Stream) {
+	streamsMonitor := monitor.NewStreamsMonitor(qwhub.NewClient().Streams, func(stream hubTwitch.Stream) {
 		bot.Say(fmt.Sprintf("%s is now streaming @ %s - %s", stream.ClientName, stream.Url, stream.Title))
 	})
 
@@ -64,7 +64,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	})
 
 	bot.AddCommand("auto", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		shouldDisable := slices.Contains([]string{"0", "off"}, cmd.ArgsToString())
+		shouldDisable := lo.Contains([]string{"0", "off"}, cmd.ArgsToString())
 
 		if shouldDisable {
 			cmder.DisableAuto()
