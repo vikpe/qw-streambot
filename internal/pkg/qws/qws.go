@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/vikpe/go-qwhub"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
@@ -78,7 +79,9 @@ func GetBestServer() (mvdsv.Mvdsv, error) {
 }
 
 func IsRelevantServer(server mvdsv.Mvdsv) bool {
-	if server.Geo.Region == "South America" {
+	excludedRegions := []string{"South America", "Oceania"}
+
+	if lo.Contains(excludedRegions, server.Geo.Region) {
 		return false
 	}
 
