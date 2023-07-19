@@ -48,6 +48,8 @@ github.com/nicklaw5/helix v1.25.0 h1:Mrz537izZVsGdM3I46uGAAlslj61frgkhS/9xQqyT/M
 github.com/nicklaw5/helix v1.25.0/go.mod h1:yvXZFapT6afIoxnAvlWiJiUMsYnoHl7tNs+t0bloAMw=
 github.com/nicklaw5/helix/v2 v2.23.1 h1:Xo1tFOBIfQkNMg1jP3kf7XXSttaFKOb0SVbzNryWj08=
 github.com/nicklaw5/helix/v2 v2.23.1/go.mod h1:zZcKsyyBWDli34x3QleYsVMiiNGMXPAEU5NjsiZDtvY=
+github.com/nicklaw5/helix/v2 v2.24.0 h1:NNMlO3lmEXe5G8+NKanI8KQSxZ0/hljJpfpdvSVimf8=
+github.com/nicklaw5/helix/v2 v2.24.0/go.mod h1:zZcKsyyBWDli34x3QleYsVMiiNGMXPAEU5NjsiZDtvY=
 github.com/pebbe/zmq4 v1.2.10 h1:wQkqRZ3CZeABIeidr3e8uQZMMH5YAykA/WN0L5zkd1c=
 github.com/pebbe/zmq4 v1.2.10/go.mod h1:nqnPueOapVhE2wItZ0uOErngczsJdLOGkebMxaO8r48=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
@@ -74,8 +76,12 @@ github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771 h1:DrBPzJ7Snsm7X2m
 github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771/go.mod h1:ZX829Mvv2GUtcZbUAyuVKfHjm/YDb1iWoCfyWpYtQ4A=
 github.com/vikpe/qw-hub-api v0.3.7 h1:ViZnOOcwK3xJ0EOvKxdTqJbYWo92L42jNxiik4DRN/0=
 github.com/vikpe/qw-hub-api v0.3.7/go.mod h1:zekghlPBiswFEWFSC1JTrU9uVNnqwaVzYpK3OH/hQB0=
+github.com/vikpe/qw-hub-api v0.3.11 h1:l/q6coFjgsnRbppmhUG1wSccijY5f1KjvL0XTlhF9Ys=
+github.com/vikpe/qw-hub-api v0.3.11/go.mod h1:1D/2FYWPXH4xJFiRh8XcuU0cVomBhO0flgso0HZOWM0=
 github.com/vikpe/serverstat v1.0.7 h1:ze3s+8F+8zo7Y+VZmvDeo51wcxm5sHfC2GVkfblZbhw=
 github.com/vikpe/serverstat v1.0.7/go.mod h1:x/2oQj5sdou1nDLmBKbB+ev6eJErWOYMMgdnKwGSGGc=
+github.com/vikpe/serverstat v1.0.8 h1:nBh8Bvso50uKAOi/yNdHBNxSCSFBapd5U/wqS3vzchU=
+github.com/vikpe/serverstat v1.0.8/go.mod h1:NntKLhRpAml8vEhUdxmhBvPj4rWg/AuYHEC0sQG6WTw=
 github.com/vikpe/twitch-chatbot v0.2.1 h1:GlBaOs0bKMBbz3ucu09LdJXYZHpwG9uM09EzbgKyqpc=
 github.com/vikpe/twitch-chatbot v0.2.1/go.mod h1:IUfuGEwGaDglqrpVls1vPoiBsb8yfZIeAdvGVzGxbP4=
 github.com/vikpe/udpclient v1.0.0 h1:xamjn2Vbwz9bEFTo9FJM2mAFdH4j3TXD7KHysyxK+lI=

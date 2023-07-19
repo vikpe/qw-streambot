@@ -8,15 +8,15 @@ require (
 	github.com/gempir/go-twitch-irc/v3 v3.3.0
 	github.com/goccy/go-json v0.10.2
 	github.com/joho/godotenv v1.5.1
-	github.com/nicklaw5/helix/v2 v2.23.1
+	github.com/nicklaw5/helix/v2 v2.24.0
 	github.com/pebbe/zmq4 v1.2.10
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.4
 	github.com/vikpe/go-ezquake v0.1.7
 	github.com/vikpe/go-qwhub v0.1.2
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
-	github.com/vikpe/qw-hub-api v0.3.7
-	github.com/vikpe/serverstat v1.0.7
+	github.com/vikpe/qw-hub-api v0.3.11
+	github.com/vikpe/serverstat v1.0.8
 	github.com/vikpe/twitch-chatbot v0.2.1
 	github.com/vikpe/udphelper v1.0.1
 	github.com/vikpe/wildcard v0.1.0
