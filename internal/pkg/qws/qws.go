@@ -36,25 +36,17 @@ func FindPlayer(pattern string) (mvdsv.Mvdsv, error) {
 func ServerScoreBonus(server mvdsv.Mvdsv) int {
 	if !server.Mode.IsXonX() {
 		return 0
-	}
-
-	if !mtag.IsOfficial(server.Settings.Get("matchtag", "")) {
+	} else if !mtag.IsOfficial(server.Settings.Get("matchtag", "")) {
 		return 0
-	}
-
-	if server.Mode.Is1on1() && server.PlayerSlots.Free > 0 {
+	} else if server.Mode.Is1on1() && server.PlayerSlots.Free > 0 {
 		return 0
-	}
-
-	if server.Mode.Is2on2() && server.PlayerSlots.Free > 1 {
+	} else if server.Mode.Is2on2() && server.PlayerSlots.Free > 1 {
 		return 0
-	}
-
-	if server.Mode.Is4on4() && server.PlayerSlots.Free > 2 {
+	} else if server.Mode.Is4on4() && server.PlayerSlots.Free > 2 {
 		return 0
+	} else {
+		return 30
 	}
-
-	return 30
 }
 
 func GetBestServer() (mvdsv.Mvdsv, error) {
