@@ -66,6 +66,10 @@ func GetBestServer() (mvdsv.Mvdsv, error) {
 	}
 
 	sort.Slice(servers, func(i, j int) bool {
+		if servers[i].Score == servers[j].Score {
+			return servers[i].QtvStream.ID > 0 && servers[j].QtvStream.ID == 0
+		}
+
 		return servers[i].Score > servers[j].Score
 	})
 
