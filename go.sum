@@ -78,10 +78,14 @@ github.com/vikpe/qw-hub-api v0.3.7 h1:ViZnOOcwK3xJ0EOvKxdTqJbYWo92L42jNxiik4DRN/
 github.com/vikpe/qw-hub-api v0.3.7/go.mod h1:zekghlPBiswFEWFSC1JTrU9uVNnqwaVzYpK3OH/hQB0=
 github.com/vikpe/qw-hub-api v0.3.11 h1:l/q6coFjgsnRbppmhUG1wSccijY5f1KjvL0XTlhF9Ys=
 github.com/vikpe/qw-hub-api v0.3.11/go.mod h1:1D/2FYWPXH4xJFiRh8XcuU0cVomBhO0flgso0HZOWM0=
+github.com/vikpe/qw-hub-api v0.3.15 h1:qMQ2HzJQiAq04qQp/oF/NAu76HZBBmDjK9ydlLcLxtY=
+github.com/vikpe/qw-hub-api v0.3.15/go.mod h1:I8isdGSH1DbBKaQxd6Z1qbUg6DSPyjjyc2gbtRArpcY=
 github.com/vikpe/serverstat v1.0.7 h1:ze3s+8F+8zo7Y+VZmvDeo51wcxm5sHfC2GVkfblZbhw=
 github.com/vikpe/serverstat v1.0.7/go.mod h1:x/2oQj5sdou1nDLmBKbB+ev6eJErWOYMMgdnKwGSGGc=
 github.com/vikpe/serverstat v1.0.8 h1:nBh8Bvso50uKAOi/yNdHBNxSCSFBapd5U/wqS3vzchU=
 github.com/vikpe/serverstat v1.0.8/go.mod h1:NntKLhRpAml8vEhUdxmhBvPj4rWg/AuYHEC0sQG6WTw=
+github.com/vikpe/serverstat v1.1.1 h1:WGppls1hoHSoYj3UjzDxic8dnXkavFPDjQbKKgG8LZQ=
+github.com/vikpe/serverstat v1.1.1/go.mod h1:xKpAEKgEtuZu6QMaI/cMJrUnwmXypDibuE+Rz5w1HPk=
 github.com/vikpe/twitch-chatbot v0.2.1 h1:GlBaOs0bKMBbz3ucu09LdJXYZHpwG9uM09EzbgKyqpc=
 github.com/vikpe/twitch-chatbot v0.2.1/go.mod h1:IUfuGEwGaDglqrpVls1vPoiBsb8yfZIeAdvGVzGxbP4=
 github.com/vikpe/udpclient v1.0.0 h1:xamjn2Vbwz9bEFTo9FJM2mAFdH4j3TXD7KHysyxK+lI=
