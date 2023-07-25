@@ -75,13 +75,9 @@ func GetBestServer() (mvdsv.Mvdsv, error) {
 }
 
 func IsRelevantServer(server mvdsv.Mvdsv) bool {
-	excludedRegions := []string{"South America", "Oceania"}
-
-	if lo.Contains(excludedRegions, server.Geo.Region) {
+	if server.Geo.Region != "Europe" && server.QtvStream.Address == "" {
 		return false
-	}
-
-	if server.Mode.IsFortress() {
+	} else if server.Mode.IsFortress() {
 		return false
 	}
 
