@@ -6,7 +6,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/samber/lo"
 	"github.com/vikpe/go-qwhub"
 	"github.com/vikpe/serverstat/qserver/mvdsv"
 	"github.com/vikpe/serverstat/qserver/mvdsv/analyze"
@@ -75,7 +74,7 @@ func GetBestServer() (mvdsv.Mvdsv, error) {
 }
 
 func IsRelevantServer(server mvdsv.Mvdsv) bool {
-	if server.Geo.Region != "Europe" && server.QtvStream.Address == "" {
+	if server.Geo.Region != "Europe" && len(server.QtvStream.Address) == 0 {
 		return false
 	} else if server.Mode.IsFortress() {
 		return false

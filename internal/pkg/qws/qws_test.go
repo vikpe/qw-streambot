@@ -21,10 +21,10 @@ func TestIsRelevantServer(t *testing.T) {
 		assert.False(t, qws.IsRelevantServer(server))
 	})
 
-	t.Run("no - excluded region", func(t *testing.T) {
+	t.Run("no - far away region without qtv", func(t *testing.T) {
 		server := mvdsv.Mvdsv{
 			SpectatorSlots: slots.New(4, 0),
-			Geo:            geo.Location{Region: "South America"},
+			Geo:            geo.Location{Region: "Oceania"},
 		}
 		assert.False(t, qws.IsRelevantServer(server))
 	})
