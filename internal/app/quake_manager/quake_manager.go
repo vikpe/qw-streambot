@@ -275,7 +275,7 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 }
 
 func (m *QuakeManager) ApplyServerSettings(server mvdsv.Mvdsv) {
-	if server.QtvStream.Address != "" {
+	if len(server.QtvStream.Url) > 0 {
 		if server.Geo.Region == "Europe" {
 			m.commander.Commandf("qtv_buffertime %s", "0.5")
 		} else {
