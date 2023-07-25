@@ -41,7 +41,6 @@ require (
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/nicklaw5/helix v1.25.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/ssoroka/slice v0.0.0-20220402005549-78f0cea3df8b // indirect
 	github.com/valyala/fastjson v1.6.4 // indirect
 	github.com/vikpe/udpclient v1.0.0 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
