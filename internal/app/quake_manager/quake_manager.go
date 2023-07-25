@@ -279,7 +279,7 @@ func (m *QuakeManager) ApplyServerSettings(server mvdsv.Mvdsv) {
 		if server.Geo.Region == "Europe" {
 			m.commander.Commandf("qtv_buffertime %s", "0.5")
 		} else {
-			m.commander.Commandf("qtv_buffertime %s", "3")
+			m.commander.Commandf("qtv_buffertime %s", "5")
 		}
 	} else {
 		time.AfterFunc(4*time.Second, func() {
