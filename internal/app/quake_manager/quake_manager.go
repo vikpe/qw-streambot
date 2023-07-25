@@ -263,17 +263,29 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 		return
 	}
 
+	m.ApplyServerSettings(server)
+
 	if len(server.QtvStream.Url) > 0 {
 		m.commander.Commandf("qtvplay %s", server.QtvStream.Url)
 	} else {
 		m.commander.Commandf("connect %s", server.Address)
 	}
 
-	time.AfterFunc(4*time.Second, func() {
-		m.commander.Autotrack()
-	})
-
 	m.serverMonitor.SetAddress(server.Address)
+}
+
+func (m *QuakeManager) ApplyServerSettings(server mvdsv.Mvdsv) {
+	if server.QtvStream.Address != "" {
+		if server.Geo.Region == "Europe" {
+			m.commander.Commandf("qtv_buffertime %s", "0.5")
+		} else {
+			m.commander.Commandf("qtv_buffertime %s", "3")
+		}
+	} else {
+		time.AfterFunc(4*time.Second, func() {
+			m.commander.Autotrack()
+		})
+	}
 }
 
 func (m *QuakeManager) OnEzquakeCommand(msg message.Message) {
