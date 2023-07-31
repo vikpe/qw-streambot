@@ -149,6 +149,12 @@ Build all apps and run all app controller scripts.
 ./scripts/build.sh && ./scripts/start.sh
 ```
 
+## Audio: virtual sound device (audio sink)
+```sh
+sudo apt install pavucontrol
+pacmd load-module module-null-sink sink_name=stream_sink sink_properties=device.description=Stream-Sink
+```
+
 ## Credits
 
 Thanks to everyone that has provided feedback and improvement suggestions (andeh, bps, circle, hangtime, milton, splash,
