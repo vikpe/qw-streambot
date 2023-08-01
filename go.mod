@@ -15,12 +15,12 @@ require (
 	github.com/vikpe/go-ezquake v0.1.7
 	github.com/vikpe/go-qwhub v0.1.2
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
-	github.com/vikpe/qw-hub-api v0.3.15
-	github.com/vikpe/serverstat v1.1.1
+	github.com/vikpe/qw-hub-api v0.4.1
+	github.com/vikpe/serverstat v1.2.0
 	github.com/vikpe/twitch-chatbot v0.2.1
 	github.com/vikpe/udphelper v1.0.1
 	github.com/vikpe/wildcard v0.1.0
-	golang.org/x/exp v0.0.0-20230713183714-613f0c0eb8a1
+	golang.org/x/exp v0.0.0-20230728194245-b0cb94b80691
 )
 
 require (
