@@ -82,7 +82,7 @@ See [`internal/app/twitchbot/twitchbot.go`](https://github.com/vikpe/qw-streambo
   * Chatbot access token to read and write to chat, scopes: `chat:read` and `chat:edit`.
 * ZeroMQ: `apt-get install libzmq3-dev`
 
-For streaming I highly recommend [Open Broadcaster Sofware (OBS)](https://obsproject.com/).
+For streaming I highly recommend [Open Broadcaster Sofware (OBS)](https://obsproject.com/), see [Stream Setup](./stream_setup/) for details on the setup used on twitch.tv/quakeworld.
 
 ## Development
 
@@ -147,12 +147,6 @@ Build all apps and run all app controller scripts.
 
 ```shell
 ./scripts/build.sh && ./scripts/start.sh
-```
-
-## Audio: virtual sound device (audio sink)
-```sh
-sudo apt install pavucontrol
-pacmd load-module module-null-sink sink_name=stream_sink sink_properties=device.description=Stream-Sink
 ```
 
 ## Credits

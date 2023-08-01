@@ -1,0 +1,254 @@
+{
+  "sceneGroups": [],
+  "macroProperties": {
+    "highlightExecuted": false,
+    "highlightConditions": false,
+    "highlightActions": false,
+    "newMacroRegisterHotkey": false
+  },
+  "macros": [
+    {
+      "name": "24h_stop",
+      "pause": false,
+      "parallel": true,
+      "onChange": false,
+      "group": false,
+      "dockSettings": {
+        "register": false,
+        "hasRunButton": true,
+        "hasPauseButton": true,
+        "runButtonText": "Run",
+        "pauseButtonText": "Pause",
+        "unpauseButtonText": "Unpause"
+      },
+      "registerHotkeys": false,
+      "pauseHotkey": [],
+      "unpauseHotkey": [],
+      "togglePauseHotkey": [],
+      "conditions": [
+        {
+          "collapsed": false,
+          "id": "streaming",
+          "logic": 0,
+          "durationModifier": {
+            "time_constraint": 1,
+            "seconds": {
+              "value": {
+                "value": 24.0,
+                "type": 0
+              },
+              "unit": 2,
+              "version": 1
+            }
+          },
+          "state": 1,
+          "keyFrameInterval": {
+            "value": 0,
+            "type": 0
+          }
+        }
+      ],
+      "actions": [
+        {
+          "collapsed": false,
+          "id": "streaming",
+          "action": 0,
+          "keyFrameInterval": {
+            "value": 0,
+            "type": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "auto_start",
+      "pause": false,
+      "parallel": true,
+      "onChange": false,
+      "group": false,
+      "dockSettings": {
+        "register": false,
+        "hasRunButton": true,
+        "hasPauseButton": true,
+        "runButtonText": "Run",
+        "pauseButtonText": "Pause",
+        "unpauseButtonText": "Unpause"
+      },
+      "registerHotkeys": false,
+      "pauseHotkey": [],
+      "unpauseHotkey": [],
+      "togglePauseHotkey": [],
+      "conditions": [
+        {
+          "collapsed": false,
+          "id": "streaming",
+          "logic": 0,
+          "durationModifier": {
+            "time_constraint": 0,
+            "seconds": {
+              "value": {
+                "value": 24.0,
+                "type": 0
+              },
+              "unit": 2,
+              "version": 1
+            }
+          },
+          "state": 0,
+          "keyFrameInterval": {
+            "value": 0,
+            "type": 0
+          }
+        }
+      ],
+      "actions": [
+        {
+          "collapsed": false,
+          "id": "streaming",
+          "action": 1,
+          "keyFrameInterval": {
+            "value": 0,
+            "type": 0
+          }
+        }
+      ]
+    }
+  ],
+  "connections": [],
+  "variables": [],
+  "switches": [],
+  "ignoreWindows": [],
+  "screenRegion": [],
+  "pauseEntries": [],
+  "sceneRoundTrip": [],
+  "sceneTransitions": [],
+  "defaultTransitions": [],
+  "defTransitionDelay": 0,
+  "ignoreIdleWindows": [],
+  "idleTargetType": 0,
+  "idleSceneName": "",
+  "idleTransitionName": "",
+  "idleEnable": false,
+  "idleTime": 60,
+  "executableSwitches": [],
+  "randomSwitches": [],
+  "fileSwitches": [],
+  "readEnabled": false,
+  "readPath": "",
+  "writeEnabled": false,
+  "writePath": "",
+  "mediaSwitches": [],
+  "timeSwitches": [],
+  "audioSwitches": [],
+  "audioFallbackTargetType": 0,
+  "audioFallbackScene": "",
+  "audioFallbackTransition": "",
+  "audioFallbackEnable": false,
+  "audioFallbackDuration": {
+    "value": {
+      "value": 0.0,
+      "type": 0
+    },
+    "unit": 0,
+    "version": 1
+  },
+  "videoSwitches": [],
+  "ServerEnabled": false,
+  "ServerPort": 55555,
+  "LockToIPv4": false,
+  "ClientEnabled": false,
+  "Address": "",
+  "ClientPort": 55555,
+  "SendSceneChange": true,
+  "SendSceneChangeAll": true,
+  "SendPreview": true,
+  "triggers": [],
+  "interval": 300,
+  "non_matching_scene": "",
+  "switch_if_not_matching": 0,
+  "noMatchDelay": {
+    "value": {
+      "value": 0.0,
+      "type": 0
+    },
+    "unit": 0,
+    "version": 1
+  },
+  "cooldown": {
+    "value": {
+      "value": 0.0,
+      "type": 0
+    },
+    "unit": 0,
+    "version": 1
+  },
+  "active": false,
+  "startup_behavior": 1,
+  "autoStartEvent": 2,
+  "verbose": false,
+  "showSystemTrayNotifications": false,
+  "disableHints": false,
+  "warnPluginLoadFailure": true,
+  "hideLegacyTabs": true,
+  "priority0": 10,
+  "priority1": 0,
+  "priority2": 2,
+  "priority3": 8,
+  "priority4": 6,
+  "priority5": 9,
+  "priority6": 7,
+  "priority7": 4,
+  "priority8": 1,
+  "priority9": 5,
+  "priority10": 3,
+  "threadPriority": 3,
+  "transitionOverrideOverride": false,
+  "adjustActiveTransitionType": true,
+  "lastImportPath": "",
+  "startHotkey": [],
+  "stopHotkey": [],
+  "toggleHotkey": [],
+  "upMacroSegmentHotkey": [],
+  "downMacroSegmentHotkey": [],
+  "removeMacroSegmentHotkey": [],
+  "generalTabPos": 0,
+  "macroTabPos": 1,
+  "transitionTabPos": 15,
+  "pauseTabPos": 16,
+  "titleTabPos": 2,
+  "exeTabPos": 3,
+  "regionTabPos": 4,
+  "mediaTabPos": 5,
+  "fileTabPos": 6,
+  "randomTabPos": 7,
+  "timeTabPos": 8,
+  "idleTabPos": 9,
+  "sequenceTabPos": 10,
+  "audioTabPos": 11,
+  "videoTabPos": 12,
+  "networkTabPos": 13,
+  "sceneGroupTabPos": 14,
+  "triggerTabPos": 17,
+  "saveWindowGeo": false,
+  "windowPosX": 885,
+  "windowPosY": 343,
+  "windowWidth": 1000,
+  "windowHeight": 600,
+  "macroActionConditionSplitterPosition": [
+    {
+      "pos": 147
+    },
+    {
+      "pos": 236
+    }
+  ],
+  "macroListMacroEditSplitterPosition": [
+    {
+      "pos": 145
+    },
+    {
+      "pos": 829
+    }
+  ],
+  "version": "e0917a35fdb444823e2297ae35f78e7f2196bdb8"
+}
