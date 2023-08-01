@@ -1,5 +1,8 @@
 # Stream Setup
 
+![image](https://github.com/vikpe/qw-streambot/assets/1616817/bb44ea3b-ff0a-4867-9baf-b2c735ac8126)
+
+
 * [Open Broadcaster Sofware (OBS)](https://obsproject.com/)
 * [PulseAudio](https://www.freedesktop.org/wiki/Software/PulseAudio/)
 * [Advanced Scene Switcher](https://obsproject.com/forum/resources/advanced-scene-switcher.395/)
