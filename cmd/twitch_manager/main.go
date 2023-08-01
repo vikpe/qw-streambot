@@ -18,8 +18,8 @@ func main() {
 	}
 
 	manager, err := twitch_manager.New(
-		os.Getenv("TWITCH_MANAGER_APP_CLIENT_ID"),
-		os.Getenv("TWITCH_MANAGER_APP_ACCESS_TOKEN"),
+		os.Getenv("TWITCH_CHANNEL_CLIENT_ID"),
+		os.Getenv("TWITCH_CHANNEL_ACCESS_TOKEN"),
 		os.Getenv("TWITCH_CHANNEL_BROADCASTER_ID"),
 		os.Getenv("ZMQ_SUBSCRIBER_ADDRESS"),
 	)
