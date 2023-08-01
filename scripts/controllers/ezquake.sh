@@ -1,3 +1,3 @@
 source ./scripts/functions.sh
 
-run_forever ${COLOR_YELLOW} ezquake_controller /home/vikpe/code/ezquake-api/quake2/ezquake-linux-x86_64 5
+run_forever ${COLOR_YELLOW} ezquake_controller ${EZQUAKE_BIN_PATH} 5
