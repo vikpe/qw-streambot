@@ -1,10 +1,15 @@
 # Stream Setup
 
+* **OS**: Ubuntu `22.04.2`
+* [ezQuake](https://ezquake.com/) `3.6.3-dev`
 * [Open Broadcaster Sofware (OBS)](https://obsproject.com/)
 * [PulseAudio](https://www.freedesktop.org/wiki/Software/PulseAudio/)
 * [Advanced Scene Switcher](https://obsproject.com/forum/resources/advanced-scene-switcher.395/)
 
 ![image](https://github.com/vikpe/qw-streambot/assets/1616817/bb44ea3b-ff0a-4867-9baf-b2c735ac8126)
+
+## ezQuake setup (config, skins, textures etc)
+See [qw-streambot-ezquake](https://github.com/vikpe/qw-streambot-ezquake).
 
 ## Scripts (Advanced Scene Switcher)
 
