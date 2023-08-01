@@ -30,7 +30,8 @@ pacmd load-module module-null-sink sink_name=stream_sink sink_properties=device.
 
 Assign ezQuake to the Stream Sink using PulseAudio (`pavucontrol`).
 
+![image](https://github.com/vikpe/qw-streambot/assets/1616817/3df7a49c-91fd-43f6-bfc5-947be6656e18)
+
 ```sh
 sudo apt install pavucontrol
 ```
-
