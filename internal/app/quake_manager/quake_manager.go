@@ -297,7 +297,7 @@ func (m *QuakeManager) ApplyServerSettings(server mvdsv.Mvdsv) {
 	}
 
 	if len(server.QtvStream.Url) > 0 {
-		m.commander.Commandf("qtv_buffertime %s", qtvBufferTime)
+		m.commander.Commandf("qtv_buffertime %d", qtvBufferTime)
 	} else {
 		time.AfterFunc(time.Duration(autotrackDelay)*time.Second, func() {
 			m.commander.Autotrack()
