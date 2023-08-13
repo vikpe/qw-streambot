@@ -138,12 +138,23 @@ func (m *QuakeManager) ValidateCurrentServer() {
 		return
 	}
 
-	const connectionGraceDuration = 10 * time.Second
-	if m.serverMonitor.GetConnectionDuration() <= connectionGraceDuration {
-		return
+	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
+
+	{ // allow connection delay
+		var connectionGraceDuration time.Duration
+
+		if currentServer.Geo.Region == "Europe" {
+			connectionGraceDuration = 8 * time.Second
+		} else {
+			connectionGraceDuration = 16 * time.Second
+		}
+
+		if m.serverMonitor.GetConnectionDuration() <= connectionGraceDuration {
+			return
+		}
 	}
 
-	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
+	// is connected
 	if analyze.HasSpectator(currentServer, m.clientPlayerName) {
 		return
 	}
