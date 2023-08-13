@@ -275,14 +275,21 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 }
 
 func (m *QuakeManager) ApplyServerSettings(server mvdsv.Mvdsv) {
-	if len(server.QtvStream.Url) > 0 {
-		if server.Geo.Region == "Europe" {
-			m.commander.Commandf("qtv_buffertime %s", "0.5")
-		} else {
-			m.commander.Commandf("qtv_buffertime %s", "5")
-		}
+	var qtvBufferTime uint8
+	var autotrackDelay uint8
+
+	if server.Geo.Region == "Europe" {
+		autotrackDelay = 5
+		qtvBufferTime = 1
 	} else {
-		time.AfterFunc(4*time.Second, func() {
+		autotrackDelay = 10
+		qtvBufferTime = 8
+	}
+
+	if len(server.QtvStream.Url) > 0 {
+		m.commander.Commandf("qtv_buffertime %s", qtvBufferTime)
+	} else {
+		time.AfterFunc(time.Duration(autotrackDelay)*time.Second, func() {
 			m.commander.Autotrack()
 		})
 	}
