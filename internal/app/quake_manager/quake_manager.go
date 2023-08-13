@@ -148,7 +148,6 @@ func (m *QuakeManager) ValidateCurrentServer() {
 		} else {
 			connectionGraceDuration = 16 * time.Second
 		}
-
 		if m.serverMonitor.GetConnectionDuration() <= connectionGraceDuration {
 			return
 		}
