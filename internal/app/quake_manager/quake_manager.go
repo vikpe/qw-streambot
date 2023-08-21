@@ -273,15 +273,17 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 		return
 	}
 
+	m.commander.Command("disconnect")
+	m.serverMonitor.SetAddress(server.Address)
 	m.ApplyDependentServerSettings(server)
 
-	if len(server.QtvStream.Url) > 0 {
-		m.commander.Commandf("qtvplay %s", server.QtvStream.Url)
-	} else {
-		m.commander.Commandf("connect %s", server.Address)
-	}
-
-	m.serverMonitor.SetAddress(server.Address)
+	time.AfterFunc(100*time.Millisecond, func() {
+		if len(server.QtvStream.Url) > 0 {
+			m.commander.Commandf("qtvplay %s", server.QtvStream.Url)
+		} else {
+			m.commander.Commandf("connect %s", server.Address)
+		}
+	})
 }
 
 func (m *QuakeManager) ApplyDependentServerSettings(server mvdsv.Mvdsv) {
