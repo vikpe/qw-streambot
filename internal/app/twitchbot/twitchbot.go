@@ -78,7 +78,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	})
 
 	bot.AddCommand("cfg_load", func(cmd chatbot.Command, msg twitch.PrivateMessage) {
-		cmder.Command("cfg_load")
+		cmder.LoadConfig()
 	})
 
 	bot.AddCommand("cmd", func(cmd chatbot.Command, msg twitch.PrivateMessage) {

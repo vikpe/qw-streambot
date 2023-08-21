@@ -327,6 +327,12 @@ func (m *QuakeManager) OnEzquakeScript(msg message.Message) {
 	script := msg.Content.ToString()
 
 	switch script {
+	case "load_config":
+		m.commander.Command("cfg_load")
+		time.AfterFunc(time.Millisecond*200, func() {
+			currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
+			m.ApplyDependentServerSettings(currentServer)
+		})
 	case "lastscores":
 		m.commander.Command("toggleconsole;lastscores")
 		time.AfterFunc(8*time.Second, func() { m.commander.Command("toggleconsole") })

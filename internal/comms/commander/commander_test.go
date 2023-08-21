@@ -99,6 +99,15 @@ func TestCommander_Lastscores(t *testing.T) {
 	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
 }
 
+func TestCommander_LoadConfig(t *testing.T) {
+	publisher := mock.NewPublisherMock()
+	cmder := commander.NewCommander(publisher.SendMessage)
+	cmder.LoadConfig()
+
+	expectedCalls := [][]any{{"ezquake.script", "load_config"}}
+	assert.Equal(t, expectedCalls, publisher.SendMessageCalls)
+}
+
 func TestCommander_Say(t *testing.T) {
 	publisher := mock.NewPublisherMock()
 	cmder := commander.NewCommander(publisher.SendMessage)

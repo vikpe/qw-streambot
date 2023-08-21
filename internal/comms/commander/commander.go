@@ -58,6 +58,10 @@ func (c Commander) Lastscores() {
 	c.sendMessage(topic.EzquakeScript, "lastscores")
 }
 
+func (c Commander) LoadConfig() {
+	c.sendMessage(topic.EzquakeScript, "load_config")
+}
+
 func (c Commander) Say(msg string) {
 	c.Commandf("bot_say %s", msg)
 }
