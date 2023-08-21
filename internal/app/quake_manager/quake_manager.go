@@ -273,7 +273,7 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 		return
 	}
 
-	m.ApplyServerSettings(server)
+	m.ApplyDependentServerSettings(server)
 
 	if len(server.QtvStream.Url) > 0 {
 		m.commander.Commandf("qtvplay %s", server.QtvStream.Url)
@@ -284,7 +284,7 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 	m.serverMonitor.SetAddress(server.Address)
 }
 
-func (m *QuakeManager) ApplyServerSettings(server mvdsv.Mvdsv) {
+func (m *QuakeManager) ApplyDependentServerSettings(server mvdsv.Mvdsv) {
 	var qtvBufferTime uint8
 	var qtvPendingTimeout uint8
 	var autotrackDelay uint8
