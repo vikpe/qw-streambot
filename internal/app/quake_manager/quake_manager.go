@@ -302,6 +302,10 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 }
 
 func (m *QuakeManager) ApplyDependentServerSettings(server mvdsv.Mvdsv) {
+	if 0 == len(server.QtvStream.Url) {
+		return
+	}
+
 	var qtvBufferTime uint8
 
 	if server.Geo.Region == "Europe" {
@@ -310,9 +314,7 @@ func (m *QuakeManager) ApplyDependentServerSettings(server mvdsv.Mvdsv) {
 		qtvBufferTime = 4
 	}
 
-	if len(server.QtvStream.Url) > 0 {
-		m.commander.Commandf("qtv_buffertime %d", qtvBufferTime)
-	}
+	m.commander.Commandf("qtv_buffertime %d", qtvBufferTime)
 }
 
 func (m *QuakeManager) OnEzquakeCommand(msg message.Message) {
