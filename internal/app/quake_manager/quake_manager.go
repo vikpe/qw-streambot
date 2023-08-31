@@ -303,19 +303,15 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 
 func (m *QuakeManager) ApplyDependentServerSettings(server mvdsv.Mvdsv) {
 	var qtvBufferTime uint8
-	var qtvPendingTimeout uint8
 
 	if server.Geo.Region == "Europe" {
 		qtvBufferTime = 1
-		qtvPendingTimeout = 5
 	} else {
-		qtvBufferTime = 8
-		qtvPendingTimeout = 10
+		qtvBufferTime = 4
 	}
 
 	if len(server.QtvStream.Url) > 0 {
 		m.commander.Commandf("qtv_buffertime %d", qtvBufferTime)
-		m.commander.Commandf("qtv_pendingtimeout %d", qtvPendingTimeout)
 	}
 }
 
