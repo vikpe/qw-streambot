@@ -8,7 +8,7 @@ require (
 	github.com/gempir/go-twitch-irc/v3 v3.3.0
 	github.com/goccy/go-json v0.10.2
 	github.com/joho/godotenv v1.5.1
-	github.com/nicklaw5/helix/v2 v2.24.0
+	github.com/nicklaw5/helix/v2 v2.24.1
 	github.com/pebbe/zmq4 v1.2.10
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.4
@@ -31,7 +31,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.15.1 // indirect
+	github.com/go-playground/validator/v10 v10.15.3 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
