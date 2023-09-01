@@ -279,7 +279,7 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 	m.serverMonitor.SetAddress(server.Address)
 	m.ApplyDependentServerSettings(server)
 
-	time.AfterFunc(100*time.Millisecond, func() {
+	time.AfterFunc(1*time.Second, func() {
 		if len(server.QtvStream.Url) > 0 {
 			m.commander.Commandf("qtvplay %s", server.QtvStream.Url)
 		} else {
