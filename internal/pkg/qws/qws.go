@@ -3,6 +3,7 @@ package qws
 import (
 	"errors"
 	"fmt"
+	"math"
 	"sort"
 	"strings"
 
@@ -54,6 +55,10 @@ func GetBestServer() (mvdsv.Mvdsv, error) {
 	// add custom score
 	for _, server := range servers {
 		server.Score += ServerScoreBonus(server)
+
+		if server.Geo.Region != "Europe" {
+			server.Score = int(math.Floor(float64(server.Score / 2)))
+		}
 	}
 
 	sort.Slice(servers, func(i, j int) bool {
