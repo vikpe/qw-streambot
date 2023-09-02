@@ -276,7 +276,7 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 	m.commander.Command("disconnect")
 
 	connectDelay := 500 * time.Millisecond
-	if !(m.getCurrentServer().Geo.Region == "Europe") {
+	if m.getCurrentServer().Geo.Region != "Europe" {
 		connectDelay = 3 * time.Second
 	}
 
