@@ -275,30 +275,36 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 
 	m.commander.Command("disconnect")
 
-	// pre connect
-	m.serverMonitor.SetAddress(server.Address)
-	m.ApplyDependentServerSettings(server)
+	isEuropeanServer := server.Geo.Region == "Europe"
 
-	time.AfterFunc(1*time.Second, func() {
+	connectDelay := 500 * time.Millisecond
+	if !isEuropeanServer {
+		connectDelay = 3 * time.Second
+	}
+
+	time.AfterFunc(connectDelay, func() {
+		// pre connect
+		m.serverMonitor.SetAddress(server.Address)
+		m.ApplyDependentServerSettings(server)
+
 		if len(server.QtvStream.Url) > 0 {
 			m.commander.Commandf("qtvplay %s", server.QtvStream.Url)
 		} else {
 			m.commander.Commandf("connect %s", server.Address)
 		}
-	})
 
-	// post connect
-	{
-		autotrackDelay := 5
+		// post connect
+		{
+			autotrackDelay := 5
+			if !isEuropeanServer {
+				autotrackDelay = 10
+			}
 
-		if server.Geo.Region != "Europe" {
-			autotrackDelay = 10
+			time.AfterFunc(time.Duration(autotrackDelay)*time.Second, func() {
+				m.commander.Autotrack()
+			})
 		}
-
-		time.AfterFunc(time.Duration(autotrackDelay)*time.Second, func() {
-			m.commander.Autotrack()
-		})
-	}
+	})
 }
 
 func (m *QuakeManager) ApplyDependentServerSettings(server mvdsv.Mvdsv) {
