@@ -273,19 +273,14 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 		return
 	}
 
-	currentServer := m.getCurrentServer()
-
 	m.commander.Command("disconnect")
 
-	isEuropeanServer := currentServer.Geo.Region == "Europe"
-
 	connectDelay := 500 * time.Millisecond
-	if !isEuropeanServer {
+	if !(m.getCurrentServer().Geo.Region == "Europe") {
 		connectDelay = 3 * time.Second
 	}
 
 	time.AfterFunc(connectDelay, func() {
-		// pre connect
 		m.serverMonitor.SetAddress(server.Address)
 		m.applyDependentServerSettings(server)
 
