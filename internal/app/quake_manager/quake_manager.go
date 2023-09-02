@@ -138,7 +138,7 @@ func (m *QuakeManager) ValidateCurrentServer() {
 		return
 	}
 
-	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
+	currentServer := m.getCurrentServer()
 
 	{ // allow connection delay
 		var connectionGraceDuration time.Duration
@@ -199,7 +199,7 @@ func (m *QuakeManager) OnStreambotEvaluate(msg message.Message) {
 }
 
 func (m *QuakeManager) evaluateAutoModeEnabled() {
-	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
+	currentServer := m.getCurrentServer()
 
 	// allow idle?
 	var allowedIdleDuration time.Duration
@@ -238,7 +238,7 @@ func (m *QuakeManager) connectToBestServer() {
 }
 
 func (m *QuakeManager) evaluateAutoModeDisabled() {
-	currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
+	currentServer := m.getCurrentServer()
 
 	const minAcceptableScore = 4
 	if currentServer.Score >= minAcceptableScore {
@@ -273,9 +273,11 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 		return
 	}
 
+	currentServer := m.getCurrentServer()
+
 	m.commander.Command("disconnect")
 
-	isEuropeanServer := server.Geo.Region == "Europe"
+	isEuropeanServer := currentServer.Geo.Region == "Europe"
 
 	connectDelay := 500 * time.Millisecond
 	if !isEuropeanServer {
@@ -285,7 +287,7 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 	time.AfterFunc(connectDelay, func() {
 		// pre connect
 		m.serverMonitor.SetAddress(server.Address)
-		m.ApplyDependentServerSettings(server)
+		m.applyDependentServerSettings(server)
 
 		if len(server.QtvStream.Url) > 0 {
 			m.commander.Commandf("qtvplay %s", server.QtvStream.Url)
@@ -307,7 +309,7 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 	})
 }
 
-func (m *QuakeManager) ApplyDependentServerSettings(server mvdsv.Mvdsv) {
+func (m *QuakeManager) applyDependentServerSettings(server mvdsv.Mvdsv) {
 	if 0 == len(server.QtvStream.Url) {
 		return
 	}
@@ -333,9 +335,8 @@ func (m *QuakeManager) OnEzquakeScript(msg message.Message) {
 	switch script {
 	case "load_config":
 		m.commander.Command("cfg_load")
-		time.AfterFunc(time.Millisecond*200, func() {
-			currentServer := sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
-			m.ApplyDependentServerSettings(currentServer)
+		time.AfterFunc(200*time.Millisecond, func() {
+			m.applyDependentServerSettings(m.getCurrentServer())
 		})
 	case "lastscores":
 		m.commander.Command("toggleconsole;lastscores")
@@ -344,6 +345,10 @@ func (m *QuakeManager) OnEzquakeScript(msg message.Message) {
 		m.commander.Command("+showscores")
 		time.AfterFunc(8*time.Second, func() { m.commander.Command("-showscores") })
 	}
+}
+
+func (m *QuakeManager) getCurrentServer() mvdsv.Mvdsv {
+	return sstat.GetMvdsvServer(m.serverMonitor.GetAddress())
 }
 
 func (m *QuakeManager) OnEzquakeStarted(msg message.Message) {
