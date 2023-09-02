@@ -289,18 +289,6 @@ func (m *QuakeManager) connectToServer(server mvdsv.Mvdsv) {
 		} else {
 			m.commander.Commandf("connect %s", server.Address)
 		}
-
-		// post connect
-		{
-			autotrackDelay := 5
-			if !isEuropeanServer {
-				autotrackDelay = 10
-			}
-
-			time.AfterFunc(time.Duration(autotrackDelay)*time.Second, func() {
-				m.commander.Autotrack()
-			})
-		}
 	})
 }
 
