@@ -53,11 +53,11 @@ func GetBestServer() (mvdsv.Mvdsv, error) {
 	servers := qwhub.NewClient().MvdsvServers()
 
 	// add custom score
-	for _, server := range servers {
-		server.Score += ServerScoreBonus(server)
+	for i := 0; i < len(servers); i++ {
+		servers[i].Score += ServerScoreBonus(servers[i])
 
-		if server.Geo.Region != "Europe" {
-			server.Score = int(math.Floor(float64(server.Score / 2)))
+		if servers[i].Geo.Region != "Europe" {
+			servers[i].Score = int(math.Floor(float64(servers[i].Score / 2)))
 		}
 	}
 
