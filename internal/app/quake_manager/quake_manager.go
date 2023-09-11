@@ -181,6 +181,7 @@ func (m *QuakeManager) ValidateCurrentServer() {
 	}
 
 	pfmt.Println("not connected to current server (reset server address)", currentServer.SpectatorNames, currentServer.QtvStream.SpectatorNames)
+	m.commander.Commandf("name %s", m.clientPlayerName)
 	m.serverMonitor.ClearAddress()
 }
 
