@@ -153,13 +153,9 @@ func (m *QuakeManager) ValidateCurrentServer() {
 		}
 	}
 
-	// is connected
 	if analyze.HasSpectator(currentServer, m.clientPlayerName) {
 		return
-	}
-
-	// check name
-	if analyze.HasSpectator(currentServer, fmt.Sprintf("%s(1)", m.clientPlayerName)) || analyze.HasSpectator(currentServer, fmt.Sprintf("(1)%s", m.clientPlayerName)) {
+	} else if analyze.HasSpectator(currentServer, fmt.Sprintf("%s*", m.clientPlayerName)) || analyze.HasSpectator(currentServer, fmt.Sprintf("*%s", m.clientPlayerName)) {
 		m.commander.Commandf("name %s", m.clientPlayerName)
 		return
 	}
@@ -181,7 +177,6 @@ func (m *QuakeManager) ValidateCurrentServer() {
 	}
 
 	pfmt.Println("not connected to current server (reset server address)", currentServer.SpectatorNames, currentServer.QtvStream.SpectatorNames)
-	m.commander.Commandf("name %s", m.clientPlayerName)
 	m.serverMonitor.ClearAddress()
 }
 
