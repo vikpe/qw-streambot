@@ -8,19 +8,19 @@ require (
 	github.com/gempir/go-twitch-irc/v3 v3.3.0
 	github.com/goccy/go-json v0.10.2
 	github.com/joho/godotenv v1.5.1
-	github.com/nicklaw5/helix/v2 v2.24.1
+	github.com/nicklaw5/helix/v2 v2.25.0
 	github.com/pebbe/zmq4 v1.2.10
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.4
 	github.com/vikpe/go-ezquake v0.1.7
 	github.com/vikpe/go-qwhub v0.1.2
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
-	github.com/vikpe/qw-hub-api v0.4.1
-	github.com/vikpe/serverstat v1.2.0
+	github.com/vikpe/qw-hub-api v0.4.2
+	github.com/vikpe/serverstat v1.2.1
 	github.com/vikpe/twitch-chatbot v0.2.1
 	github.com/vikpe/udphelper v1.0.1
 	github.com/vikpe/wildcard v0.1.0
-	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
+	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 )
 
 require (
@@ -43,9 +43,9 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/valyala/fastjson v1.6.4 // indirect
 	github.com/vikpe/udpclient v1.0.0 // indirect
-	golang.org/x/crypto v0.12.0 // indirect
-	golang.org/x/net v0.14.0 // indirect
-	golang.org/x/sys v0.11.0 // indirect
-	golang.org/x/text v0.12.0 // indirect
+	golang.org/x/crypto v0.13.0 // indirect
+	golang.org/x/net v0.15.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
