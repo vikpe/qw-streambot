@@ -1,7 +1,6 @@
 package quake_manager
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -153,13 +152,6 @@ func (m *QuakeManager) ValidateCurrentServer() {
 		}
 	}
 
-	if analyze.HasSpectator(currentServer, m.clientPlayerName) {
-		return
-	} else if analyze.HasSpectator(currentServer, fmt.Sprintf("%s*", m.clientPlayerName)) || analyze.HasSpectator(currentServer, fmt.Sprintf("*%s", m.clientPlayerName)) {
-		m.commander.Commandf("name %s", m.clientPlayerName)
-		return
-	}
-
 	// download missing maps
 	mapName := currentServer.Settings.Get("map", "")
 
@@ -174,6 +166,12 @@ func (m *QuakeManager) ValidateCurrentServer() {
 			pfmt.Printfln("success")
 			return
 		}
+	}
+
+	if analyze.HasSpectator(currentServer, m.clientPlayerName) {
+		return
+	} else {
+		m.commander.Commandf("name %s", m.clientPlayerName)
 	}
 
 	pfmt.Println("not connected to current server (reset server address)", currentServer.SpectatorNames, currentServer.QtvStream.SpectatorNames)
