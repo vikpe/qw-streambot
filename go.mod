@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/bep/debounce v1.2.1
 	github.com/fatih/color v1.15.0
-	github.com/gempir/go-twitch-irc/v3 v3.3.0
+	github.com/gempir/go-twitch-irc/v4 v4.0.0
 	github.com/goccy/go-json v0.10.2
 	github.com/joho/godotenv v1.5.1
 	github.com/nicklaw5/helix/v2 v2.25.1
@@ -29,7 +29,6 @@ require (
 	github.com/cavaliergopher/grab/v3 v3.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
-	github.com/gempir/go-twitch-irc/v4 v4.0.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.15.4 // indirect

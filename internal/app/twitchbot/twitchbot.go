@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/gempir/go-twitch-irc/v3"
+	"github.com/gempir/go-twitch-irc/v4"
 	"github.com/samber/lo"
 	"github.com/vikpe/go-qwhub"
 	"github.com/vikpe/prettyfmt"
