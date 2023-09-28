@@ -1,6 +1,6 @@
 module github.com/vikpe/streambot
 
-go 1.18
+go 1.20
 
 require (
 	github.com/bep/debounce v1.2.1
@@ -8,7 +8,7 @@ require (
 	github.com/gempir/go-twitch-irc/v3 v3.3.0
 	github.com/goccy/go-json v0.10.2
 	github.com/joho/godotenv v1.5.1
-	github.com/nicklaw5/helix/v2 v2.25.0
+	github.com/nicklaw5/helix/v2 v2.25.1
 	github.com/pebbe/zmq4 v1.2.10
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.4
@@ -16,8 +16,8 @@ require (
 	github.com/vikpe/go-qwhub v0.1.2
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
 	github.com/vikpe/qw-hub-api v0.4.2
-	github.com/vikpe/serverstat v1.2.1
-	github.com/vikpe/twitch-chatbot v0.2.1
+	github.com/vikpe/serverstat v1.2.5
+	github.com/vikpe/twitch-chatbot v0.2.3
 	github.com/vikpe/udphelper v1.0.1
 	github.com/vikpe/wildcard v0.1.0
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
@@ -29,13 +29,15 @@ require (
 	github.com/cavaliergopher/grab/v3 v3.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
+	github.com/gempir/go-twitch-irc/v4 v4.0.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.15.3 // indirect
-	github.com/go-resty/resty/v2 v2.7.0 // indirect
+	github.com/go-playground/validator/v10 v10.15.4 // indirect
+	github.com/go-resty/resty/v2 v2.8.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/jpillora/longestcommon v0.0.0-20161227235612-adb9d91ee629 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
