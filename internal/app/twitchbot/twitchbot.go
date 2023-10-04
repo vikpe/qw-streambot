@@ -36,7 +36,11 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 
 	// announce when streamers go live
 	streamsMonitor := monitor.NewStreamsMonitor(qwhub.NewClient().Streams, func(stream hubTwitch.Stream) {
-		bot.Say(fmt.Sprintf("%s is now streaming @ %s - %s", stream.ClientName, stream.Url, stream.Title))
+		shouldAnnounce := stream.IsFeatured && stream.DurationMinutes >= 2 && stream.DurationMinutes <= 5
+
+		if shouldAnnounce {
+			bot.Say(fmt.Sprintf("%s is now streaming @ %s - %s", stream.ClientName, stream.Url, stream.Title))
+		}
 	})
 
 	// bot events
@@ -47,7 +51,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 	bot.OnStarted = func() {
 		pfmt.Println("started")
 		go subscriber.Start()
-		go streamsMonitor.Start(15 * time.Second)
+		go streamsMonitor.Start(1 * time.Minute)
 	}
 
 	bot.OnStopped = func(sig os.Signal) {
