@@ -15,7 +15,7 @@ require (
 	github.com/vikpe/go-ezquake v0.1.7
 	github.com/vikpe/go-qwhub v0.1.2
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
-	github.com/vikpe/qw-hub-api v0.5.0
+	github.com/vikpe/qw-hub-api v0.5.6
 	github.com/vikpe/serverstat v1.2.5
 	github.com/vikpe/twitch-chatbot v0.2.3
 	github.com/vikpe/udphelper v1.0.1
@@ -36,7 +36,6 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/jpillora/longestcommon v0.0.0-20161227235612-adb9d91ee629 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
