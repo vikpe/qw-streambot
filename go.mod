@@ -13,7 +13,7 @@ require (
 	github.com/samber/lo v1.39.0
 	github.com/stretchr/testify v1.8.4
 	github.com/vikpe/go-ezquake v0.1.7
-	github.com/vikpe/go-qwhub v0.1.3
+	github.com/vikpe/go-qwhub v0.1.4
 	github.com/vikpe/prettyfmt v0.0.0-20220720175521-e445f605e771
 	github.com/vikpe/qw-hub-api v0.7.3
 	github.com/vikpe/serverstat v1.2.6
