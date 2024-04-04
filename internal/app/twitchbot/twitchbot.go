@@ -73,6 +73,7 @@ func New(botUsername, botAccessToken, channelName, subscriberAddress, publisherA
 		if shouldDisable {
 			cmder.DisableAuto()
 		} else {
+			cmder.Autotrack()
 			cmder.EnableAuto()
 		}
 	})
