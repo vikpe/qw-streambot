@@ -1,6 +1,6 @@
 # Stream Setup
 
-* **OS**: Ubuntu `22.04.2`
+* **OS**: Ubuntu `22.04.1`
 * [ezQuake](https://ezquake.com/) `3.6.3-dev`
 * [Open Broadcaster Sofware (OBS)](https://obsproject.com/)
 * [PulseAudio](https://www.freedesktop.org/wiki/Software/PulseAudio/)
@@ -9,6 +9,7 @@
 ![image](https://github.com/vikpe/qw-streambot/assets/1616817/bb44ea3b-ff0a-4867-9baf-b2c735ac8126)
 
 ## ezQuake setup (config, skins, textures etc)
+
 See [qw-streambot-ezquake](https://github.com/vikpe/qw-streambot-ezquake).
 
 ## Scripts (Advanced Scene Switcher)
@@ -32,7 +33,8 @@ audio to include in the stream.
 sudo apt install pavucontrol
 
 # create device "Stream-Sink"
-pacmd load-module module-null-sink sink_name=stream_sink sink_properties=device.description=Stream-Sink
+pacmd load-module module-null-sink sink_name=streambot
+pactl load-module module-loopback source=streambot.monitor sink=@DEFAULT_SINK@
 ```
 
 Assign ezQuake to the Stream Sink using PulseAudio.
