@@ -83,6 +83,8 @@ func IsRelevantServer(server mvdsv.Mvdsv) bool {
 		return false
 	} else if server.Mode.IsFortress() {
 		return false
+	} else if server.Geo.Region == "Oceania" {
+		return false
 	}
 
 	return analyze.IsSpeccable(server)
